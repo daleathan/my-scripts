@@ -10,9 +10,7 @@ import os
 print("Checking...")
 
 aurPkgs = Popen(["pacman", "-Qm"], stdout = PIPE).communicate()
-aurPkgs = str(aurPkgs)
-aurPkgs = aurPkgs.replace("\\n", " ").replace("b\'", "").replace("\', None", "").strip("()").rstrip(" ")
-aurPkgs = aurPkgs.split(" ")
+aurPkgs = (str(aurPkgs).replace("\\n", " ").replace("b\'", "").replace("\', None", "").strip("()").rstrip(" ")).split(" ")
 
 counter = 0
 while counter < len(aurPkgs) - 1 :
@@ -35,7 +33,7 @@ try :
             if x[1] < version : updates.append((x[0], str("Update for " + x[0] + " is available: " + x[1] + " --> " + version)))
             elif x[1] > version : mismatches.append(str("Local " + x[0] + " looks newer than AUR version: " + x[1] + " --> " + version))
 
-    if updates == mismatches == failures == [] : print("Everything is up to date.")
+    if updates == mismatches == failures == [] : print("\nEverything is up to date.")
     else :
         if failures != [] :
             print("\nSearch failures:\n----------------")
