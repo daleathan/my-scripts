@@ -5,6 +5,7 @@
 from subprocess import Popen, PIPE
 from bs4 import BeautifulSoup
 import requests
+import os
 
 print("Checking...")
 
@@ -31,18 +32,28 @@ try :
         else :
             end = page.find("</h2>", start)
             version = page[start:end].split(" ")[1]
-            if x[1] < version : updates.append(str("Update for " + x[0] + " is available: " + x[1] + " --> " + version))
+            if x[1] < version : updates.append((x[0], str("Update for " + x[0] + " is available: " + x[1] + " --> " + version)))
             elif x[1] > version : mismatches.append(str("Local " + x[0] + " looks newer than AUR version: " + x[1] + " --> " + version))
 
-    if failures != [] :
-        print("\nSearch failures:\n----------------")
-        for x in failures : print(x)
-    if mismatches != [] :
-        print("\nLocal remote mismatches:\n------------------------")
-        for x in mismatches : print(x)
-    if updates != [] :
-        print("\nAvailable updates:\n------------------")
-        for x in updates : print(x)
     if updates == mismatches == failures == [] : print("Everything is up to date.")
+    else :
+        if failures != [] :
+            print("\nSearch failures:\n----------------")
+            for x in failures : print(x)
+        if mismatches != [] :
+            print("\nLocal remote mismatches:\n------------------------")
+            for x in mismatches : print(x)
+        if updates != [] :
+            print("\nAvailable updates:\n------------------")
+            for x in updates : print(x[1])
+            fetch = input("\nFetch updated tarballs? [y/n] ")
+            if fetch == "y" :
+                if os.path.exists(os.path.expanduser('~') + "/Downloads") : downloadsDir = os.path.expanduser('~') + "/Downloads"
+                else : downloadsDir = os.path.expanduser('~')
+                for x in updates :
+                    print("Fetching: " + x[0] + ".tar.gz")
+                    link = "https://aur.archlinux.org/packages/" + x[0][:2] + "/" + x[0] + "/" + x[0] + ".tar.gz"
+                    Popen(["wget", "-q", link, "-P", downloadsDir])
+                print("\nTarballs have been downloaded. Check: " + downloadsDir)    
 except requests.ConnectionError :
     print("Error. Connection to network failed.")
