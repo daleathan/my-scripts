@@ -27,7 +27,7 @@ try :
         response = requests.get("https://aur.archlinux.org/packages/" + x[0])
         page = str(BeautifulSoup(response.content))
         start = page.find("<h2>Package Details: ") + 21
-        if start == -1 : failures.append("Check for " + x[0] + " failed. Is it in the AUR?")
+        if start == 20 : failures.append("Check for " + x[0] + " failed. Is it in the AUR?")
         else :
             end = page.find("</h2>", start)
             version = page[start:end].split(" ")[1]
