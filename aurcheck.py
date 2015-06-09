@@ -11,7 +11,8 @@ import sys
 args = sys.argv
 if ('-h' in args) or ('--help' in args) : print('''Usage:
   -h, --help: Print this help message
-  -aur4: Check the new git based AUR instead of the current AUR 3''')
+  -aur4: Check the new git based AUR instead of the current AUR 3
+  --strict: AUR 4 option. Assume that untransitioned packages are not in AUR 4''')
 else :
     print("Checking...")
     
@@ -35,15 +36,20 @@ else :
         else : aurUrl = "https://aur.archlinux.org/packages/"
         
         for x in aurPkgs:
-            response = requests.get(aurUrl + x[0])
-            page = str(BeautifulSoup(response.content))
-            start = page.find("<h2>Package Details: ") + 21
-            if start == 20 : failures.append("Check for " + x[0] + " failed. Is it in the AUR?")
-            else :
-                end = page.find("</h2>", start)
-                version = page[start:end].split(" ")[1]
-                if x[1] < version : updates.append((x[0], str("Update for " + x[0] + " is available: " + x[1] + " --> " + version)))
-                elif x[1] > version : mismatches.append(str("Local " + x[0] + " looks newer than AUR version: " + x[1] + " --> " + version))
+            if (aurVer == 4) and ('--strict' in args) :
+                response = requests.get("https://aur4.archlinux.org/cgit/aur.git/log/?h=" + x[0])
+                existCheck = str(BeautifulSoup(response.content))
+                if existCheck.find("Invalid branch: " + x[0]) != -1 : failures.append("Check for " + x[0] + " failed. Is it in the AUR?")
+            else :    
+                response = requests.get(aurUrl + x[0])
+                page = str(BeautifulSoup(response.content))
+                start = page.find("<h2>Package Details: ") + 21
+                if start == 20 : failures.append("Check for " + x[0] + " failed. Is it in the AUR?")
+                else :
+                    end = page.find("</h2>", start)
+                    version = page[start:end].split(" ")[1]
+                    if x[1] < version : updates.append((x[0], str("Update for " + x[0] + " is available: " + x[1] + " --> " + version)))
+                    elif x[1] > version : mismatches.append(str("Local " + x[0] + " looks newer than AUR version: " + x[1] + " --> " + version))
 
         if updates == mismatches == failures == [] : print("\nEverything is up to date.")
         else :
