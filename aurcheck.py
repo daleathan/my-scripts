@@ -72,9 +72,10 @@ else :
                     if os.path.exists(os.path.expanduser('~') + "/Downloads") : downloadsDir = os.path.expanduser('~') + "/Downloads"
                     else : downloadsDir = os.path.expanduser('~')
                     for x in updates :
-                        print("Fetching: " + x[0] + ".tar.gz")
-                        if aurVer == 4 : pkgUrl = "https://aur4.archlinux.org/cgit/aur.git/snapshot/" + x[0] + ".tar.gz"
-                        else : pkgUrl = "https://aur.archlinux.org/packages/" + x[0][:2] + "/" + x[0] + "/" + x[0] + ".tar.gz"
+                        newPkg = x.split(' ')[0]
+                        print("Fetching: " + newPkg + ".tar.gz")
+                        if aurVer == 4 : pkgUrl = "https://aur4.archlinux.org/cgit/aur.git/snapshot/" + newPkg + ".tar.gz"
+                        else : pkgUrl = "https://aur.archlinux.org/packages/" + newPkg[:2] + "/" + newPkg + "/" + newPkg + ".tar.gz"
                         Popen(["wget", "-q", pkgUrl, "-P", downloadsDir])
                     print("\nTarballs have been downloaded. Check: " + downloadsDir)    
     except requests.ConnectionError :
