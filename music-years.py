@@ -21,6 +21,7 @@ while 0 <= yearStart <= len(contents) :
     years += [year]
     yearStart = contents.find('<date>', yearEnd)
     yearEnd = contents.find('</date>', yearStart)
+years = [x for x in years if len(str(x)) == 4]
     
 # Begin reporting results
 print("Your results:\n")
