@@ -32,7 +32,7 @@ try :
 
     # Report median
     years = sorted(years)
-    if len(years) % 2 != 0 : print("Median year of release for your music: " + str(years[(len(years) / 2) + 0.5]))
+    if len(years) % 2 != 0 : print("Median year of release for your music: " + str(years[int((len(years) / 2) + 0.5)]))
     else :
         year1 = years[int(len(years) / 2)]
         year2 = years[int((len(years) / 2) + 1)]
