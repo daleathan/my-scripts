@@ -31,23 +31,22 @@ else :
         updates = []
         mismatches = []
         failures = []
-        aur3Pkgs = []
         
         if aurVer == 4 : aurUrl = "https://aur4.archlinux.org/packages/"
         else : aurUrl = "https://aur.archlinux.org/packages/"
         
         for x in aurPkgs:
+            if aurVer == 4 :
+                response = requests.get("https://aur4.archlinux.org/cgit/aur.git/log/?h=" + x[0])
+                logPage = str(BeautifulSoup(response.content))
+                if logPage.find("Invalid branch: " + x[0]) != -1 :
+                    failures.append(x[0])
+                    continue
             response = requests.get(aurUrl + x[0])
             page = str(BeautifulSoup(response.content))
             start = page.find("<h2>Package Details: ") + 21
             if start == 20 : failures.append(x[0])
             else :
-                if aurVer == 4 :
-                    response = requests.get("https://aur4.archlinux.org/cgit/aur.git/log/?h=" + x[0])
-                    logPage = str(BeautifulSoup(response.content))
-                    if logPage.find("Invalid branch: " + x[0]) != -1 :
-                        aur3Pkgs.append(x[0])
-                        continue
                 end = page.find("</h2>", start)
                 version = page[start:end].split(" ")[1]
                 if x[1] < version : updates.append(str(x[0] + " " +x[1] + " --> " + version))
@@ -58,9 +57,6 @@ else :
             if failures != [] :
                 print("\nThe following packages were not found in the AUR:\n-----")
                 for x in failures : print(x)
-            if aur3Pkgs != [] :
-                print("\nThe following packages are in AUR 3 but not AUR 4:\n-----")
-                for x in aur3Pkgs : print(x)
             if mismatches != [] :
                 print("\nThe following local packages are more recent than their AUR versions:\n-----")
                 for x in mismatches : print(x)
