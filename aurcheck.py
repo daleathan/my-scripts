@@ -44,15 +44,15 @@ else :
                     continue
             response = requests.get(aurUrl + x[0])
             page = str(BeautifulSoup(response.content))
-            start = page.find("<h2>Package Details: ") + 21
-            if start == 20 : failures.append(x[0])
+            start = page.find("<h2>Package Details: ")
+            if start == -1 : failures.append(x[0])
             else :
                 end = page.find("</h2>", start)
-                version = page[start:end].split(" ")[1]
+                version = page[start + 21:end].split(" ")[1]
                 if x[1] < version : updates.append(str(x[0] + " " +x[1] + " --> " + version))
                 elif x[1] > version : mismatches.append(str(x[0] + " " +x[1] + " --> " + version))  
 
-        if updates == mismatches == failures == aur3Pkgs == [] : print("\nEverything is up to date.")
+        if updates == mismatches == failures == [] : print("\nEverything is up to date.")
         else :
             if failures != [] :
                 print("\nThe following packages were not found in the AUR:\n-----")
