@@ -1,27 +1,50 @@
 #!/usr/bin/python
 #Silly Python script to analyse music collection by year of release
+
 import os
 import math
+import sys
+from mutagen.id3 import ID3, ID3NoHeaderError
 
-homeDir = os.path.expanduser('~')
-rboxDir = homeDir + '/.local/share/rhythmbox/rhythmdb.xml'
+def usage() :
+    print('''Usage:
+  music-years.py <path to music>
+  Note: without the path to music argument, the path is taken to be ~/Music''')
 
-try :
-    file = open(rboxDir, 'r')
-    contents = file.read()
-    file.close()
+# Get music directory
+args = sys.argv
+if len(args) > 1 :
+    if (args[1] == '-h') or (args[1] == '--help') :
+        usage()
+        exit(0)
+    if os.path.exists(args[1]) : musicDir = args[1]
+    else :
+        usage()
+        exit(0)
+elif os.path.exists(os.path.expanduser('~') + "/Music") : musicDir = os.path.expanduser('~') + "/Music"
+else :
+    usage()
+    exit(0)
 
-    years = []
-    yearStart = contents.find('<date>')
-    yearEnd = contents.find('</date>', yearStart)
-    while 0 <= yearStart <= len(contents) :
-        yearExtract = int(contents[yearStart + 6:yearEnd])
-        year = math.floor((yearExtract / 365.05) + 0.5)
-        years += [year]
-        yearStart = contents.find('<date>', yearEnd)
-        yearEnd = contents.find('</date>', yearStart)
-    years = [x for x in years if len(str(x)) == 4]
-        
+# Get dates for music files
+musicFiles = []
+years = []
+
+for root, dirs, files in os.walk(musicDir, topdown=False):
+    for name in files:
+        musicFiles.append(os.path.join(root, name))
+
+for x in musicFiles :
+    try :
+        audio = ID3(x)
+        years.append(int(str(audio["TDRC"].text[0])))
+    except ID3NoHeaderError :
+        pass
+
+if years == [] :
+    print("No valid music files found. Nothing to do. Exiting...")
+    exit(0)
+else :
     # Begin reporting results
     print("Your results:\n")
 
@@ -88,5 +111,3 @@ try :
     while counter < len(decades) :
         print(str(counter + 1) + ": " + str(decades[counter][0]) + "s (" + str(len(decades[counter])) + " tracks)")
         counter += 1
-except IOError :
-    print("rhythmdb.xml file not found. Are you using Rhythmbox to manage your collection?")
