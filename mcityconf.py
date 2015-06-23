@@ -105,40 +105,40 @@ class UI() :
         l1.grid(row = 1, column = 1, columnspan = 3)
 
         #Theme ui
-        l2 = Label(parent, text = "Choose theme:", pady = 7, padx = 5).grid(row = 2, column = 1)
+        l2 = Label(parent, text = "Choose theme:", pady = 7, padx = 5).grid(row = 2, column = 1, sticky = W)
         global varOp
         varOp = StringVar(parent)
         varOp.set("Current: " + getTheme())
         themes = findThemes()
-        m1 = OptionMenu(parent, varOp, *themes, command = setTheme).grid(row = 2, column = 2)
+        m1 = OptionMenu(parent, varOp, *themes, command = setTheme).grid(row = 2, column = 2, sticky = W)
 
         #Font ui
         ##Use Sysfont?
-        l3 = Label(parent, text = "Use system font?", pady = 7, padx = 5).grid(row = 3, column = 1)
+        l3 = Label(parent, text = "Use system font?", pady = 7, padx = 5).grid(row = 3, column = 1, sticky = W)
         if getSysFont() == 'true' : b1Text = "Toggle (Now on)"
         else : b1Text = "Toggle (Now off)"
         global b1
         b1 = Button(parent, text = b1Text, command = setSysFont)
-        b1.grid(row = 3, column = 2)
+        b1.grid(row = 3, column = 2, sticky = W)
 
         ##Titlebar font
-        l4 = Label(parent, text = "Set font:", pady = 7, padx = 5).grid(row = 4, column = 1)
+        l4 = Label(parent, text = "Set font:", pady = 7, padx = 5).grid(row = 4, column = 1, sticky = W)
         global e1
         e1 = Entry(parent)
-        e1.grid(row = 4, column = 2)
+        e1.grid(row = 4, column = 2, sticky = W)
         e1.insert(0, getTitleFont())
-        b2 = Button(parent, text = "Update", command = setTitleFont).grid(row = 4, column = 3)
+        b2 = Button(parent, text = "Update", command = setTitleFont).grid(row = 4, column = 3, sticky = E)
 
         #Button layout ui
-        l5 = Label(parent, text = "Set button layout:", pady = 7, padx = 5).grid(row = 5, column = 1)
+        l5 = Label(parent, text = "Set button layout:", pady = 7, padx = 5).grid(row = 5, column = 1, sticky = W)
         global e2
         e2 = Entry(parent)
-        e2.grid(row = 5, column = 2)
+        e2.grid(row = 5, column = 2, sticky = W)
         e2.insert(0, getButtonLayout())
-        b3 = Button(parent, text = "Update", command = setButtonLayout).grid(row = 5, column = 3)
+        b3 = Button(parent, text = "Update", command = setButtonLayout).grid(row = 5, column = 3, sticky = E)
 
         #Reset
-        b4 = Button(parent, text = "Reset...", command = lambda : resetWindow()).grid(row = 6, column = 3)
+        b4 = Button(parent, text = "Reset...", command = lambda : resetWindow()).grid(row = 6, column = 3, sticky = E)
 
         def runReset() :
             if resetVar.get() == 1 : reset.theme()
