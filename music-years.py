@@ -17,7 +17,7 @@ if len(args) > 1 :
     if (args[1] == '-h') or (args[1] == '--help') :
         usage()
         exit(0)
-    if os.path.exists(args[1]) : musicDir = args[1]
+    elif os.path.exists(args[1]) : musicDir = args[1]
     else :
         usage()
         exit(0)
