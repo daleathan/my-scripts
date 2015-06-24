@@ -72,7 +72,7 @@ else :
                         print("Fetching: " + newPkg + ".tar.gz")
                         if aurVer == 4 : pkgUrl = "https://aur4.archlinux.org/cgit/aur.git/snapshot/" + newPkg + ".tar.gz"
                         else : pkgUrl = "https://aur.archlinux.org/packages/" + newPkg[:2] + "/" + newPkg + "/" + newPkg + ".tar.gz"
-                        Popen(["wget", "-q", pkgUrl, "-P", downloadsDir])
+                        Popen(["wget", "-q", pkgUrl, "-P", downloadsDir]).wait()
                     print("\nTarballs have been downloaded. Check: " + downloadsDir)    
     except requests.ConnectionError :
         print("Error. Connection to network failed.")
