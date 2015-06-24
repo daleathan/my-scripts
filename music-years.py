@@ -38,7 +38,7 @@ for x in musicFiles :
     try :
         audio = ID3(x)
         years.append(int(str(audio["TDRC"].text[0])))
-    except ID3NoHeaderError :
+    except (ID3NoHeaderError, KeyError) :
         pass
 
 if years == [] :
@@ -46,7 +46,8 @@ if years == [] :
     exit(0)
 else :
     # Begin reporting results
-    print("Your results:\n")
+    print("Number of files found: " + str(len(musicFiles)))
+    print("Number of tagged tracks found: " + str(len(years)) + "\n")
 
     # Report mean
     total = 0
@@ -73,18 +74,12 @@ else :
     modeList.sort(key=len, reverse=True)
     print("Mode year of release for your music: " + str(modeList[0][0]) + " (" + str(len(modeList[0])) + " tracks)")
 
-    # Top and bottom 10 years for tracks
+    # Top years for tracks
     print("\nTop 10 years for tracks")
     counter = 0
     while counter < 10 :
         print(str(counter + 1) + ": " + str(modeList[counter][0]) + " (" + str(len(modeList[counter])) + " tracks)")
         counter += 1
-
-    print("\nBottom 10 years for tracks")
-    counter = -1
-    while counter > -11 :
-        print(str(abs(counter)) + ": " + str(modeList[counter][0]) + " (" + str(len(modeList[counter])) + " tracks)")
-        counter -= 1
 
     # Report tracks per decade
     def getDecade(x) :
