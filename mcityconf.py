@@ -3,14 +3,13 @@
 #By Charles Bos
 
 from tkinter import *
-from tkinter import messagebox
 from subprocess import Popen, PIPE
 import os
 
 def checkMetacity() :
     execs = os.listdir("/bin")
     if "metacity" not in execs :
-        messagebox.showerror(title = "mcityconf.py Error", message = "Metacity wasn't found on this system. Exiting.")
+        print("mcityconf.py - Metacity wasn't found on this system. Exiting.")
         os._exit(0)
 
 def getTheme() :
@@ -169,9 +168,9 @@ class UI() :
             r4 = Radiobutton(resetWin, text = "Button layout", variable = resetVar, value = 4).grid(row = 2, column = 4)
             r5 = Radiobutton(resetWin, text = "All", variable = resetVar, value = 5).grid(row = 2, column = 5)
             b5 = Button(resetWin, text = "Ok", command = runReset).grid(row = 3, column = 2, columnspan = 3)
-        
+
+checkMetacity()        
 top = Tk()
 top.title("Settings for Metacity")
 ui = UI(top)
-checkMetacity()
 top.mainloop()
