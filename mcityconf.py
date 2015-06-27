@@ -3,8 +3,15 @@
 #By Charles Bos
 
 from tkinter import *
+from tkinter import messagebox
 from subprocess import Popen, PIPE
 import os
+
+def checkMetacity() :
+    execs = os.listdir("/bin")
+    if "metacity" not in execs :
+        messagebox.showerror(title = "mcityconf.py Error", message = "Metacity wasn't found on this system. Exiting.")
+        os._exit(0)
 
 def getTheme() :
     theme = Popen(["gsettings", "get", "org.gnome.metacity", "theme"], stdout = PIPE).communicate()
@@ -166,4 +173,5 @@ class UI() :
 top = Tk()
 top.title("Settings for Metacity")
 ui = UI(top)
+checkMetacity()
 top.mainloop()
