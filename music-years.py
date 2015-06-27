@@ -16,15 +16,15 @@ args = sys.argv
 if len(args) > 1 :
     if (args[1] == '-h') or (args[1] == '--help') :
         usage()
-        exit(0)
+        os._exit(0)
     elif os.path.exists(args[1]) : musicDir = args[1]
     else :
         usage()
-        exit(0)
+        os._exit(0)
 elif os.path.exists(os.path.expanduser('~') + "/Music") : musicDir = os.path.expanduser('~') + "/Music"
 else :
     usage()
-    exit(0)
+    os._exit(0)
 
 # Get dates for music files
 musicFiles = []
@@ -43,7 +43,7 @@ for x in musicFiles :
 
 if years == [] :
     print("No valid music files found. Nothing to do. Exiting...")
-    exit(0)
+    os._exit(0)
 else :
     # Begin reporting results
     print("Number of files found: " + str(len(musicFiles)))
