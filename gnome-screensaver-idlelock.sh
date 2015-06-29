@@ -3,9 +3,9 @@
 #Note: works only if monitor is switched off, not if monitor is blanked
 
 #Check if already running and exit immediately if so
-RUNNING=$(ps aux | grep gnome-screensaver-idlelock.sh | grep -v grep | wc -l)
-if [ "$RUNNING" -gt "2" ]; then
-  echo "gnome-screeensaver-idlelock.sh is already running"
+RUNNING=$(pgrep -f -c gnome-screensaver-idlelock.sh)
+if [ ! "$RUNNING" = "1" ]; then
+  echo "gnome-screensaver-idlelock.sh is already running"
   exit 0
 fi
  
