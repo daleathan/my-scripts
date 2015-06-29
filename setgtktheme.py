@@ -92,7 +92,7 @@ def setTheme(ver) :
             file = open(path, "w")
             if ver == 2 : file.write("gtk-theme-name = " + '"' + varOpG2.get() + '"')
             else : file.write("[Settings]\ngtk-theme-name = " + varOpG3.get())
-            file.close()
+        file.close()
     else :
         #If file does not exist, create it
         if ver == 3 :
