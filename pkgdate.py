@@ -4,8 +4,32 @@
 
 from subprocess import Popen, PIPE
 import datetime
+import sys
+import os
 
-instOutput = Popen(["pacman", "-Qi"], stdout = PIPE).communicate()
+def usage() :
+    print('''Usage:
+  pkgdate.py <options>
+
+Options:
+  -h: Display this dialog
+  -e: List explicitly installed packages only
+  -m: List local packages only''')
+
+args = sys.argv
+
+if "-h" in args :
+    usage()
+    os._exit(0)
+
+pacOpts = "-Qi"
+validOpts = ["-e", "-m", "-em", "-me"]
+for x in args :
+    if x in validOpts :
+        temp = list(pacOpts)
+        if x.lstrip("-") not in temp : pacOpts += x.lstrip("-")
+
+instOutput = Popen(["pacman", pacOpts], stdout = PIPE).communicate()
 instOutput = (str(instOutput).replace("\\n", " ").replace("b\'", "").replace("\', None", "").strip("()").rstrip(" ")).split(" ")
 instOutput = [x for x in instOutput if (x != "") and (x != ":")]
 
