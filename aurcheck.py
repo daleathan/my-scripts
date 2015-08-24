@@ -22,15 +22,9 @@ try :
     updates = []
     mismatches = []
     failures = []
-    aurUrl = "https://aur4.archlinux.org/packages/"
+    aurUrl = "https://aur.archlinux.org/packages/"
     
     for x in aurPkgs:
-        #Check for unmigrated packages first (will be removed when AUR4 replaces AUR3)
-        response = requests.get("https://aur4.archlinux.org/cgit/aur.git/log/?h=" + x[0])
-        logPage = str(BeautifulSoup(response.content))
-        if logPage.find("Invalid branch: " + x[0]) != -1 :
-            failures.append(x[0])
-            continue
         response = requests.get(aurUrl + x[0])
         page = str(BeautifulSoup(response.content))
         start = page.find("<h2>Package Details: ")
@@ -59,7 +53,7 @@ try :
                 for x in updates :
                     newPkg = x.split(' ')[0]
                     print("Fetching: " + newPkg + ".tar.gz")
-                    pkgUrl = "https://aur4.archlinux.org/cgit/aur.git/snapshot/" + newPkg + ".tar.gz"
+                    pkgUrl = "https://aur.archlinux.org/cgit/aur.git/snapshot/" + newPkg + ".tar.gz"
                     Popen(["wget", "-q", pkgUrl, "-P", downloadsDir]).wait()
                 print("\nTarballs have been downloaded. Check: " + downloadsDir)    
 except requests.ConnectionError :
