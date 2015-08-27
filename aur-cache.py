@@ -67,6 +67,9 @@ for x in dirs :
     #original tar.gz file
     if contains :
         shutil.rmtree(x)
-        os.remove(x + ".tar.gz")
+        try : 
+            os.remove(x + ".tar.gz")
+        except FileNotFoundError : 
+            pass
 
 print("Done")
