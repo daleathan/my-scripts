@@ -32,6 +32,7 @@ for x in args :
 instOutput = Popen(["pacman", pacOpts], stdout = PIPE).communicate()
 instOutput = (str(instOutput).replace("\\n", " ").replace("b\'", "").replace("\', None", "").strip("()").rstrip(" ")).split(" ")
 instOutput = [x for x in instOutput if (x != "") and (x != ":")]
+instOutput[0] = instOutput[0].lstrip('''b"''')
 
 name = []
 date = []
