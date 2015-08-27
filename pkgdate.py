@@ -36,7 +36,6 @@ instOutput[0] = instOutput[0].lstrip('''b"''')
 
 name = []
 date = []
-instPkgs = []
 
 counter = 0
 while counter < len(instOutput) :
@@ -50,11 +49,6 @@ while counter < len(instOutput) :
         date.append(temp.rstrip(" "))
     counter += 1
 
-counter = 0
-while counter < len(name) :
-    instPkgs.append((name[counter], date[counter]))
-    counter += 1
-
+instPkgs = [list(x) for x in zip(name, date)]
 instPkgs = sorted(instPkgs, key=lambda x: datetime.datetime.strptime(x[1], '%d %b %Y %H:%M:%S'))
-
 for x in instPkgs : print(x[0] + ", " + x[1])
