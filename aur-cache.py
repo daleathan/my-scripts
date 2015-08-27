@@ -55,7 +55,7 @@ for x in dirs :
         while counter < len(contents) :
             contents[counter] = x + "/" + contents[counter]
             counter += 1
-    except NotADirectoryError :
+    except (NotADirectoryError, FileNotFoundError) :
         continue
     #Copy found package files
     contains = False
