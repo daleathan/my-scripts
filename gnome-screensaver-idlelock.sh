@@ -1,6 +1,6 @@
 #!/bin/bash
-#Lock screen with GNOME Screensaver when the monitor is switched off
-#Note: works only if monitor is switched off, not if monitor is blanked
+#Lock screen with GNOME Screensaver after 10 minutes idle time
+#Requires xprintidle
 
 #Check if already running and exit immediately if so
 RUNNING=$(pgrep -f -c gnome-screensaver-idlelock.sh)
@@ -11,9 +11,9 @@ fi
  
 while true
 do
-  MONITOR=$(xset -q | grep Monitor)
+  IDLE=$(xprintidle)
   SCREENSAVER=$(gnome-screensaver-command -q)
-  if [ "$MONITOR" = "  Monitor is Off" ] && [ "$SCREENSAVER" = "The screensaver is inactive" ]; then
+  if [ "$IDLE" -ge 600000 ] && [ "$SCREENSAVER" = "The screensaver is inactive" ]; then
     gnome-screensaver-command --lock
   fi
   sleep 1
