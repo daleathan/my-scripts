@@ -60,15 +60,16 @@ while counter < len(name) :
 #Check cache packages against installed ones
 oldPkgs = []
 for x in cachePkgs :
-    if x not in instPkgs : oldPkgs.append(x)
+    if x not in instPkgs : 
+        if x.find(".pkg.tar.xz") != -1 : oldPkgs.append(x)
 
 #Show packages to be removed and remove them if specified
 if len(oldPkgs) > 0 :
-    print("Files to be removed:\n-----")
+    print("Packages to be removed:\n-----")
     for x in oldPkgs : print(x)
-    remove = input("\nWould you like to remove these files? [y/n] ")
+    remove = input("\nWould you like to remove these packages? [y/n] ")
     if remove == "y" :
         for x in oldPkgs : os.remove(cacheDir + "/" + x)
-        print("All old files removed.")
+        print("All old packages removed.")
 else : 
-    print("No files to be removed.")
+    print("No packages to be removed.")
