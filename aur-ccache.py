@@ -9,15 +9,11 @@ import sys
 def usage() :
     print('''Usage:
   aur-ccache.py <path to cache> <options>
-  Note: without the path to cache argument, the path is taken to be ~/.aurcache
-
-  Options:
-    -h, --help: print this dialog
-    --dry-run: show packages to be deleted but do not delete them''')
+  Note: without the path to cache argument, the path is taken to be ~/.aurcache''')
 
 # Get cache directory
 args = sys.argv
-if (len(args) > 1) and (args[1] != "--dry-run") :
+if len(args) > 1 :
     if (args[1] == '-h') or (args[1] == '--help') :
         usage()
         os._exit(0)
@@ -66,16 +62,13 @@ oldPkgs = []
 for x in cachePkgs :
     if x not in instPkgs : oldPkgs.append(x)
 
-#Show packages to be removed if --dry-run. Remove them if not --dry-run
-if "--dry-run" in args :
-    if len(oldPkgs) > 0 :
-        print("Files to be removed:\n-----")
-        for x in oldPkgs : print(x)
-    else : print("No files to be removed.")
-else :
-    if len(oldPkgs) > 0 :
-        for x in oldPkgs :
-            print("Removing: " + x)
-            os.remove(cacheDir + "/" + x)
-        print("\nAll old files removed!")
-    else : print("No files to be removed.")
+#Show packages to be removed and remove them if specified
+if len(oldPkgs) > 0 :
+    print("Files to be removed:\n-----")
+    for x in oldPkgs : print(x)
+    remove = input("\nWould you like to remove these files? [y/n] ")
+    if remove == "y" :
+        for x in oldPkgs : os.remove(cacheDir + "/" + x)
+        print("All old files removed.")
+else : 
+    print("No files to be removed.")
