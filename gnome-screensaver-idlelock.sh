@@ -1,6 +1,8 @@
 #!/bin/bash
 #Lock screen with GNOME Screensaver after 10 minutes idle time
 #Requires xprintidle
+#Note: You're probably better off using something like xautolock -
+#this is just an experiment
 
 #Check if already running and exit immediately if so
 RUNNING=$(pgrep -f -c gnome-screensaver-idlelock.sh)
