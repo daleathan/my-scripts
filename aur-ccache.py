@@ -8,7 +8,7 @@ import sys
 
 def usage() :
     print('''Usage:
-  aur-ccache.py <path to cache> <options>
+  aur-ccache.py <path to cache>
   Note: without the path to cache argument, the path is taken to be ~/.aurcache''')
 
 # Get cache directory
@@ -62,6 +62,7 @@ oldPkgs = []
 for x in cachePkgs :
     if x not in instPkgs : 
         if x.find(".pkg.tar.xz") != -1 : oldPkgs.append(x)
+oldPkgs = sorted(oldPkgs)
 
 #Show packages to be removed and remove them if specified
 if len(oldPkgs) > 0 :
