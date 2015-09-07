@@ -54,5 +54,5 @@ else :
     #Start renaming
     counter = 0
     for x in musicFiles :
-        os.rename(x[1], x[0] + "/" + trackNums[counter] + " " + titles[counter] + ".mp3")
+        os.rename(x[1], os.path.join(x[0], trackNums[counter] + " " + titles[counter] + ".mp3"))
         counter += 1
