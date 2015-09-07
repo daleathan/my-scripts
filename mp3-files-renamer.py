@@ -15,8 +15,8 @@ def usage() :
 #Get music directory
 args = sys.argv
 if (len(args) != 2) or (args[1] == '-h') or (args[1] == '--help') :
-        usage()
-        os._exit(0)
+    usage()
+    os._exit(0)
 else :
     if os.path.exists(args[1]) : musicDir = args[1]
     else :
@@ -25,7 +25,7 @@ else :
 
 #Get titles and track numbers for songs
 musicFiles = []
-tracknums = []
+trackNums = []
 titles = []
 
 for root, dirs, files in os.walk(musicDir, topdown=False):
@@ -37,15 +37,15 @@ for x in musicFiles :
     try :
         audio = ID3(x)
         titles.append(str(audio["TIT2"].text[0]))
-        tracknums.append(str(audio["TRCK"].text[0]))
+        trackNums.append(str(audio["TRCK"].text[0]))
     except (ID3NoHeaderError, KeyError) :
         musicFiles.remove(x)
 
 #Add leading 0 if missing
-for x in tracknums :
-    if len(x) == 1 : tracknums[tracknums.index(x)] = "0" + x
+for x in trackNums :
+    if len(x) == 1 : trackNums[trackNums.index(x)] = "0" + x
 
-if (len(tracknums) != len(titles)) or (len(tracknums) == len(titles) == 0) :
+if (len(trackNums) != len(titles)) or (len(trackNums) == len(titles) == 0) :
     print("Music files not found or improperly tagged. Unable to continue.")
     os._exit(0)
 else :
@@ -56,5 +56,5 @@ else :
     counter = 0
     for x in musicFiles :
         path = x[:getPath(x)]
-        os.rename(x, path + tracknums[counter] + " " + titles[counter] + ".mp3")
+        os.rename(x, path + trackNums[counter] + " " + titles[counter] + ".mp3")
         counter += 1
