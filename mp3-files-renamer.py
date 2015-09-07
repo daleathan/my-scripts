@@ -44,7 +44,7 @@ for x in musicFiles :
 #Add leading 0 if missing
 #Remove number of tracks per album if it exists
 for x in trackNums :
-    if len(x) == 1 : trackNums[trackNums.index(x)] = "0" + x
+    if len(x.split("/")[0]) == 1 : trackNums[trackNums.index(x)] = "0" + x
     trackNums[trackNums.index(x)] = x.split("/")[0]
 
 if (len(trackNums) != len(titles)) or (len(trackNums) == len(titles) == 0) :
