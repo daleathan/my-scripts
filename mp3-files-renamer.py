@@ -31,11 +31,11 @@ titles = []
 for root, dirs, files in os.walk(musicDir, topdown=False):
     for name in files:
         if name.find(".mp3") != -1 : 
-            musicFiles.append(os.path.join(root, name))
+            musicFiles.append((root, os.path.join(root, name)))
 
 for x in musicFiles :
     try :
-        audio = ID3(x)
+        audio = ID3(x[1])
         titles.append(str(audio["TIT2"].text[0]))
         trackNums.append(str(audio["TRCK"].text[0]))
     except (ID3NoHeaderError, KeyError) :
@@ -52,11 +52,7 @@ if (len(trackNums) != len(titles)) or (len(trackNums) == len(titles) == 0) :
     os._exit(0)
 else :
     #Start renaming
-    def getPath(origSong) :
-        return origSong.rfind("/") + 1
- 
     counter = 0
     for x in musicFiles :
-        path = x[:getPath(x)]
-        os.rename(x, path + trackNums[counter] + " " + titles[counter] + ".mp3")
+        os.rename(x[1], x[0] + "/" + trackNums[counter] + " " + titles[counter] + ".mp3")
         counter += 1
