@@ -46,7 +46,7 @@ for x in tracknums :
     if len(x) == 1 : tracknums[tracknums.index(x)] = "0" + x
 
 if (len(tracknums) != len(titles)) or (len(tracknums) == len(titles) == 0) :
-    print("No valid music files found. Nothing to do. Exiting...")
+    print("Music files not found or improperly tagged. Unable to continue.")
     os._exit(0)
 else :
     #Start renaming
