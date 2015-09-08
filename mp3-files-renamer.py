@@ -62,7 +62,7 @@ else :
 
     #Fix illegal characters
     counter = 0
-    while counter < len(musicFiles) :
+    while counter < len(convList) :
         if sys.platform == "win32" :
             winIllegals = ["<", ">", ":", '"', "/", "\\", "|", "?", "*"]
             for x in convList[counter][1] : 
