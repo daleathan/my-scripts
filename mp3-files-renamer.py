@@ -48,7 +48,7 @@ for x in ignore : musicFiles.remove(x)
 #Add leading 0 if missing
 #Remove number of tracks per album if it exists
 for x in convList :
-    if len(x[0].split("/")[0]) == 1 : convList[convList.index(x)][0] = "0" + x
+    if len(x[0].split("/")[0]) == 1 : convList[convList.index(x)][0] = "0" + x[0]
     convList[convList.index(x)][0] = x[0].split("/")[0]
 
 #If no files to convert, report problem files and exit
