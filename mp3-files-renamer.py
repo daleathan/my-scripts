@@ -40,8 +40,10 @@ for x in musicFiles :
         trackNum = str(audio["TRCK"].text[0])
         convList.append([trackNum, title])
     except (ID3NoHeaderError, KeyError) :
-        musicFiles.remove(x)
-        ignore.append(x[1])
+        ignore.append(x)
+
+#Remove problem files from list
+for x in ignore : musicFiles.remove(x)
 
 #Add leading 0 if missing
 #Remove number of tracks per album if it exists
@@ -51,10 +53,11 @@ for x in convList :
 
 #If no files to convert, report problem files and exit
 if len(convList) == 0 :
-    print("Music files not found or improperly tagged. Unable to continue.")
-    if len(ignore) > 0 :
-        print("\nThe following files could not be renamed:")
-        for x in ignore : print(x)
+    if len(convList) == 0 and len(ignore) == 0:
+        print("No music files were found.")
+    elif len(convList) == 0 and len(ignore) != 0 :
+        print("No renamable files were found.\n\nCheck the tags on the following files:\n-----")
+        for x in ignore : print(x[1])
     os._exit(0)
 else :
     #Start renaming
@@ -69,5 +72,5 @@ else :
         counter += 1
     print(str(success) + " files were successfully renamed.")
     if len(ignore) > 0 :
-        print("\nThe following files could not be renamed:")
-        for x in ignore : print(x)
+        print("\nThe following files could not be renamed - check their tags:\n-----")
+        for x in ignore : print(x[1])
