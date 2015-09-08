@@ -25,8 +25,8 @@ else :
 
 #Get titles and track numbers for songs
 musicFiles = []
-trackNums = []
-titles = []
+convList = []
+ignore = []
 
 for root, dirs, files in os.walk(musicDir, topdown=False):
     for name in files:
@@ -36,23 +36,38 @@ for root, dirs, files in os.walk(musicDir, topdown=False):
 for x in musicFiles :
     try :
         audio = ID3(x[1])
-        titles.append(str(audio["TIT2"].text[0]))
-        trackNums.append(str(audio["TRCK"].text[0]))
+        title = str(audio["TIT2"].text[0])
+        trackNum = str(audio["TRCK"].text[0])
+        convList.append([trackNum, title])
     except (ID3NoHeaderError, KeyError) :
         musicFiles.remove(x)
+        ignore.append(x[1])
 
 #Add leading 0 if missing
 #Remove number of tracks per album if it exists
-for x in trackNums :
-    if len(x.split("/")[0]) == 1 : trackNums[trackNums.index(x)] = "0" + x
-    trackNums[trackNums.index(x)] = x.split("/")[0]
+for x in convList :
+    if len(x[0].split("/")[0]) == 1 : convList[convList.index(x)][0] = "0" + x
+    convList[convList.index(x)][0] = x[0].split("/")[0]
 
-if (len(trackNums) != len(titles)) or (len(trackNums) == len(titles) == 0) :
+#If no files to convert, report problem files and exit
+if len(convList) == 0 :
     print("Music files not found or improperly tagged. Unable to continue.")
+    if len(ignore) > 0 :
+        print("\nThe following files could not be renamed:")
+        for x in ignore : print(x)
     os._exit(0)
 else :
     #Start renaming
     counter = 0
+    success = 0
     for x in musicFiles :
-        os.rename(x[1], os.path.join(x[0], trackNums[counter] + " " + titles[counter] + ".mp3"))
+        try :
+            os.rename(x[1], os.path.join(x[0], convList[counter][0] + " " + convList[counter][1] + ".mp3"))
+            success += 1
+        except IOError :
+            pass
         counter += 1
+    print(str(success) + " files were successfully renamed.")
+    if len(ignore) > 0 :
+        print("\nThe following files could not be renamed:")
+        for x in ignore : print(x)
