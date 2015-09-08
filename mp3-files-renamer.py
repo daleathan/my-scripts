@@ -39,7 +39,7 @@ for x in musicFiles :
         title = str(audio["TIT2"].text[0])
         trackNum = str(audio["TRCK"].text[0])
         convList.append([trackNum, title])
-    except (ID3NoHeaderError, KeyError) :
+    except (ID3NoHeaderError, KeyError, PermissionError) :
         ignore.append(x)
 
 #Remove problem files from list
@@ -56,21 +56,16 @@ if len(convList) == 0 :
     if len(convList) == 0 and len(ignore) == 0:
         print("No music files were found.")
     elif len(convList) == 0 and len(ignore) != 0 :
-        print("No renamable files were found.\n\nCheck the tags on the following files:\n-----")
+        print("Some music files were found but none were renamable.\n\nCheck the tags and permissions on the following files:\n-----")
         for x in ignore : print(x[1])
     os._exit(0)
 else :
     #Start renaming
     counter = 0
-    success = 0
     for x in musicFiles :
-        try :
-            os.rename(x[1], os.path.join(x[0], convList[counter][0] + " " + convList[counter][1] + ".mp3"))
-            success += 1
-        except IOError :
-            pass
+        os.rename(x[1], os.path.join(x[0], convList[counter][0] + " " + convList[counter][1] + ".mp3"))
         counter += 1
-    print(str(success) + " files were successfully renamed.")
+    print(str(len(convList)) + " files were successfully renamed.")
     if len(ignore) > 0 :
         print("\nThe following files could not be renamed - check their tags:\n-----")
         for x in ignore : print(x[1])
