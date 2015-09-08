@@ -67,5 +67,5 @@ else :
         counter += 1
     print(str(len(convList)) + " files were successfully renamed.")
     if len(ignore) > 0 :
-        print("\nThe following files could not be renamed - check their tags:\n-----")
+        print("\nSome files could not be renamed.\nCheck the tags and permissions on the following files:\n-----")
         for x in ignore : print(x[1])
