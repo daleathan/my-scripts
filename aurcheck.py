@@ -48,8 +48,9 @@ try :
             for x in updates : print(x)
             fetch = input("\nFetch updated tarballs? [y/n] ")
             if fetch == "y" :
-                if os.path.exists(os.path.expanduser('~') + "/Downloads") : downloadsDir = os.path.expanduser('~') + "/Downloads"
-                else : downloadsDir = os.path.expanduser('~')
+                homeDir = os.path.expanduser('~')
+                if os.path.exists(homeDir + "/Downloads") : downloadsDir = homeDir + "/Downloads"
+                else : downloadsDir = homeDir
                 for x in updates :
                     newPkg = x.split(' ')[0]
                     print("Fetching: " + newPkg + ".tar.gz")
