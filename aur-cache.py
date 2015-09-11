@@ -2,7 +2,6 @@
 #Copy compiled packages to AUR cache and remove the original tarballs and build dirs
 #By Charles Bos
 
-from subprocess import Popen, PIPE
 import os
 import sys
 import shutil
