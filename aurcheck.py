@@ -22,10 +22,9 @@ try :
     updates = []
     mismatches = []
     failures = []
-    aurUrl = "https://aur.archlinux.org/packages/"
     
     for x in aurPkgs:
-        response = requests.get(aurUrl + x[0])
+        response = requests.get("https://aur.archlinux.org/packages/" + x[0])
         page = str(BeautifulSoup(response.content, "html.parser"))
         start = page.find("<h2>Package Details: ")
         if start == -1 : failures.append(x[0])
