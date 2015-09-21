@@ -48,9 +48,9 @@ for x in ignore : musicFiles.remove(x)
 
 #If no files to convert, report problem files and exit
 if len(convList) == 0 :
-    if len(convList) == 0 and len(ignore) == 0:
+    if len(ignore) == 0 :
         print("No music files were found.")
-    elif len(convList) == 0 and len(ignore) != 0 :
+    else :
         print("Some music files were found but none were renamable.\n\nCheck the tags and permissions on the following files:\n-----")
         for x in ignore : print(x[1])
     os._exit(0)
