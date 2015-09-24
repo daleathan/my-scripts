@@ -23,6 +23,7 @@ try :
     splitPkgs = []
     mismatches = []
     failures = []
+    devel = ["-git", "-bzr", "-svn", "-hg"]
     
     for x in aurPkgs:
         response = requests.get("https://aur.archlinux.org/packages/" + x[0])
@@ -38,7 +39,8 @@ try :
                 pkgBaseEnd = page.find('''">View PKGBUILD</a> /''')
                 pkgBase = page[pkgBaseStart + 64:pkgBaseEnd]
                 if x[0] != pkgBase : splitPkgs.append(str(x[0] + " " +x[1] + " --> " + version))
-            elif x[1] > version : mismatches.append(str(x[0] + " " +x[1] + " --> " + version))  
+            elif x[1] > version : 
+                if not any(y in x[0] for y in devel) : mismatches.append(str(x[0] + " " +x[1] + " --> " + version))  
 
     if updates == mismatches == failures == [] : print("\nEverything is up to date.")
     else :
