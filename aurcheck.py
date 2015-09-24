@@ -7,8 +7,6 @@ from bs4 import BeautifulSoup
 import requests
 import os
 
-print("Checking...")
-
 aurPkgs = Popen(["pacman", "-Qm"], stdout = PIPE).communicate()
 aurPkgs = (str(aurPkgs).replace("\\n", " ").replace("b\'", "").replace("\', None", "").strip("()").rstrip(" ")).split(" ")
 
@@ -28,7 +26,7 @@ for x in aurPkgs:
     try :
         response = requests.get("https://aur.archlinux.org/packages/" + x[0])
     except requests.ConnectionError :
-        print("Connection to network failed.")
+        print("Error. Connection to network failed.")
         os._exit(0)
     page = str(BeautifulSoup(response.content, "html.parser"))
     start = page.find("<h2>Package Details: ")
@@ -45,16 +43,18 @@ for x in aurPkgs:
         elif x[1] > version : 
             if not any(y in x[0] for y in devel) : mismatches.append(str(x[0] + " " +x[1] + " --> " + version))  
 
-if updates == mismatches == failures == [] : print("\nEverything is up to date.")
+if updates == mismatches == failures == [] : print("Everything is up to date.")
 else :
     if failures != [] :
-        print("\nThe following packages were not found in the AUR:\n-----")
+        print("The following packages were not found in the AUR:\n-----")
         for x in failures : print(x)
+        print()
     if mismatches != [] :
-        print("\nThe following local packages are more recent than their AUR versions:\n-----")
+        print("The following local packages are more recent than their AUR versions:\n-----")
         for x in mismatches : print(x)
+        print()
     if updates != [] :
-        print("\nThe following packages have updates available:\n-----")
+        print("The following packages have updates available:\n-----")
         for x in updates : print(x)
         fetch = input("\nFetch updated tarballs? [y/n] ")
         if fetch == "y" :
