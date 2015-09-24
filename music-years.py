@@ -72,14 +72,17 @@ else :
             modeList += [temp]
         counter += 1
     modeList.sort(key=len, reverse=True)
-    print("Mode year of release for your music: " + str(modeList[0][0]) + " (" + str(len(modeList[0])) + " tracks)")
+    if modeList != [] : print("Mode year of release for your music: " + str(modeList[0][0]) + " (" + str(len(modeList[0])) + " tracks)")
+    else : print("Mode year of release for your music: " + str(years[0]) + " (" + str(len(years)) + " tracks)")
 
     # Top years for tracks
     print("\nTop years for tracks (max 10)")
     counter = 0
-    while (counter < 10) and (counter < len(modeList)) :
-        print(str(counter + 1) + ": " + str(modeList[counter][0]) + " (" + str(len(modeList[counter])) + " tracks)")
-        counter += 1
+    if modeList != [] :
+        while (counter < 10) and (counter < len(modeList)) :
+            print(str(counter + 1) + ": " + str(modeList[counter][0]) + " (" + str(len(modeList[counter])) + " tracks)")
+            counter += 1
+    else : print("1: " + str(years[0]) + " (" + str(len(years)) + " tracks)")
 
     # Report tracks per decade
     def getDecade(x) :
@@ -99,6 +102,7 @@ else :
             temp = [y for y in trackDecs if y == x]
             decades += [temp]
         counter += 1
+    if decades == [] : decades += [trackDecs]
     decades.sort(key=len, reverse=True)
 
     print("\nNumber of tracks per decade")
