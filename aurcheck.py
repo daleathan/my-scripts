@@ -20,6 +20,7 @@ while counter < len(aurPkgs) - 1 :
     
 try :
     updates = []
+    splitPkgs = []
     mismatches = []
     failures = []
     
@@ -31,7 +32,12 @@ try :
         else :
             end = page.find("</h2>", start)
             version = page[start + 21:end].split(" ")[1]
-            if x[1] < version : updates.append(str(x[0] + " " +x[1] + " --> " + version))
+            if x[1] < version : 
+                updates.append(str(x[0] + " " +x[1] + " --> " + version))
+                pkgBaseStart = page.find('''<a href="https://aur.archlinux.org/cgit/aur.git/tree/PKGBUILD?h=''')
+                pkgBaseEnd = page.find('''">View PKGBUILD</a> /''')
+                pkgBase = page[pkgBaseStart + 64:pkgBaseEnd]
+                if x[0] != pkgBase : splitPkgs.append(str(x[0] + " " +x[1] + " --> " + version))
             elif x[1] > version : mismatches.append(str(x[0] + " " +x[1] + " --> " + version))  
 
     if updates == mismatches == failures == [] : print("\nEverything is up to date.")
@@ -51,6 +57,7 @@ try :
                 if os.path.exists(homeDir + "/Downloads") : downloadsDir = homeDir + "/Downloads"
                 else : downloadsDir = homeDir
                 for x in updates :
+                    if x in splitPkgs : continue
                     newPkg = x.split(' ')[0]
                     print("Fetching: " + newPkg + ".tar.gz")
                     pkgUrl = "https://aur.archlinux.org/cgit/aur.git/snapshot/" + newPkg + ".tar.gz"
