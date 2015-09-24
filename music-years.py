@@ -75,9 +75,9 @@ else :
     print("Mode year of release for your music: " + str(modeList[0][0]) + " (" + str(len(modeList[0])) + " tracks)")
 
     # Top years for tracks
-    print("\nTop 10 years for tracks")
+    print("\nTop years for tracks (max 10)")
     counter = 0
-    while counter < 10 :
+    while (counter < 10) and (counter < len(modeList)) :
         print(str(counter + 1) + ": " + str(modeList[counter][0]) + " (" + str(len(modeList[counter])) + " tracks)")
         counter += 1
 
