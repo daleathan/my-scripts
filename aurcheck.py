@@ -48,11 +48,11 @@ else :
     if failures != [] :
         print("The following packages were not found in the AUR:\n-----")
         for x in failures : print(x)
-        print()
+        if mismatches != [] : print()
     if mismatches != [] :
         print("The following local packages are more recent than their AUR versions:\n-----")
         for x in mismatches : print(x)
-        print()
+        if updates != [] : print()
     if updates != [] :
         print("The following packages have updates available:\n-----")
         for x in updates : print(x)
