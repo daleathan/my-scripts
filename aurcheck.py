@@ -20,8 +20,6 @@ updates = []
 splitPkgs = []
 mismatches = []
 failures = []
-devel = ["-git", "-bzr", "-svn", "-hg"]
-develFound = False
 
 for x in aurPkgs:
     try :
@@ -41,15 +39,9 @@ for x in aurPkgs:
             pkgBaseEnd = page.find('''">View PKGBUILD</a> /''')
             pkgBase = page[pkgBaseStart + 64:pkgBaseEnd]
             if x[0] != pkgBase : splitPkgs.append(str(x[0] + " " +x[1] + " --> " + version))
-        elif x[1] > version : 
-            if not any(y in x[0] for y in devel) : mismatches.append(str(x[0] + " " +x[1] + " --> " + version))
-            else : develFound = True 
+        elif x[1] > version : mismatches.append(str(x[0] + " " +x[1] + " --> " + version))
 
-if updates == mismatches == failures == [] : 
-    if not develFound : print("Everything is up to date.")
-    else : 
-        print("Note: some version mismatches for development packages were ignored.")
-        print("Everything is up to date.")
+if updates == mismatches == failures == [] : print("Everything is up to date.")
 else :
     if failures != [] :
         print("The following packages were not found in the AUR:\n-----")
