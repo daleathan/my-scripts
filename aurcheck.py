@@ -46,7 +46,7 @@ else :
     if failures != [] :
         print("The following packages were not found in the AUR:\n-----")
         for x in failures : print(x)
-        if mismatches != [] : print()
+        if (mismatches != []) or (updates != []) : print()
     if mismatches != [] :
         print("The following local packages are more recent than their AUR versions:\n-----")
         for x in mismatches : print(x)
