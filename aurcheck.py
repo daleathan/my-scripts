@@ -64,7 +64,9 @@ else :
             for x in updates :
                 if x in splitPkgs : continue
                 newPkg = x.split(' ')[0]
-                print("Fetching: " + newPkg + ".tar.gz")
                 pkgUrl = "https://aur.archlinux.org/cgit/aur.git/snapshot/" + newPkg + ".tar.gz"
                 Popen(["wget", "-q", pkgUrl, "-P", downloadsDir]).wait()
-            print("\nTarballs have been downloaded. Check: " + downloadsDir)
+                if os.path.exists(downloadsDir + "/" + newPkg + ".tar.gz") : completion = "SUCCESS"
+                else : completion = "FAILURE"
+                print("Fetch: " + newPkg + ".tar.gz - " + completion)
+            print("\nDownloads completed. Check: " + downloadsDir)
