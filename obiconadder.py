@@ -11,9 +11,8 @@ def usage() :
   obiconadder.py <path to menu file>''')
 
 def getDotDesktop(item, identifier) :
-    dotDesktops = os.listdir("/usr/share/applications")
     for x in dotDesktops :
-        file = open("/usr/share/applications/" + x, "r", encoding = "utf-8")
+        file = open(x, "r", encoding = "utf-8")
         fileText = file.read()
         file.close()
         idStart = fileText.find(identifier)
@@ -27,13 +26,13 @@ def getDotDesktop(item, identifier) :
     return None
 
 def getIcon(dotDesktop) :
-    file = open("/usr/share/applications/" + dotDesktop, encoding = "utf-8")
+    file = open(dotDesktop, encoding = "utf-8")
     fileText = file.read()
     file.close()
     iconStart = fileText.find("Icon=")
     if iconStart != -1 :
         iconEnd = fileText.find("\n", iconStart)
-        for x in iconDir :
+        for x in iconsList :
             if fileText[iconStart + 5:iconEnd] == x.split("/")[-1].split(".")[0].split(" %")[0] :
                 return x
         return None
@@ -49,14 +48,15 @@ else :
     usage()
     os._exit(0)
 
-#Get locations of icons
-iconDirA = os.listdir("/usr/share/pixmaps")
-for x in iconDirA : iconDirA[iconDirA.index(x)] = "/usr/share/pixmaps/" + x
-iconDirB = []
-for root, dirs, files in os.walk("/usr/share/icons/hicolor/48x48", topdown=False):
-    for name in files:
-        iconDirB.append(os.path.join(root, name))
-iconDir = iconDirA + iconDirB
+#Get locations of icons and .desktops
+iconDirs = ["/usr/share/pixmaps", "/usr/share/icons/hicolor/48x48"]
+iconsList = []
+for x in iconDirs :
+    for root, dirs, files in os.walk(x, topdown=False):
+        for name in files:
+            iconsList.append(os.path.join(root, name))
+dotDesktops = os.listdir("/usr/share/applications")
+for x in dotDesktops : dotDesktops[dotDesktops.index(x)] = "/usr/share/applications/" + x
 
 #Start scanning menu file
 file = open(menuFile, "r")
