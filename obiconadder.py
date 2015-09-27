@@ -46,8 +46,8 @@ def getIconTheme() :
         file = open(homeDir + "/.gtkrc-2.0", "r")
         fileText = file.read()
         file.close()
-        contents = contents.split("\n")
-        for x in contents :
+        fileText = fileText.split("\n")
+        for x in fileText :
             y = x.split("=")
             if y[0].strip() == "gtk-icon-theme-name" : theme = y[-1].strip().strip('"')
         if os.path.exists("/usr/share/icons/" + theme) : return theme
