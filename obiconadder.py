@@ -64,9 +64,9 @@ fileText = file.read()
 file.close()
 newFile = fileText[:]
 
+#Get icons for applications
 nameStart = fileText.find('<item label="')
 nameEnd = fileText.find('">', nameStart)
-
 while 0 <= nameStart <= len(fileText) :
     dotDesktop = getDotDesktop(fileText[nameStart + 13:nameEnd], "Name=")
     if dotDesktop != None : icon = getIcon(dotDesktop)
@@ -81,6 +81,18 @@ while 0 <= nameStart <= len(fileText) :
         newFile = newFile.replace(fileText[nameStart + 13:nameEnd], fileText[nameStart + 13:nameEnd] + '" icon="' + icon)
     nameStart = fileText.find('<item label="', nameEnd)
     nameEnd = fileText.find('">', nameStart)
+
+#Get icons for categories (needs gnome-icon-theme, I might improve this later on)
+prelimStart = fileText.find('<menu id="')
+catStart = fileText.find('label="', prelimStart)
+catEnd = fileText.find('">', catStart)
+while 0 <= prelimStart <= len(fileText) :
+    icon = "/usr/share/icons/gnome/48x48/categories/applications-" + fileText[catStart + 7:catEnd].lower() + ".png"
+    if os.path.isfile(icon) :
+        newFile = newFile.replace(fileText[catStart + 7:catEnd], fileText[catStart + 7:catEnd] + '" icon="' + icon)
+    prelimStart = fileText.find('<menu id="', catEnd)
+    catStart = fileText.find('label="', prelimStart)
+    catEnd = fileText.find('">', catStart)
 
 #Now add the icons
 #This will replace the contents of the old file
