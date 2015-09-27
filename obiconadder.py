@@ -69,7 +69,7 @@ else :
 
 #Get locations of icons and .desktops
 iconDirs = ["/usr/share/pixmaps", "/usr/share/icons/hicolor/48x48"]
-if getIconTheme() != None : iconDirs.append("/usr/share/icons/" + getIconTheme())
+if getIconTheme() != None : iconDirs.append("/usr/share/icons/" + getIconTheme() + "/48x48")
 iconsList = []
 for x in iconDirs :
     for root, dirs, files in os.walk(x, topdown=False):
