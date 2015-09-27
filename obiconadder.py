@@ -83,16 +83,18 @@ while 0 <= nameStart <= len(fileText) :
     nameEnd = fileText.find('">', nameStart)
 
 #Get icons for categories (needs gnome-icon-theme, I might improve this later on)
-prelimStart = fileText.find('<menu id="')
-catStart = fileText.find('label="', prelimStart)
-catEnd = fileText.find('">', catStart)
-while 0 <= prelimStart <= len(fileText) :
-    icon = "/usr/share/icons/gnome/48x48/categories/applications-" + fileText[catStart + 7:catEnd].lower() + ".png"
+catStart = fileText.find('<menu id="')
+catEnd = fileText.find('" ', catStart)
+labelStart = fileText.find('label="', catEnd)
+labelEnd = fileText.find('">', labelStart)
+while 0 <= catStart <= len(fileText) :
+    icon = "/usr/share/icons/gnome/48x48/categories/applications-" + fileText[labelStart + 7:labelEnd].lower() + ".png"
     if os.path.isfile(icon) :
-        newFile = newFile.replace(fileText[catStart + 7:catEnd], fileText[catStart + 7:catEnd] + '" icon="' + icon)
-    prelimStart = fileText.find('<menu id="', catEnd)
-    catStart = fileText.find('label="', prelimStart)
-    catEnd = fileText.find('">', catStart)
+        newFile = newFile.replace(fileText[catStart:catEnd + 1], fileText[catStart:catEnd + 1] + ' icon="' + icon + '"')
+    catStart = fileText.find('<menu id="', labelEnd)
+    catEnd = fileText.find('" ', catStart)
+    labelStart = fileText.find('label="', catEnd)
+    labelEnd = fileText.find('">', labelStart)
 
 #Now add the icons
 #This will replace the contents of the old file
