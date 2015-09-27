@@ -37,6 +37,25 @@ def getIcon(dotDesktop) :
                 return x
         return None
     else : return None
+
+def getIconTheme() :
+    #Try and get the icon theme from ~/.gtkrc-2.0. If we cannot do this, try and
+    #find the gnome-icon-theme instead.
+    homeDir = os.path.expanduser('~')
+    try :
+        file = open(homeDir + "/.gtkrc-2.0", "r")
+        fileText = file.read()
+        file.close()
+        contents = contents.split("\n")
+        for x in contents :
+            y = x.split("=")
+            if y[0].strip() == "gtk-icon-theme-name" : theme = y[-1].strip().strip('"')
+        if os.path.exists("/usr/share/icons/" + theme) : return theme
+        elif os.path.exists("/usr/share/icons/gnome") : return "gnome"
+        else : return None
+    except IOError :
+        if os.path.exists("/usr/share/icons/gnome") : return "gnome"
+        else : return None
         
 #Handle args
 args = sys.argv
@@ -50,6 +69,7 @@ else :
 
 #Get locations of icons and .desktops
 iconDirs = ["/usr/share/pixmaps", "/usr/share/icons/hicolor/48x48"]
+if getIconTheme() != None : iconDirs.append("/usr/share/icons/" + getIconTheme())
 iconsList = []
 for x in iconDirs :
     for root, dirs, files in os.walk(x, topdown=False):
@@ -82,14 +102,15 @@ while 0 <= nameStart <= len(fileText) :
     nameStart = fileText.find('<item label="', nameEnd)
     nameEnd = fileText.find('">', nameStart)
 
-#Get icons for categories (needs gnome-icon-theme, I might improve this later on)
+#Get icons for categories
 catStart = fileText.find('<menu id="')
 catEnd = fileText.find('" ', catStart)
 labelStart = fileText.find('label="', catEnd)
 labelEnd = fileText.find('">', labelStart)
 while 0 <= catStart <= len(fileText) :
-    icon = "/usr/share/icons/gnome/48x48/categories/applications-" + fileText[labelStart + 7:labelEnd].lower() + ".png"
-    if os.path.isfile(icon) :
+    if getIconTheme() != None : icon = "/usr/share/icons/" + getIconTheme() + "/48x48/categories/applications-" + fileText[labelStart + 7:labelEnd].lower() + ".png"
+    else : icon = None
+    if (icon != None) and (os.path.isfile(icon)) :
         newFile = newFile.replace(fileText[catStart:labelStart - 1], fileText[catStart:catEnd + 1] + ' icon="' + icon + '"')
     catStart = fileText.find('<menu id="', labelEnd)
     catEnd = fileText.find('" ', catStart)
