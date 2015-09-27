@@ -17,7 +17,7 @@ def getDotDesktop(item, identifier) :
         file.close()
         idStart = fileText.find(identifier)
         idEnd = fileText.find("\n", idStart)
-        if item == fileText[idStart + 5:idEnd] : return x
+        if item == fileText[idStart + 5:idEnd].split(" %")[0] : return x
     #As a fallback position, try and match the execute line from the file with
     #the .desktop filename
     if identifier == "Exec=" :
@@ -33,7 +33,7 @@ def getIcon(dotDesktop) :
     if iconStart != -1 :
         iconEnd = fileText.find("\n", iconStart)
         for x in iconsList :
-            if fileText[iconStart + 5:iconEnd] == x.split("/")[-1].split(".")[0].split(" %")[0] :
+            if fileText[iconStart + 5:iconEnd] == x.split("/")[-1].split(".")[0] :
                 return x
         return None
     else : return None
