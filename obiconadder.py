@@ -99,5 +99,5 @@ while 0 <= catStart <= len(fileText) :
 #Now add the icons
 #This will replace the contents of the old file
 file = open(menuFile, "w")
-print(newFile, file = file)
+print(newFile.rstrip("\n"), file = file)
 file.close()
