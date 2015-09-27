@@ -10,15 +10,20 @@ def usage() :
     print('''Usage:
   obiconadder.py <path to menu file>''')
 
-def getDotDesktop(item) :
+def getDotDesktop(item, identifier) :
     dotDesktops = os.listdir("/usr/share/applications")
     for x in dotDesktops :
         file = open("/usr/share/applications/" + x, "r", encoding = "utf-8")
         fileText = file.read()
         file.close()
-        nameStart = fileText.find("Name=")
-        nameEnd = fileText.find("\n", nameStart)
-        if item == fileText[nameStart + 5:nameEnd] : return x
+        idStart = fileText.find(identifier)
+        idEnd = fileText.find("\n", idStart)
+        if item == fileText[idStart + 5:idEnd] : return x
+    #As a fallback position, try and match the execute line from the file with
+    #the .desktop filename
+    if identifier == "Exec=" :
+        for x in dotDesktops :
+            if item == x.split("/")[-1].split(".desktop")[0] : return x
     return None
 
 def getIcon(dotDesktop) :
@@ -29,7 +34,7 @@ def getIcon(dotDesktop) :
     if iconStart != -1 :
         iconEnd = fileText.find("\n", iconStart)
         for x in iconDir :
-            if fileText[iconStart + 5:iconEnd] == x.split("/")[-1].split(".")[0] :
+            if fileText[iconStart + 5:iconEnd] == x.split("/")[-1].split(".")[0].split(" %")[0] :
                 return x
         return None
     else : return None
@@ -59,21 +64,26 @@ fileText = file.read()
 file.close()
 newFile = fileText[:]
 
-itemStart = fileText.find('<item label="')
-itemEnd = fileText.find('">', itemStart)
+nameStart = fileText.find('<item label="')
+nameEnd = fileText.find('">', nameStart)
 
-while 0 <= itemStart <= len(fileText) :
-    dotDesktop = getDotDesktop(fileText[itemStart + 13:itemEnd])
+while 0 <= nameStart <= len(fileText) :
+    dotDesktop = getDotDesktop(fileText[nameStart + 13:nameEnd], "Name=")
     if dotDesktop != None : icon = getIcon(dotDesktop)
-    else : icon = None
+    else :
+        #If identification by name fails, try by exec instead 
+        execStart = fileText.find("<execute>", nameEnd)
+        execEnd = fileText.find("</execute>", execStart)
+        dotDesktop = getDotDesktop(fileText[execStart + 9:execEnd], "Exec=")
+        if dotDesktop != None : icon = getIcon(dotDesktop)
+        else : icon = None
     if icon != None :
-        newFile = newFile.replace(fileText[itemStart + 13:itemEnd], fileText[itemStart + 13:itemEnd] + '" icon="' + icon)
-    itemStart = fileText.find('<item label="', itemEnd)
-    itemEnd = fileText.find('">', itemStart)
+        newFile = newFile.replace(fileText[nameStart + 13:nameEnd], fileText[nameStart + 13:nameEnd] + '" icon="' + icon)
+    nameStart = fileText.find('<item label="', nameEnd)
+    nameEnd = fileText.find('">', nameStart)
 
 #Now add the icons
 #This will replace the contents of the old file
 file = open(menuFile, "w")
 print(newFile, file = file)
 file.close()
-    
