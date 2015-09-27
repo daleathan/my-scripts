@@ -39,8 +39,7 @@ def getIcon(dotDesktop) :
     else : return None
 
 def getIconTheme() :
-    #Try and get the icon theme from ~/.gtkrc-2.0. If we cannot do this, try and
-    #find the gnome-icon-theme instead.
+    #Try and get the icon theme from ~/.gtkrc-2.0
     homeDir = os.path.expanduser('~')
     try :
         file = open(homeDir + "/.gtkrc-2.0", "r")
@@ -50,12 +49,10 @@ def getIconTheme() :
         for x in fileText :
             y = x.split("=")
             if y[0].strip() == "gtk-icon-theme-name" : theme = y[-1].strip().strip('"')
-        if os.path.exists("/usr/share/icons/" + theme) : return theme
-        elif os.path.exists("/usr/share/icons/gnome") : return "gnome"
+        if os.path.exists("/usr/share/icons/" + theme + "/48x48") : return theme
         else : return None
     except IOError :
-        if os.path.exists("/usr/share/icons/gnome") : return "gnome"
-        else : return None
+        return None
         
 #Handle args
 args = sys.argv
@@ -70,6 +67,7 @@ else :
 #Get locations of icons and .desktops
 iconDirs = ["/usr/share/pixmaps", "/usr/share/icons/hicolor/48x48"]
 if getIconTheme() != None : iconDirs.append("/usr/share/icons/" + getIconTheme() + "/48x48")
+if os.path.exists("/usr/share/icons/gnome/48x48") : iconDirs.append("/usr/share/icons/gnome/48x48")
 iconsList = []
 for x in iconDirs :
     for root, dirs, files in os.walk(x, topdown=False):
@@ -103,12 +101,16 @@ while 0 <= nameStart <= len(fileText) :
     nameEnd = fileText.find('">', nameStart)
 
 #Get icons for categories
+#If user set theme cannot be found, fall back to gnome-icon-theme
 catStart = fileText.find('<menu id="')
 catEnd = fileText.find('" ', catStart)
 labelStart = fileText.find('label="', catEnd)
 labelEnd = fileText.find('">', labelStart)
 while 0 <= catStart <= len(fileText) :
-    if getIconTheme() != None : icon = "/usr/share/icons/" + getIconTheme() + "/48x48/categories/applications-" + fileText[labelStart + 7:labelEnd].lower() + ".png"
+    if getIconTheme() != None : catTheme = getIconTheme()
+    elif os.path.exists("/usr/share/icons/gnome/48x48") : catTheme = "gnome"
+    else : catTheme = None
+    if catTheme != None : icon = "/usr/share/icons/" + catTheme + "/48x48/categories/applications-" + fileText[labelStart + 7:labelEnd].lower() + ".png"
     else : icon = None
     if (icon != None) and (os.path.isfile(icon)) :
         newFile = newFile.replace(fileText[catStart:labelStart - 1], fileText[catStart:catEnd + 1] + ' icon="' + icon + '"')
