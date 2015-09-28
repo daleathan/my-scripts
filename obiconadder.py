@@ -80,7 +80,6 @@ for x in dotDesktops : dotDesktops[dotDesktops.index(x)] = "/usr/share/applicati
 file = open(menuFile, "r")
 fileText = file.read()
 file.close()
-newFile = fileText[:]
 
 #Get icons for applications
 nameStart = fileText.find('<item label="')
@@ -96,7 +95,7 @@ while 0 <= nameStart <= len(fileText) :
         if dotDesktop != None : icon = getIcon(dotDesktop)
         else : icon = None
     if icon != None :
-        newFile = newFile.replace(fileText[nameStart + 13:nameEnd], fileText[nameStart + 13:nameEnd].split('" icon="')[0] + '" icon="' + icon)
+        fileText = fileText.replace(fileText[nameStart + 13:nameEnd], fileText[nameStart + 13:nameEnd].split('" icon="')[0] + '" icon="' + icon)
     nameStart = fileText.find('<item label="', nameEnd)
     nameEnd = fileText.find('">', nameStart)
 
@@ -126,7 +125,7 @@ if catTheme != None :
         else :
             icon = None
         if icon != None :
-            newFile = newFile.replace(fileText[catStart:labelStart - 1], fileText[catStart:catEnd + 1] + ' icon="' + icon + '"')
+            fileText = fileText.replace(fileText[catStart:labelStart - 1], fileText[catStart:catEnd + 1] + ' icon="' + icon + '"')
         catStart = fileText.find('<menu id="', labelEnd)
         catEnd = fileText.find('" ', catStart)
         labelStart = fileText.find('label="', catEnd)
@@ -135,5 +134,5 @@ if catTheme != None :
 #Now add the icons
 #This will replace the contents of the old file
 file = open(menuFile, "w")
-print(newFile.rstrip("\n"), file = file)
+print(fileText.rstrip("\n"), file = file)
 file.close()
