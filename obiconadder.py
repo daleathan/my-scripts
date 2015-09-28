@@ -101,23 +101,31 @@ while 0 <= nameStart <= len(fileText) :
     nameEnd = fileText.find('">', nameStart)
 
 #Get icons for categories
-#If user set theme cannot be found, fall back to gnome-icon-theme
-catStart = fileText.find('<menu id="')
-catEnd = fileText.find('" ', catStart)
-labelStart = fileText.find('label="', catEnd)
-labelEnd = fileText.find('">', labelStart)
-while 0 <= catStart <= len(fileText) :
-    if getIconTheme() != None : catTheme = getIconTheme()
+#If user set theme cannot be found or does not contain an
+#appropriate number of icons, fall back to gnome-icon-theme
+try :
+    if getIconTheme() != None :
+        if len(os.listdir("/usr/share/icons/" + getIconTheme() + "/48x48/categories")) >= 15 : 
+            catTheme = getIconTheme()
     elif os.path.exists("/usr/share/icons/gnome/48x48") : catTheme = "gnome"
     else : catTheme = None
-    if catTheme != None : icon = "/usr/share/icons/" + catTheme + "/48x48/categories/applications-" + fileText[labelStart + 7:labelEnd].lower() + ".png"
-    else : icon = None
-    if (icon != None) and (os.path.isfile(icon)) :
-        newFile = newFile.replace(fileText[catStart:labelStart - 1], fileText[catStart:catEnd + 1] + ' icon="' + icon + '"')
-    catStart = fileText.find('<menu id="', labelEnd)
+except IOError :
+    if os.path.exists("/usr/share/icons/gnome/48x48") : catTheme = "gnome"
+    else : catTheme = None
+
+if catTheme != None :
+    catStart = fileText.find('<menu id="')
     catEnd = fileText.find('" ', catStart)
     labelStart = fileText.find('label="', catEnd)
     labelEnd = fileText.find('">', labelStart)
+    while 0 <= catStart <= len(fileText) :
+        icon = "/usr/share/icons/" + catTheme + "/48x48/categories/applications-" + fileText[labelStart + 7:labelEnd].lower() + ".png"
+        if os.path.isfile(icon) :
+            newFile = newFile.replace(fileText[catStart:labelStart - 1], fileText[catStart:catEnd + 1] + ' icon="' + icon + '"')
+        catStart = fileText.find('<menu id="', labelEnd)
+        catEnd = fileText.find('" ', catStart)
+        labelStart = fileText.find('label="', catEnd)
+        labelEnd = fileText.find('">', labelStart)
 
 #Now add the icons
 #This will replace the contents of the old file
