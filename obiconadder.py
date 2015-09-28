@@ -119,8 +119,13 @@ if catTheme != None :
     labelStart = fileText.find('label="', catEnd)
     labelEnd = fileText.find('">', labelStart)
     while 0 <= catStart <= len(fileText) :
-        icon = "/usr/share/icons/" + catTheme + "/48x48/categories/applications-" + fileText[labelStart + 7:labelEnd].lower() + ".png"
-        if os.path.isfile(icon) :
+        if os.path.isfile("/usr/share/icons/" + catTheme + "/48x48/categories/applications-" + fileText[labelStart + 7:labelEnd].lower() + ".png") :
+            icon = "/usr/share/icons/" + catTheme + "/48x48/categories/applications-" + fileText[labelStart + 7:labelEnd].lower() + ".png"
+        elif os.path.isfile("/usr/share/icons/" + catTheme + "/48x48/categories/package_" + fileText[labelStart + 7:labelEnd].lower() + ".png") :
+            icon = "/usr/share/icons/" + catTheme + "/48x48/categories/package_" + fileText[labelStart + 7:labelEnd].lower() + ".png"
+        else :
+            icon = None
+        if icon != None :
             newFile = newFile.replace(fileText[catStart:labelStart - 1], fileText[catStart:catEnd + 1] + ' icon="' + icon + '"')
         catStart = fileText.find('<menu id="', labelEnd)
         catEnd = fileText.find('" ', catStart)
