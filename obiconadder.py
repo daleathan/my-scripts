@@ -17,7 +17,7 @@ def getDotDesktop(item, identifier) :
         file.close()
         idStart = fileText.find(identifier)
         idEnd = fileText.find("\n", idStart)
-        if item == fileText[idStart + 5:idEnd].split(" %")[0].lstrip("<! [CDATA[").rstrip("]]>") : return x
+        if item == fileText[idStart + 5:idEnd].split(" %")[0].lstrip("<![CDATA[").rstrip("]]>") : return x
     #As a fallback position, try and match the execute line from the file with
     #the .desktop filename
     if identifier == "Exec=" :
