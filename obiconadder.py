@@ -96,6 +96,8 @@ while 0 <= nameStart <= len(fileText) :
         else : icon = None
     if icon != None :
         fileText = fileText.replace(fileText[nameStart + 13:nameEnd], fileText[nameStart + 13:nameEnd].split('" icon="')[0] + '" icon="' + icon)
+    else :
+        fileText = fileText.replace(fileText[nameStart + 13:nameEnd], fileText[nameStart + 13:nameEnd].split('" icon="')[0])
     nameStart = fileText.find('<item label="', nameEnd)
     nameEnd = fileText.find('">', nameStart)
 
