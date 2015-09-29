@@ -5,6 +5,7 @@
 
 import sys
 import os
+import shutil
 
 def usage() :
     print('''Usage:
@@ -133,6 +134,8 @@ if catTheme != None :
         labelStart = fileText.find('label="', catEnd)
         labelEnd = fileText.find('">', labelStart)
 
+#Backup original file
+shutil.copyfile(menuFile, menuFile + ".bak")
 #Now add the icons
 #This will replace the contents of the old file
 file = open(menuFile, "w")
