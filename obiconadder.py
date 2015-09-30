@@ -95,10 +95,12 @@ while 0 <= nameStart <= len(fileText) :
         dotDesktop = getDotDesktop(fileText[execStart + 9:execEnd], "Exec=")
         if dotDesktop != None : icon = getIcon(dotDesktop)
         else : icon = None
+    newEntry = fileText[nameStart + 13:nameEnd]
     if icon != None :
-        fileText = fileText.replace(fileText[nameStart + 13:nameEnd], fileText[nameStart + 13:nameEnd].split('" icon="')[0] + '" icon="' + icon)
+        newEntry = newEntry.replace(fileText[nameStart + 13:nameEnd], fileText[nameStart + 13:nameEnd].split('" icon="')[0] + '" icon="' + icon)
     else :
-        fileText = fileText.replace(fileText[nameStart + 13:nameEnd], fileText[nameStart + 13:nameEnd].split('" icon="')[0])
+        newEntry = newEntry.replace(fileText[nameStart + 13:nameEnd], fileText[nameStart + 13:nameEnd].split('" icon="')[0])
+    fileText = fileText[:nameStart + 13] + newEntry + fileText[nameEnd:]
     nameStart = fileText.find('<item label="', nameEnd)
     nameEnd = fileText.find('">', nameStart)
 
