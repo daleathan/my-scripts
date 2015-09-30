@@ -1,6 +1,6 @@
 #!/usr/bin/python
 #A script to add icons to an existing Openbox menu file
-#This is untested and may not work at all as expected
+#This may not work at all as expected, please use with care
 #By Charles Bos
 
 import sys
