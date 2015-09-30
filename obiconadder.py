@@ -67,7 +67,7 @@ else :
 
 #Get locations of icons and .desktops
 iconDirs = ["/usr/share/pixmaps", "/usr/share/icons/hicolor/48x48"]
-if getIconTheme() != None : iconDirs.append("/usr/share/icons/" + getIconTheme() + "/48x48")
+if (getIconTheme() != None) and (getIconTheme() != "gnome") : iconDirs.append("/usr/share/icons/" + getIconTheme() + "/48x48")
 if os.path.exists("/usr/share/icons/gnome/48x48") : iconDirs.append("/usr/share/icons/gnome/48x48")
 iconsList = []
 for x in iconDirs :
