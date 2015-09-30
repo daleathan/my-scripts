@@ -33,6 +33,10 @@ def getIcon(dotDesktop) :
     iconStart = fileText.find("Icon=")
     if iconStart != -1 :
         iconEnd = fileText.find("\n", iconStart)
+        #Prefer 48x48 icons but return a different icon size if unavailable
+        for x in iconsList :
+            if fileText[iconStart + 5:iconEnd] == x.split("/")[-1].split(".")[0] :
+                if x.find("48x48") != -1 : return x
         for x in iconsList :
             if fileText[iconStart + 5:iconEnd] == x.split("/")[-1].split(".")[0] :
                 return x
@@ -66,9 +70,9 @@ else :
     os._exit(0)
 
 #Get locations of icons and .desktops
-iconDirs = ["/usr/share/pixmaps", "/usr/share/icons/hicolor/48x48"]
-if (getIconTheme() != None) and (getIconTheme() != "gnome") : iconDirs.append("/usr/share/icons/" + getIconTheme() + "/48x48")
-if os.path.exists("/usr/share/icons/gnome/48x48") : iconDirs.append("/usr/share/icons/gnome/48x48")
+iconDirs = ["/usr/share/pixmaps", "/usr/share/icons/hicolor"]
+if (getIconTheme() != None) and (getIconTheme() != "gnome") : iconDirs.append("/usr/share/icons/" + getIconTheme())
+if os.path.exists("/usr/share/icons/gnome") : iconDirs.append("/usr/share/icons/gnome")
 iconsList = []
 for x in iconDirs :
     for root, dirs, files in os.walk(x, topdown=False):
