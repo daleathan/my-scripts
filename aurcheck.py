@@ -39,7 +39,7 @@ for x in aurPkgs:
             pkgBaseEnd = page.find('''">View PKGBUILD</a> /''')
             pkgBase = page[pkgBaseStart + 64:pkgBaseEnd]
             if x[0] != pkgBase : splitPkgs.append(str(x[0] + " " +x[1] + " --> " + version))
-        elif x[1] > version : mismatches.append(str(x[0] + " " +x[1] + " --> " + version))
+        elif x[1] > version : mismatches.append(str(x[0] + " - (local) " +x[1] + " (AUR) " + version))
 
 if updates == mismatches == failures == [] : print("Everything is up to date.")
 else :
