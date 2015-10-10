@@ -17,7 +17,7 @@ def versionCheck(localVer, aurVer) :
     versions = [localVer, aurVer]
     for x in versions :
         y = list(x.replace("-", "."))
-        for z in range(0, len(y) - 1) :
+        for z in range(0, len(y)) :
             if y[z] != "." :
                 try :
                     int(y[z])
