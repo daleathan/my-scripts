@@ -10,22 +10,22 @@ import os
 def versionCheck(localVer, aurVer) :
     #Compare versions by splitting version string at "." and comparing each number in turn -
     #letters will be converted into their ascii codes. If lengths are not equal after
-    #splitting, this cannot be don properly so fall back to simple string comparison.
+    #splitting, this cannot be done properly so fall back to simple string comparison.
+    #Return 0 immediately if vers are equal. Return 1 for updates and return -1 for mismatches -
+    #(where local ver is newer than aur ver).
     if localVer == aurVer : return 0
     versions = [localVer, aurVer]
     for x in versions :
-        y = list(x)
-        for z in y :
-            if (z != ".") and (z != "-") :
+        y = list(x.replace("-", "."))
+        for z in range(0, len(y) - 1) :
+            if y[z] != "." :
                 try :
-                    int(z)
+                    int(y[z])
                 except ValueError :
-                    y[y.index(z)] = str(ord(z))
+                    y[z] = str(ord(y[z]))
         y = ''.join(y)
-        y = y.replace("-", ".")
         y = y.split(".")
         versions[versions.index(x)] = y
-
     if len(versions[0]) == len(versions[1]) :
         counter = 0
         while counter < len(versions[0]) :
