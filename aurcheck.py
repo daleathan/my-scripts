@@ -14,6 +14,10 @@ def versionCheck(localVer, aurVer) :
     #Return 0 immediately if vers are equal. Return 1 for updates and return -1 for mismatches -
     #(where local ver is newer than aur ver).
     if localVer == aurVer : return 0
+    #Check for epochs. Any package that has an epoch is automatically more recent than
+    #a package without
+    if (aurVer.find(":") != -1) and (localVer.find(":") == -1) : return 1
+    if (aurVer.find(":") == -1) and (localVer.find(":") != -1) : return -1
     versions = [localVer, aurVer]
     for x in versions :
         y = list(x.replace("-", "."))
