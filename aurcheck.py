@@ -7,6 +7,35 @@ from bs4 import BeautifulSoup
 import requests
 import os
 
+def versionCheck(localVer, aurVer) :
+    #Compare versions by splitting version string at "." and comparing each number in turn -
+    #letters will be converted into their ascii codes. If lengths are not equal after
+    #splitting, this cannot be don properly so fall back to simple string comparison.
+    if localVer == aurVer : return 0
+    versions = [localVer, aurVer]
+    for x in versions :
+        y = list(x)
+        for z in y :
+            if (z != ".") and (z != "-") :
+                try :
+                    int(z)
+                except ValueError :
+                    y[y.index(z)] = str(ord(z))
+        y = ''.join(y)
+        y = y.replace("-", ".")
+        y = y.split(".")
+        versions[versions.index(x)] = y
+
+    if len(versions[0]) == len(versions[1]) :
+        counter = 0
+        while counter < len(versions[0]) :
+            if int(versions[1][counter]) > int(versions[0][counter]) : return 1
+            elif int(versions[1][counter]) < int(versions[0][counter]) : return -1
+            counter += 1
+    else :
+        if aurVer > localVer : return 1
+        elif aurVer < localVer : return -1
+        
 aurPkgs = Popen(["pacman", "-Qm"], stdout = PIPE).communicate()
 aurPkgs = (str(aurPkgs).replace("\\n", " ").replace("b\'", "").replace("\', None", "").strip("()").rstrip(" ")).split(" ")
 
@@ -33,13 +62,14 @@ for x in aurPkgs:
     else :
         end = page.find("</h2>", start)
         version = page[start + 21:end].split(" ")[1]
-        if x[1] < version : 
+        comparison = versionCheck(x[1], version)
+        if comparison == 1 : 
             updates.append(str(x[0] + " " +x[1] + " --> " + version))
             pkgBaseStart = page.find('''<a href="https://aur.archlinux.org/cgit/aur.git/tree/PKGBUILD?h=''')
             pkgBaseEnd = page.find('''">View PKGBUILD</a> /''')
             pkgBase = page[pkgBaseStart + 64:pkgBaseEnd]
             if x[0] != pkgBase : splitPkgs.append(str(x[0] + " " +x[1] + " --> " + version))
-        elif x[1] > version : mismatches.append(str(x[0] + " - (local) " +x[1] + " (AUR) " + version))
+        elif comparison == -1 : mismatches.append(str(x[0] + " - (local) " +x[1] + " (AUR) " + version))
 
 if updates == mismatches == failures == [] : print("Everything is up to date.")
 else :
