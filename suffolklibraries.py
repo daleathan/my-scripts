@@ -54,7 +54,7 @@ def login(browser, creds) :
     password.send_keys(creds[1])
     loginButton.click()
     #Check that login succeeded
-    htmlString = str(BeautifulSoup(browser.page_source))
+    htmlString = str(BeautifulSoup(browser.page_source, "html.parser"))
     if htmlString.find("Invalid ID or PIN, please try again.") != -1 :
         print("\nInvalid login. Stored credentials will now be removed. Please try again.")
         try :
@@ -76,7 +76,7 @@ def getLoans(browser) :
     except selenium.common.exceptions.NoSuchElementException :
         pass
 
-    htmlString = str(BeautifulSoup(browser.page_source))
+    htmlString = str(BeautifulSoup(browser.page_source, "html.parser"))
     loanList = []
     titleStart = htmlString.find('''NAVLVL=SET">''')
     titleEnd = htmlString.find("</a>", titleStart)
