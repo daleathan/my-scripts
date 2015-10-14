@@ -95,8 +95,10 @@ def getLoans(browser) :
 
 def showLoans(loans, urgency) :
     if urgency == False :
-        print("All loans\n-----\nTitle" + (" " * 45) + "Due: ")
-        for x in loans : print("{:50s}".format(x[0]) + x[1])
+        if loans != [] :
+            print("All loans\n-----\nTitle" + (" " * 45) + "Due: ")
+            for x in loans : print("{:50s}".format(x[0]) + x[1])
+        else : print("No loans")
     else :
         urgent = []
         for x in loans :
