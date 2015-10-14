@@ -114,9 +114,11 @@ def runCommand(command) :
     global loginStatus
     if command == "help" : showHelp()
     if command == "login" :
-        creds = getCredentials()
-        loginStatus = login(browser, creds)
-        if not loginStatus : home()
+        if not loginStatus :
+            creds = getCredentials()
+            loginStatus = login(browser, creds)
+            if not loginStatus : home()
+        else : print("You are already logged in.")
     if command == "logout" :
         if loginStatus == False : print("You are not logged in.")
         else :
