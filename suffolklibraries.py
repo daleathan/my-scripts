@@ -66,7 +66,6 @@ def login(browser, creds) :
 def logout(browser) :
     logoutButton = browser.find_element_by_link_text("Logout")
     logoutButton.click()
-    home()
     
 def getLoans(browser) :
     try :
@@ -115,9 +114,9 @@ def runCommand(command) :
     if command == "help" : showHelp()
     if command == "login" :
         if not loginStatus :
+            home()
             creds = getCredentials()
             loginStatus = login(browser, creds)
-            if not loginStatus : home()
         else : print("You are already logged in.")
     if command == "logout" :
         if loginStatus == False : print("You are not logged in.")
@@ -141,7 +140,6 @@ if __name__ == "__main__" :
     credFile = homeDir + "/.suffolklibraries"
     commands = ["help", "login", "logout", "show loans", "show urgent", "exit"]
     browser = webdriver.PhantomJS()
-    home()
     global loginStatus
     loginStatus = False
 
