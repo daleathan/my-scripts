@@ -149,3 +149,9 @@ if __name__ == "__main__" :
         command = input("[Suffolk Libraries]: ")
         if command not in commands : print("Command not found.")
         else : runCommand(command)
+
+    #Cleanup
+    try :
+        os.remove("ghostdriver.log")
+    except IOError :
+        pass
