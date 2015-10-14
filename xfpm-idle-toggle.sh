@@ -1,12 +1,12 @@
 #!/bin/sh
-#Toggle the xautolock setting and Xfpm presentation mode
+#Toggle Xfpm presentation mode
 
 QUERY="xfconf-query -c xfce4-power-manager -p /xfce4-power-manager/presentation-mode"
 PRES_MODE=$(eval $QUERY)
 if [ $PRES_MODE = "false" ]; then
-  xautolock -disable
   eval "$QUERY -s true"
+  notify-send "Presentation mode: ON" -i xfpm-ac-adapter
 else
-  xautolock -enable
   eval "$QUERY -s false"
+  notify-send "Presentation mode: OFF" -i xfpm-ac-adapter
 fi
