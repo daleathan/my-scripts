@@ -11,7 +11,8 @@ import os
 
 def showHelp() :
     print('''Suffolk Libraries console commands\n-----\n
-login          Login in to your Suffolk Libraries account. If stored credentials are found, the process will be automatic.\n
+login          Login in to your Suffolk Libraries account. 
+               If stored credentials are found, the process will be automatic.\n
 logout         Logout of your Suffolk Libraries account.\n
 show loans     Show all loans on your account.\n
 show urgent    Show all loans due in the next seven days.\n
