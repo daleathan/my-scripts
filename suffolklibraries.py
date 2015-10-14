@@ -19,10 +19,8 @@ show urgent    Show all loans due in the next seven days.\n
 exit           Close the program.\n
 help           Show this dialog.''')
 
-def initiate() :
-    browser = webdriver.PhantomJS()
+def home() :
     browser.get("https://suffolk.spydus.co.uk/cgi-bin/spydus.exe/MSGTRN/OPAC/LOGINB")
-    return browser
 
 def getCredentials() :
     creds = []
@@ -68,7 +66,7 @@ def login(browser, creds) :
 def logout(browser) :
     logoutButton = browser.find_element_by_link_text("Logout")
     logoutButton.click()
-    browser.get("https://suffolk.spydus.co.uk/cgi-bin/spydus.exe/MSGTRN/OPAC/LOGINB")
+    home()
     
 def getLoans(browser) :
     try :
@@ -118,6 +116,7 @@ def runCommand(command) :
     if command == "login" :
         creds = getCredentials()
         loginStatus = login(browser, creds)
+        if not loginStatus : home()
     if command == "logout" :
         if loginStatus == False : print("You are not logged in.")
         else :
@@ -139,7 +138,8 @@ if __name__ == "__main__" :
     homeDir = os.path.expanduser("~")
     credFile = homeDir + "/.suffolklibraries"
     commands = ["help", "login", "logout", "show loans", "show urgent", "exit"]
-    browser = initiate()
+    browser = webdriver.PhantomJS()
+    home()
     global loginStatus
     loginStatus = False
 
