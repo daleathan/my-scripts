@@ -93,6 +93,7 @@ else :
             homeDir = os.path.expanduser('~')
             if os.path.exists(homeDir + "/Downloads") : downloadsDir = homeDir + "/Downloads"
             else : downloadsDir = homeDir
+            print("Downloading to " + downloadsDir + "\n")
             for x in updates :
                 if x in splitPkgs : continue
                 newPkg = x.split(' ')[0]
@@ -101,4 +102,3 @@ else :
                 if os.path.exists(downloadsDir + "/" + newPkg + ".tar.gz") : completion = "SUCCESS"
                 else : completion = "FAILURE"
                 print("Fetch: " + newPkg + ".tar.gz - " + completion)
-            print("\nDownloads completed. Check: " + downloadsDir)
