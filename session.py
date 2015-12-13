@@ -15,11 +15,21 @@ def getLogoutArg() :
     else : return args[1]
 
 def runAction() :
-    if option.get() == 1 : os.system("pkill " + getLogoutArg())
-    elif option.get() == 2 : os.system("systemctl suspend")
-    elif option.get() == 3 : os.system("systemctl hibernate")
-    elif option.get() == 4 : os.system("systemctl reboot")
-    elif option.get() == 5 : os.system("systemctl poweroff")
+    if option.get() == 1 : 
+        os.system("pkill " + getLogoutArg())
+        os._exit(0)
+    elif option.get() == 2 : 
+        os.system("systemctl suspend")
+        os._exit(0)
+    elif option.get() == 3 : 
+        os.system("systemctl hibernate")
+        os._exit(0)
+    elif option.get() == 4 : 
+        os.system("systemctl reboot")
+        os._exit(0)
+    elif option.get() == 5 : 
+        os.system("systemctl poweroff")
+        os._exit(0)
         
 class UI() :
     def __init__(self, parent) :
