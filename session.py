@@ -1,19 +1,21 @@
 #!/usr/bin/python
-#A quick and dirty interface to end a session 
-# This assumes systemd and xinitrc (for logout)
+#A quick and dirty interface to end a session - assumes systemd
 #By Charles Bos
 
 from tkinter import *
 import os
 import sys
 
-def getWm() :
+def getLogoutArg() :
+    #If using startx, run with 1 argument, the name of the last x client
+    #specified in xinitrc, will usually be the window manager.
+    #Else run with no args and the logout command will be pkill -u $USER
     args = sys.argv
     if len(args) == 1 : return "-u $USER"
     else : return args[1]
 
 def runAction() :
-    if option.get() == 1 : os.system("pkill " + getWm())
+    if option.get() == 1 : os.system("pkill " + getLogoutArg())
     elif option.get() == 2 : os.system("systemctl suspend")
     elif option.get() == 3 : os.system("systemctl hibernate")
     elif option.get() == 4 : os.system("systemctl reboot")
