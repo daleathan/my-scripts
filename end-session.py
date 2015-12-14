@@ -6,17 +6,16 @@ from tkinter import *
 import os
 import sys
 
-def getLogoutArg() :
-    #If using startx, run with 1 argument, the name of the last x client
-    #specified in xinitrc, will usually be the window manager.
-    #Else run with no args and the logout command will be pkill -u $USER
+def getLogoutCommand() :
+    #Logout command can be specified as a program argument. Without arguments
+    #the command is taken as pkill -u $USER
     args = sys.argv
-    if len(args) == 1 : return "-u $USER"
+    if len(args) == 1 : return "pkill -u $USER"
     else : return args[1]
 
 def runAction() :
     if option.get() == 1 : 
-        os.system("pkill " + getLogoutArg())
+        os.system(getLogoutCommand())
         os._exit(0)
     elif option.get() == 2 : 
         os.system("systemctl suspend")
