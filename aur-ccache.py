@@ -31,7 +31,7 @@ cachePkgs = os.listdir(cacheDir)
 
 #Get installed AUR package list
 instOutput = Popen(["pacman", "-Qmi"], stdout = PIPE).communicate()
-instOutput = (str(instOutput).replace("\\n", " ").replace("b\'", "").replace("\', None", "").strip("()").rstrip(" ")).split(" ")
+instOutput = (str(instOutput).replace("\\n", " ").replace("b\'", "").replace("\', None", "").strip("()").rstrip(" ").lstrip('''"b''')).split(" ")
 instOutput = [x for x in instOutput if (x != "") and (x != ":")]
 
 name = []
