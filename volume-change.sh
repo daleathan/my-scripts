@@ -1,7 +1,20 @@
 #!/bin/sh
 #A script to increase, decrease or toggle the pulseaudio volume.
 
-if [ "$1" == "toggle" ]; then
+usage() {
+  echo "Usage:
+  volume-change.sh [OPTIONS]
+
+Options:
+  -h, --help: show this dialogue
+  up: increase the volume by 5%
+  down: decrease the volume by 5%
+  toggle: mute/unmute the volume"
+}
+
+if [ ! "$1" ] || [ "$1" == "-h" ] || [ "$1" == "--help" ]; then
+  usage
+elif [ "$1" == "toggle" ]; then
   pactl set-sink-mute $(pactl list sinks short | cut -f 1) toggle
 elif [ "$1" == "up" ]; then
   CURRENT_VOLUME=$(amixer | grep "Front Left: Playback" | cut -d "[" -f 2 | cut -d "%" -f 1)
