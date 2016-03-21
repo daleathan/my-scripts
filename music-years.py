@@ -108,5 +108,5 @@ else :
     print("\nNumber of tracks per decade")
     counter = 0
     while counter < len(decades) :
-        print(str(counter + 1) + ": " + str(decades[counter][0]) + "s (" + str(len(decades[counter])) + " tracks)")
+        print(str(counter + 1) + ": " + str(decades[counter][0]) + "s (" + str(len(decades[counter])) + " tracks) (" + str(round(len(decades[counter]) / len(years) * 100)) + "%)")
         counter += 1
