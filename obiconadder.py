@@ -145,5 +145,5 @@ shutil.copyfile(menuFile, menuFile + ".bak")
 #Now add the icons
 #This will replace the contents of the old file
 file = open(menuFile, "w")
-print(fileText.rstrip("\n"), file = file)
+file.write(fileText)
 file.close()
