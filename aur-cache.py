@@ -42,6 +42,7 @@ while counter < len(dirs) :
 for x in dirs :
     try :
         contents = os.listdir(x)
+        if "PKGBUILD" not in contents : continue
         counter = 0
         while counter < len(contents) :
             contents[counter] = x + "/" + contents[counter]
