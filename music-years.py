@@ -1,4 +1,4 @@
-#!/usr/bin/python
+#!/usr/bin/python3
 #Silly Python script to analyse music collection by year of release
 
 import os

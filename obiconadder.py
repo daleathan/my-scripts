@@ -1,4 +1,4 @@
-#!/usr/bin/python
+#!/usr/bin/python3
 #A script to add icons to an existing Openbox menu file
 #This may not work at all as expected, please use with care
 #By Charles Bos

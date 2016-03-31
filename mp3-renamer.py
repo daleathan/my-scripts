@@ -1,4 +1,4 @@
-#!/usr/bin/python
+#!/usr/bin/python3
 #Python script to rename mp3 files according to the format
 #"Track-number Track-name.mp3", for example: 02 Self Control.mp3
 #Note: Tracks must have valid ID3 data for this to work - python-mutagen is required.

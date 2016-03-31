@@ -1,4 +1,4 @@
-#!/usr/bin/python
+#!/usr/bin/python3
 #List packages by date of installation
 #By Charles Bos
 

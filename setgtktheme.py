@@ -1,4 +1,4 @@
-#!/usr/bin/python
+#!/usr/bin/python3
 #A Python script to set the theme for GTK+ 2 and GTK+ 3 applications in minimal environments
 #By Charles Bos
 

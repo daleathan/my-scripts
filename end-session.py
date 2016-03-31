@@ -1,4 +1,4 @@
-#!/usr/bin/python
+#!/usr/bin/python3
 #A quick and dirty interface to end a session - assumes systemd
 #By Charles Bos
 

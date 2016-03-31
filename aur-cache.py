@@ -1,4 +1,4 @@
-#!/usr/bin/python
+#!/usr/bin/python3
 #Copy compiled packages to AUR cache and remove the original tarballs and build dirs
 #By Charles Bos
 

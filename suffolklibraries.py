@@ -1,4 +1,4 @@
-#!/usr/bin/python
+#!/usr/bin/python3
 #Console client for the Suffolk Libraries website
 #Uses Python Selenium and PhantomJS
 #By Charles Bos

@@ -1,4 +1,4 @@
-#!/usr/bin/python
+#!/usr/bin/python3
 #A simple script to check for AUR package updates
 #By Charles Bos
 

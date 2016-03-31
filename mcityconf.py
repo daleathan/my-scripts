@@ -1,4 +1,4 @@
-#!/usr/bin/python
+#!/usr/bin/python3
 #A simple interface for configuring some Metacity settings
 #By Charles Bos
 

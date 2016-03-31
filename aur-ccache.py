@@ -1,4 +1,4 @@
-#!/usr/bin/python
+#!/usr/bin/python3
 #Remove all cached AUR packages other than the ones installed
 #By Charles Bos
 
