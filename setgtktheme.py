@@ -98,7 +98,7 @@ def setResource(ver, resource, var) :
                     else : z = str(resource + " = " + var.get())
                 else :
                     if ver == 2 : z = str(resource + "=" + '"' + var.get() + '"')
-                    else : z = str(resource + "=" + varOpG3.get())
+                    else : z = str(resource + "=" + var.get())
                 contents[contents.index(x)] = z
                 found = True
                 break
