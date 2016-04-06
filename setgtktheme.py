@@ -1,5 +1,7 @@
 #!/usr/bin/python3
 #A Python script to set the theme for GTK+ 2 and GTK+ 3 applications in minimal environments
+#This shouldn't overwrite existing ~/.gtkrc-2.0 or ~/.config/gtk-3.0/settings.ini files - instead
+#it will try to update them in place.
 #By Charles Bos
 
 from tkinter import *
@@ -36,7 +38,7 @@ def findThemes(ver) :
 
     return sorted(final)
 
-def getTheme(ver) :
+def getResource(ver, resource) :
     homeDir = os.path.expanduser('~')
     try :
         if ver == 2 : file = open(homeDir + "/.gtkrc-2.0", "r")
@@ -46,17 +48,17 @@ def getTheme(ver) :
         contents = contents.split("\n")
         for x in contents :
             y = x.split("=")
-            if y[0].strip() == "gtk-theme-name" : return y[-1].strip().strip('"')
+            if y[0].strip() == resource : return y[-1].strip().strip('"')
         return "None set"
     except IOError :
         return "None set"
 
-def setTheme(ver) :
+def setResource(ver, resource, var) :
     homeDir = os.path.expanduser('~')
     if ver == 2 : path = homeDir + "/.gtkrc-2.0"
     else : path = homeDir + "/.config/gtk-3.0/settings.ini"
     if os.path.exists(path) :
-        #If file exists, read it and try to get find theme name line
+        #If file exists, read it and try to get find resource name line
         #If found, update it
         found = False
         file = open(path, "r")
@@ -65,24 +67,24 @@ def setTheme(ver) :
         contents = contents.split("\n")
         for x in contents :
             y = x.split("=")
-            if y[0].strip() == "gtk-theme-name" :
+            if y[0].strip() == resource :
                 if y[0][-1] == " " :
-                    if ver == 2: z = str("gtk-theme-name = " + '"' + varOpG2.get() + '"')
-                    else : z = str("gtk-theme-name = " + varOpG3.get())
+                    if ver == 2: z = str(resource + " = " + '"' + var.get() + '"')
+                    else : z = str(resource + " = " + var.get())
                 else :
-                    if ver == 2 : z = str("gtk-theme-name=" + '"' + varOpG2.get() + '"')
-                    else : z = str("gtk-theme-name=" + varOpG3.get())
+                    if ver == 2 : z = str(resource + "=" + '"' + var.get() + '"')
+                    else : z = str(resource + "=" + varOpG3.get())
                 contents[contents.index(x)] = z
                 found = True
                 break
 
         if not found and contents != [''] :
-            #If file exists and is full but gtk-theme-name is not present, append it
+            #If file exists and is full but resource is not present, append it
             file = open(path, "a")
-            if ver == 2 : file.write("\ngtk-theme-name = " + '"' + varOpG2.get() + '"')
-            else : file.write("\ngtk-theme-name = " + varOpG3.get())
+            if ver == 2 : file.write("\n" + resource + " = " + '"' + var.get() + '"')
+            else : file.write("\n" + resource + " = " + var.get())
         elif found :
-            #If file exists and gtk-theme-name is present, update it
+            #If file exists and resource is present, update it
             file = open(path, "w")
             for x in contents :
                 if contents.index(x) == len(contents) -1 : file.write(x)
@@ -90,8 +92,8 @@ def setTheme(ver) :
         else :
             #If file exists but is empty, overwrite it
             file = open(path, "w")
-            if ver == 2 : file.write("gtk-theme-name = " + '"' + varOpG2.get() + '"')
-            else : file.write("[Settings]\ngtk-theme-name = " + varOpG3.get())
+            if ver == 2 : file.write(resource + " = " + '"' + var.get() + '"')
+            else : file.write("[Settings]\n" + resource + " = " + var.get())
         file.close()
     else :
         #If file does not exist, create it
@@ -101,24 +103,32 @@ def setTheme(ver) :
             except FileExistsError :
                 pass
         file = open(path, "w")
-        if ver == 2 : file.write("gtk-theme-name = " + '"' + varOpG2.get() + '"')
-        else : file.write("[Settings]\ngtk-theme-name = " + varOpG3.get())
+        if ver == 2 : file.write(resource + " = " + '"' + var.get() + '"')
+        else : file.write("[Settings]\n" + resource + " = " + var.get())
         file.close()
 
 def update() :
-    if (varOpG2 != getTheme(2)) and (varOpG2.get() != "None set") : setTheme(2)
-    if (varOpG3 != getTheme(3)) and (varOpG3.get() != "None set") : setTheme(3)
+    #Update GTK+ 2 theme
+    if (varOpG2 != getResource(2, "gtk-theme-name")) and (varOpG2.get() != "None set") : setResource(2, "gtk-theme-name", varOpG2)
+
+    #Update GTK+ 3 theme
+    if (varOpG3 != getResource(3, "gtk-theme-name")) and (varOpG3.get() != "None set") : setResource(3, "gtk-theme-name", varOpG3)
+
+    #Update GTK+ 2 and GTK+ 3 font
+    if (fontField.get() != getResource(2, "gtk-font-name")) and (fontField.get() != "None set") :
+        setResource(2, "gtk-font-name", fontField)
+        setResource(3, "gtk-font-name", fontField)
 
 class UI() :
     def __init__(self, parent) :
-        l1 = Label(parent, text = "Set the theme for GTK+ applications", pady = 5, padx = 5, relief = RAISED)
+        l1 = Label(parent, text = "Set the theme and font for GTK+ applications", pady = 5, padx = 5, relief = RAISED)
         l1.grid(row = 1, column = 1, columnspan = 2)
 
         #GTK+ 2 section
         l2 = Label(parent, text = "GTK+ 2 app theme:", pady = 7, padx = 5).grid(row = 2, column = 1, sticky = W)
         global varOpG2
         varOpG2 = StringVar(parent)
-        varOpG2.set(getTheme(2))
+        varOpG2.set(getResource(2, "gtk-theme-name"))
         themesG2 = findThemes(2)
         m1 = OptionMenu(parent, varOpG2, *themesG2).grid(row = 2, column = 2, sticky = W)
 
@@ -126,15 +136,22 @@ class UI() :
         l3 = Label(parent, text = "GTK+ 3 app theme:", pady = 7, padx = 5).grid(row = 3, column = 1, sticky = W)
         global varOpG3
         varOpG3 = StringVar(parent)
-        varOpG3.set(getTheme(3))
+        varOpG3.set(getResource(3, "gtk-theme-name"))
         themesG3 = findThemes(3)
         m2 = OptionMenu(parent, varOpG3, *themesG3).grid(row = 3, column = 2, sticky = W)
 
+        #Font section
+        l4 = Label(parent, text = "GTK+ font:", pady = 7, padx = 5).grid(row = 4, column = 1, sticky = W)
+        global fontField
+        fontField = Entry(parent)
+        fontField.grid(row = 4, column = 2, sticky = W)
+        fontField.insert(0, getResource(2, "gtk-font-name")) #As we're not allowing differing font settings, only check gtk2 font
+
         #Buttons
-        b1 = Button(parent, text = "Close", padx = 5, pady = 5, bd = 3, command = parent.destroy).grid(row = 4, column = 1)
-        b2 = Button(parent, text = "Update", padx = 5, pady = 5, bd = 3, command = update).grid(row = 4, column = 2)
+        b1 = Button(parent, text = "Close", padx = 5, pady = 5, bd = 3, command = parent.destroy).grid(row = 5, column = 1)
+        b2 = Button(parent, text = "Update", padx = 5, pady = 5, bd = 3, command = update).grid(row = 5, column = 2)
         
-top = Tk()
+top = Tk()  
 top.title("Set GTK+ theme")
 ui = UI(top)
 top.mainloop()
