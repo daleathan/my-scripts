@@ -153,22 +153,22 @@ def endOnNewline() :
             file.write('\n')
             file.close()
 
-def update() :
+def update(rVars) :
     #Update GTK+ 2 theme
-    if (varOpG2 != getResource(2, "gtk-theme-name")) and (varOpG2.get() != "None set") : setResource(2, "gtk-theme-name", varOpG2)
+    if (rVars[0] != getResource(2, "gtk-theme-name")) and (rVars[0].get() != "None set") : setResource(2, "gtk-theme-name", rVars[0])
 
     #Update GTK+ 3 theme
-    if (varOpG3 != getResource(3, "gtk-theme-name")) and (varOpG3.get() != "None set") : setResource(3, "gtk-theme-name", varOpG3)
+    if (rVars[1] != getResource(3, "gtk-theme-name")) and (rVars[1].get() != "None set") : setResource(3, "gtk-theme-name", rVars[1])
 
     #Update GTK+ 2 and GTK+ 3 font
-    if (fontField.get() != getResource(2, "gtk-font-name")) and (fontField.get() != "None set") :
-        setResource(2, "gtk-font-name", fontField)
-        setResource(3, "gtk-font-name", fontField)
+    if (rVars[2].get() != getResource(2, "gtk-font-name")) and (rVars[2].get() != "None set") :
+        setResource(2, "gtk-font-name", rVars[2])
+        setResource(3, "gtk-font-name", rVars[2])
 
     #Update GTK+ 2 and GTK+ 3 icons
-    if (varOpIcons.get() != getResource(2, "gtk-icon-theme-name")) and (varOpIcons.get() != "None set") :
-        setResource(2, "gtk-icon-theme-name", varOpIcons)
-        setResource(3, "gtk-icon-theme-name", varOpIcons)
+    if (rVars[3].get() != getResource(2, "gtk-icon-theme-name")) and (rVars[3].get() != "None set") :
+        setResource(2, "gtk-icon-theme-name", rVars[3])
+        setResource(3, "gtk-icon-theme-name", rVars[3])
 
     #Ensure that the last char in both files is a newline
     endOnNewline()
@@ -179,18 +179,22 @@ class UI() :
         l1 = Label(parent, text = "Set the theme for GTK+ 2 and 3 applications", pady = 5, padx = 5, relief = RAISED)
         l1.grid(row = 1, column = 1, columnspan = 2)
 
+        #List of resource vars. Positions format is as follows:
+        #0 = GTK+ 2 theme, 1 = GTK+ 3 theme, 2 = Font, 3 = Icons
+        rVars = []
+
         #GTK+ 2 section
         l2 = Label(parent, text = "GTK+ 2 app theme:", pady = 7, padx = 5).grid(row = 2, column = 1, sticky = W)
-        global varOpG2
         varOpG2 = StringVar(parent)
+        rVars.append(varOpG2)
         varOpG2.set(getResource(2, "gtk-theme-name"))
         themesG2 = findThemes(2)
         m1 = OptionMenu(parent, varOpG2, *themesG2).grid(row = 2, column = 2, sticky = W)
 
         #GTK+ 3 section
         l3 = Label(parent, text = "GTK+ 3 app theme:", pady = 7, padx = 5).grid(row = 3, column = 1, sticky = W)
-        global varOpG3
         varOpG3 = StringVar(parent)
+        rVars.append(varOpG3)
         varOpG3.set(getResource(3, "gtk-theme-name"))
         themesG3 = findThemes(3)
         m2 = OptionMenu(parent, varOpG3, *themesG3).grid(row = 3, column = 2, sticky = W)
@@ -200,22 +204,22 @@ class UI() :
         
         #Font section
         l4 = Label(parent, text = "GTK+ font:", pady = 7, padx = 5).grid(row = 4, column = 1, sticky = W)
-        global fontField
         fontField = Entry(parent)
+        rVars.append(fontField)
         fontField.grid(row = 4, column = 2, sticky = W)
         fontField.insert(0, getResource(2, "gtk-font-name"))
 
         #Icons section
         l5 = Label(parent, text = "GTK+ icons:", pady = 7, padx = 5).grid(row = 5, column = 1, sticky = W)
-        global varOpIcons
         varOpIcons = StringVar(parent)
+        rVars.append(varOpIcons)
         varOpIcons.set(getResource(2, "gtk-icon-theme-name"))
         icons = findIcons()
         m3 = OptionMenu(parent, varOpIcons, *icons).grid(row = 5, column = 2, sticky = W)
 
         #Buttons
         b1 = Button(parent, text = "Close", padx = 5, pady = 5, bd = 3, command = parent.destroy).grid(row = 6, column = 1)
-        b2 = Button(parent, text = "Update", padx = 5, pady = 5, bd = 3, command = update).grid(row = 6, column = 2)
+        b2 = Button(parent, text = "Update", padx = 5, pady = 5, bd = 3, command = lambda : update(rVars)).grid(row = 6, column = 2)
         
 top = Tk()  
 ui = UI(top)
