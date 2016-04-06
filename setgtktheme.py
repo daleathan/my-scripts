@@ -175,6 +175,7 @@ def update() :
 
 class UI() :
     def __init__(self, parent) :
+        parent.title("Set GTK+ theme")
         l1 = Label(parent, text = "Set the theme for GTK+ 2 and 3 applications", pady = 5, padx = 5, relief = RAISED)
         l1.grid(row = 1, column = 1, columnspan = 2)
 
@@ -217,6 +218,5 @@ class UI() :
         b2 = Button(parent, text = "Update", padx = 5, pady = 5, bd = 3, command = update).grid(row = 6, column = 2)
         
 top = Tk()  
-top.title("Set GTK+ theme")
 ui = UI(top)
 top.mainloop()
