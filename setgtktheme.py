@@ -56,6 +56,9 @@ def findIcons() :
     for x in allIcons :
         dirs = os.listdir(x)
         y = x.split("/")
+        #Dir needs to contain index.theme and might well contain cursors dir. Therefore, the
+        #number of items within dir needs to be greater than 2 for it to contain a viable icon
+        #theme
         if len(dirs) > 2 and "index.theme" in dirs : final.append(y[-1])
     #Remove hicolor and default
     if "hicolor" in final : final.remove("hicolor")
