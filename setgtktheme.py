@@ -56,7 +56,7 @@ def findIcons() :
     for x in allIcons :
         dirs = os.listdir(x)
         y = x.split("/")
-        if dirs != [] and "index.theme" in dirs and len(dirs) > 2 : final.append(y[-1])
+        if len(dirs) > 2 and "index.theme" in dirs : final.append(y[-1])
     #Remove hicolor and default
     if "hicolor" in final : final.remove("hicolor")
     if "default" in final : final.remove("default")
@@ -175,7 +175,7 @@ def update() :
 
 class UI() :
     def __init__(self, parent) :
-        l1 = Label(parent, text = "Set the theme and font for GTK+ applications", pady = 5, padx = 5, relief = RAISED)
+        l1 = Label(parent, text = "Set the theme for GTK+ 2 and 3 applications", pady = 5, padx = 5, relief = RAISED)
         l1.grid(row = 1, column = 1, columnspan = 2)
 
         #GTK+ 2 section
