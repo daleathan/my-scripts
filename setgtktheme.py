@@ -38,6 +38,31 @@ def findThemes(ver) :
 
     return sorted(final)
 
+def findIcons() :
+    homeDir = os.path.expanduser('~')
+    a = os.listdir("/usr/share/icons")
+    for x in a : a[a.index(x)] = "/usr/share/icons/" + x
+    if os.path.exists("/usr/local/share/icons") :
+        b = os.listdir("/usr/local/share/icons")
+        for x in b : b[b.index(x)] = "/usr/local/share/icons/" + x
+    else : b = []
+    if os.path.exists(homeDir + "/.icons") :
+        c = os.listdir(homeDir + "/.icons")
+        for x in c : c[c.index(x)] = homeDir + "/.icons/" + x
+    else : c = []
+    allIcons = a + b + c
+    final = []
+    
+    for x in allIcons :
+        dirs = os.listdir(x)
+        y = x.split("/")
+        if dirs != [] and "index.theme" in dirs and len(dirs) > 2 : final.append(y[-1])
+    #Remove hicolor and default
+    if "hicolor" in final : final.remove("hicolor")
+    if "default" in final : final.remove("default")
+
+    return sorted(final)
+
 def getResource(ver, resource) :
     homeDir = os.path.expanduser('~')
     try :
@@ -119,6 +144,11 @@ def update() :
         setResource(2, "gtk-font-name", fontField)
         setResource(3, "gtk-font-name", fontField)
 
+    #Update GTK+ 2 and GTK+ 3 icons
+    if (varOpIcons.get() != getResource(2, "gtk-icon-theme-name")) and (varOpIcons.get() != "None set") :
+        setResource(2, "gtk-icon-theme-name", varOpIcons)
+        setResource(3, "gtk-icon-theme-name", varOpIcons)
+
 class UI() :
     def __init__(self, parent) :
         l1 = Label(parent, text = "Set the theme and font for GTK+ applications", pady = 5, padx = 5, relief = RAISED)
@@ -140,16 +170,27 @@ class UI() :
         themesG3 = findThemes(3)
         m2 = OptionMenu(parent, varOpG3, *themesG3).grid(row = 3, column = 2, sticky = W)
 
+        #Hereafter, we're not supporting seperate settings for GTK+ 2 and GTK+ 3.
+        #For displaying the current setting, we only check the GTK+ 2 settings file.
+        
         #Font section
         l4 = Label(parent, text = "GTK+ font:", pady = 7, padx = 5).grid(row = 4, column = 1, sticky = W)
         global fontField
         fontField = Entry(parent)
         fontField.grid(row = 4, column = 2, sticky = W)
-        fontField.insert(0, getResource(2, "gtk-font-name")) #As we're not allowing differing font settings, only check gtk2 font
+        fontField.insert(0, getResource(2, "gtk-font-name"))
+
+        #Icons section
+        l5 = Label(parent, text = "GTK+ icons:", pady = 7, padx = 5).grid(row = 5, column = 1, sticky = W)
+        global varOpIcons
+        varOpIcons = StringVar(parent)
+        varOpIcons.set(getResource(2, "gtk-icon-theme-name"))
+        icons = findIcons()
+        m3 = OptionMenu(parent, varOpIcons, *icons).grid(row = 5, column = 2, sticky = W)
 
         #Buttons
-        b1 = Button(parent, text = "Close", padx = 5, pady = 5, bd = 3, command = parent.destroy).grid(row = 5, column = 1)
-        b2 = Button(parent, text = "Update", padx = 5, pady = 5, bd = 3, command = update).grid(row = 5, column = 2)
+        b1 = Button(parent, text = "Close", padx = 5, pady = 5, bd = 3, command = parent.destroy).grid(row = 6, column = 1)
+        b2 = Button(parent, text = "Update", padx = 5, pady = 5, bd = 3, command = update).grid(row = 6, column = 2)
         
 top = Tk()  
 top.title("Set GTK+ theme")
