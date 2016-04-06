@@ -132,6 +132,27 @@ def setResource(ver, resource, var) :
         else : file.write("[Settings]\n" + resource + " = " + var.get())
         file.close()
 
+def endOnNewline() :
+    homeDir = os.path.expanduser('~')
+    if os.path.exists(homeDir + "/.gtkrc-2.0") :
+        path = homeDir + "/.gtkrc-2.0"
+        file = open(path, "r")
+        contents = file.read()
+        file.close()
+        if contents[-1] != '\n' :
+            file = open(path, "a")
+            file.write('\n')
+            file.close()
+    if os.path.exists(homeDir + "/.config/gtk-3.0/settings.ini") :
+        path = homeDir + "/.config/gtk-3.0/settings.ini"
+        file = open(path, "r")
+        contents = file.read()
+        file.close()
+        if contents[-1] != '\n' :
+            file = open(path, "a")
+            file.write('\n')
+            file.close()
+
 def update() :
     #Update GTK+ 2 theme
     if (varOpG2 != getResource(2, "gtk-theme-name")) and (varOpG2.get() != "None set") : setResource(2, "gtk-theme-name", varOpG2)
@@ -148,6 +169,9 @@ def update() :
     if (varOpIcons.get() != getResource(2, "gtk-icon-theme-name")) and (varOpIcons.get() != "None set") :
         setResource(2, "gtk-icon-theme-name", varOpIcons)
         setResource(3, "gtk-icon-theme-name", varOpIcons)
+
+    #Ensure that the last char in both files is a newline
+    endOnNewline()
 
 class UI() :
     def __init__(self, parent) :
