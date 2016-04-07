@@ -8,7 +8,7 @@ from tkinter import *
 from tkinter import messagebox
 import os
 
-def findThemes(sFile) :
+def findThemes(themeType) :
     homeDir = os.path.expanduser('~')
     a = os.listdir("/usr/share/themes")
     for x in a : a[a.index(x)] = "/usr/share/themes/" + x
@@ -26,16 +26,17 @@ def findThemes(sFile) :
     for x in allThemes :
         dirs = os.listdir(x)
         y = x.split("/")
-        if sFile == "gtk2" :
+        if themeType == "gtk2" :
             if "gtk-2.0" in (dirs) :
                 gDir = os.listdir(x + "/gtk-2.0")
                 if "gtkrc" in gDir : final.append(y[-1])
-        elif sFile == "gtk3" :
+        else :
             if "gtk-3.0" in (dirs) :
                 gDir = os.listdir(x + "/gtk-3.0")
                 if "gtk.css" in gDir : final.append(y[-1])
-    #Add default theme to list    
-    if sFile == "gtk3" : final.append("Raleigh")
+    #Add default themes to list    
+    if "Adwaita" not in final : final.append("Adwaita")
+    if "Raleigh" not in final : final.append("Raleigh")
 
     return sorted(final)
 
