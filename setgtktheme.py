@@ -38,7 +38,7 @@ def findThemes(sFile) :
 
     return sorted(final)
 
-def findIcons() :
+def findIcons(themeType) :
     homeDir = os.path.expanduser('~')
     a = os.listdir("/usr/share/icons")
     for x in a : a[a.index(x)] = "/usr/share/icons/" + x
@@ -58,8 +58,12 @@ def findIcons() :
         y = x.split("/")
         #Dir needs to contain index.theme and might well contain cursors dir. Therefore, the
         #number of items within dir needs to be greater than 2 for it to contain a viable icon
-        #theme
-        if len(dirs) > 2 and "index.theme" in dirs : final.append(y[-1])
+        #theme. For cursor theme, we only need the cursor dir.
+        if "index.theme" in dirs :
+            if themeType == "cursors" :
+                if "cursors" in dirs : final.append(y[-1])
+            else :
+                if len(dirs) > 2 : final.append(y[-1])
     #Remove hicolor and default
     if "hicolor" in final : final.remove("hicolor")
     if "default" in final : final.remove("default")
@@ -71,6 +75,7 @@ def getResource(sFile, resource) :
     try :
         if sFile == "gtk2" : file = open(homeDir + "/.gtkrc-2.0", "r")
         elif sFile == "gtk3" : file = open(homeDir + "/.config/gtk-3.0/settings.ini", "r")
+        elif sFile == "xdg_cursor" : file = open(homeDir + "/.icons/default/index.theme", "r")
         contents = file.read()
         file.close()
         contents = contents.split("\n")
@@ -85,6 +90,7 @@ def setResource(sFile, resource, var) :
     homeDir = os.path.expanduser('~')
     if sFile == "gtk2" : path = homeDir + "/.gtkrc-2.0"
     elif sFile == "gtk3" : path = homeDir + "/.config/gtk-3.0/settings.ini"
+    elif sFile == "xdg_cursor" : path = homeDir + "/.icons/default/index.theme"
     if os.path.exists(path) :
         #If file exists, read it and try to get find resource name line
         #If found, update it
@@ -98,10 +104,10 @@ def setResource(sFile, resource, var) :
             if y[0].strip() == resource :
                 if y[0][-1] == " " :
                     if sFile == "gtk2": z = str(resource + " = " + '"' + var.get() + '"')
-                    elif sFile == "gtk3" : z = str(resource + " = " + var.get())
+                    else : z = str(resource + " = " + var.get())
                 else :
                     if sFile == "gtk2" : z = str(resource + "=" + '"' + var.get() + '"')
-                    elif sFile == "gtk3" : z = str(resource + "=" + var.get())
+                    else : z = str(resource + "=" + var.get())
                 contents[contents.index(x)] = z
                 found = True
                 break
@@ -111,6 +117,7 @@ def setResource(sFile, resource, var) :
             file = open(path, "a")
             if sFile == "gtk2" : file.write("\n" + resource + " = " + '"' + var.get() + '"')
             elif sFile == "gtk3" : file.write("\n" + resource + " = " + var.get())
+            elif sFile == "xdg_cursor" : file.write("\n" + resource + "=" + var.get())
         elif found :
             #If file exists and resource is present, update it
             file = open(path, "w")
@@ -122,37 +129,29 @@ def setResource(sFile, resource, var) :
             file = open(path, "w")
             if sFile == "gtk2" : file.write(resource + " = " + '"' + var.get() + '"')
             elif sFile == "gtk3" : file.write("[Settings]\n" + resource + " = " + var.get())
+            elif sFile == "xdg_cursor" : file.write("[Icon Theme]\n" + resource + "=" + var.get())
         file.close()
     else :
         #If file does not exist, create it
         if sFile == "gtk3" :
-            try :
-                os.makedirs(homeDir + "/.config/gtk-3.0/")
-            except FileExistsError :
-                pass
+            try : os.makedirs(homeDir + "/.config/gtk-3.0/")
+            except FileExistsError : pass
+        elif sFile == "xdg_cursor" :
+            try : os.makedirs(homeDir + "/.icons/default/")
+            except FileExistsError : pass
         file = open(path, "w")
         if sFile == "gtk2" : file.write(resource + " = " + '"' + var.get() + '"')
         elif sFile == "gtk3" : file.write("[Settings]\n" + resource + " = " + var.get())
+        elif sFile == "xdg_cursor" : file.write("[Icon Theme]\n" + resource + "=" + var.get())
         file.close()
 
-def endOnNewline() :
-    homeDir = os.path.expanduser('~')
-    if os.path.exists(homeDir + "/.gtkrc-2.0") :
-        path = homeDir + "/.gtkrc-2.0"
-        file = open(path, "r")
+def endOnNewline(filePath) :
+    if os.path.exists(filePath) :
+        file = open(filePath, "r")
         contents = file.read()
         file.close()
         if contents[-1] != '\n' :
-            file = open(path, "a")
-            file.write('\n')
-            file.close()
-    if os.path.exists(homeDir + "/.config/gtk-3.0/settings.ini") :
-        path = homeDir + "/.config/gtk-3.0/settings.ini"
-        file = open(path, "r")
-        contents = file.read()
-        file.close()
-        if contents[-1] != '\n' :
-            file = open(path, "a")
+            file = open(filePath, "a")
             file.write('\n')
             file.close()
 
@@ -173,8 +172,17 @@ def update(rVars) :
         setResource("gtk2", "gtk-icon-theme-name", rVars[3])
         setResource("gtk3", "gtk-icon-theme-name", rVars[3])
 
-    #Ensure that the last char in both files is a newline
-    endOnNewline()
+    #Update GTK+ 2, GTK+ 3 and XDG cursor theme
+    if (rVars[4].get() != getResource("xdg_cursor", "Inherits")) and (rVars[4].get() != "None set") :
+        setResource("xdg_cursor", "Inherits", rVars[4])
+        setResource("gtk2", "gtk-cursor-theme-name", rVars[4])
+        setResource("gtk3", "gtk-cursor-theme-name", rVars[4])
+
+    #Ensure that the last char in all files is a newline
+    homeDir = os.path.expanduser('~')
+    endOnNewline(homeDir + "/.gtkrc-2.0")
+    endOnNewline(homeDir + "/.config/gtk-3.0/settings.ini")
+    endOnNewline(homeDir + "/.icons/default/index.theme")
 
 class UI() :
     def __init__(self, parent) :
@@ -183,7 +191,7 @@ class UI() :
         l1.grid(row = 1, column = 1, columnspan = 2)
 
         #List of resource vars. Positions format is as follows:
-        #0 = GTK+ 2 theme, 1 = GTK+ 3 theme, 2 = Font, 3 = Icons
+        #0 = GTK+ 2 theme, 1 = GTK+ 3 theme, 2 = Font, 3 = Icons, 4 = Cursors
         rVars = []
 
         #GTK+ 2 section
@@ -217,12 +225,20 @@ class UI() :
         varOpIcons = StringVar(parent)
         rVars.append(varOpIcons)
         varOpIcons.set(getResource("gtk2", "gtk-icon-theme-name"))
-        icons = findIcons()
+        icons = findIcons("icons")
         m3 = OptionMenu(parent, varOpIcons, *icons).grid(row = 5, column = 2, sticky = W)
 
+        #Cursors section
+        l6 = Label(parent, text = "GTK+ cursors:", pady = 7, padx = 5).grid(row = 6, column = 1, sticky = W)
+        varOpCursors = StringVar(parent)
+        rVars.append(varOpCursors)
+        varOpCursors.set(getResource("xdg_cursor", "Inherits"))
+        cursors = findIcons("cursors")
+        m4 = OptionMenu(parent, varOpCursors, *cursors).grid(row = 6, column = 2, sticky = W)
+
         #Buttons
-        b1 = Button(parent, text = "Close", padx = 5, pady = 5, bd = 3, command = parent.destroy).grid(row = 6, column = 1)
-        b2 = Button(parent, text = "Update", padx = 5, pady = 5, bd = 3, command = lambda : update(rVars)).grid(row = 6, column = 2)
+        b1 = Button(parent, text = "Close", padx = 5, pady = 5, bd = 3, command = parent.destroy).grid(row = 7, column = 1)
+        b2 = Button(parent, text = "Update", padx = 5, pady = 5, bd = 3, command = lambda : update(rVars)).grid(row = 7, column = 2)
         
 top = Tk()  
 ui = UI(top)
