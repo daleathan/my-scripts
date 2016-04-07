@@ -32,6 +32,7 @@ def runAction() :
         
 class UI() :
     def __init__(self, parent) :
+        parent.title("End session")
         global option
         option = IntVar()
         r1 = Radiobutton(parent, text = "Logout", variable = option, value = 1).grid(row = 2, column = 1)
@@ -42,6 +43,5 @@ class UI() :
         b1 = Button(parent, text = "Ok", command = runAction).grid(row = 3, column = 1, columnspan = 5)
         
 top = Tk()
-top.title("End session")
 ui = UI(top)
 top.mainloop()

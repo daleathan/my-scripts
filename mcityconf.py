@@ -107,6 +107,7 @@ class reset() :
         
 class UI() :
     def __init__(self, parent) :
+        parent.title("Settings for Metacity")
         l1 = Label(parent, text = "Configure the Metacity theme, titlebar font and button order.", pady = 5, padx = 5, relief = RAISED)
         l1.grid(row = 1, column = 1, columnspan = 3)
 
@@ -171,6 +172,5 @@ class UI() :
 
 checkMetacity()        
 top = Tk()
-top.title("Settings for Metacity")
 ui = UI(top)
 top.mainloop()
