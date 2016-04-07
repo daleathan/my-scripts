@@ -7,7 +7,7 @@
 from tkinter import *
 import os
 
-def findThemes(ver) :
+def findThemes(sFile) :
     homeDir = os.path.expanduser('~')
     a = os.listdir("/usr/share/themes")
     for x in a : a[a.index(x)] = "/usr/share/themes/" + x
@@ -25,16 +25,16 @@ def findThemes(ver) :
     for x in allThemes :
         dirs = os.listdir(x)
         y = x.split("/")
-        if ver == 2 :
+        if sFile == "gtk2" :
             if "gtk-2.0" in (dirs) :
                 gDir = os.listdir(x + "/gtk-2.0")
                 if "gtkrc" in gDir : final.append(y[-1])
-        else :
+        elif sFile == "gtk3" :
             if "gtk-3.0" in (dirs) :
                 gDir = os.listdir(x + "/gtk-3.0")
                 if "gtk.css" in gDir : final.append(y[-1])
     #Add default theme to list    
-    if ver == 3 : final.append("Raleigh")
+    if sFile == "gtk3" : final.append("Raleigh")
 
     return sorted(final)
 
@@ -66,11 +66,11 @@ def findIcons() :
 
     return sorted(final)
 
-def getResource(ver, resource) :
+def getResource(sFile, resource) :
     homeDir = os.path.expanduser('~')
     try :
-        if ver == 2 : file = open(homeDir + "/.gtkrc-2.0", "r")
-        else : file = open(homeDir + "/.config/gtk-3.0/settings.ini", "r")
+        if sFile == "gtk2" : file = open(homeDir + "/.gtkrc-2.0", "r")
+        elif sFile == "gtk3" : file = open(homeDir + "/.config/gtk-3.0/settings.ini", "r")
         contents = file.read()
         file.close()
         contents = contents.split("\n")
@@ -81,10 +81,10 @@ def getResource(ver, resource) :
     except IOError :
         return "None set"
 
-def setResource(ver, resource, var) :
+def setResource(sFile, resource, var) :
     homeDir = os.path.expanduser('~')
-    if ver == 2 : path = homeDir + "/.gtkrc-2.0"
-    else : path = homeDir + "/.config/gtk-3.0/settings.ini"
+    if sFile == "gtk2" : path = homeDir + "/.gtkrc-2.0"
+    elif sFile == "gtk3" : path = homeDir + "/.config/gtk-3.0/settings.ini"
     if os.path.exists(path) :
         #If file exists, read it and try to get find resource name line
         #If found, update it
@@ -97,11 +97,11 @@ def setResource(ver, resource, var) :
             y = x.split("=")
             if y[0].strip() == resource :
                 if y[0][-1] == " " :
-                    if ver == 2: z = str(resource + " = " + '"' + var.get() + '"')
-                    else : z = str(resource + " = " + var.get())
+                    if sFile == "gtk2": z = str(resource + " = " + '"' + var.get() + '"')
+                    elif sFile == "gtk3" : z = str(resource + " = " + var.get())
                 else :
-                    if ver == 2 : z = str(resource + "=" + '"' + var.get() + '"')
-                    else : z = str(resource + "=" + var.get())
+                    if sFile == "gtk2" : z = str(resource + "=" + '"' + var.get() + '"')
+                    elif sFile == "gtk3" : z = str(resource + "=" + var.get())
                 contents[contents.index(x)] = z
                 found = True
                 break
@@ -109,8 +109,8 @@ def setResource(ver, resource, var) :
         if not found and contents != [''] :
             #If file exists and is full but resource is not present, append it
             file = open(path, "a")
-            if ver == 2 : file.write("\n" + resource + " = " + '"' + var.get() + '"')
-            else : file.write("\n" + resource + " = " + var.get())
+            if sFile == "gtk2" : file.write("\n" + resource + " = " + '"' + var.get() + '"')
+            elif sFile == "gtk3" : file.write("\n" + resource + " = " + var.get())
         elif found :
             #If file exists and resource is present, update it
             file = open(path, "w")
@@ -120,19 +120,19 @@ def setResource(ver, resource, var) :
         else :
             #If file exists but is empty, overwrite it
             file = open(path, "w")
-            if ver == 2 : file.write(resource + " = " + '"' + var.get() + '"')
-            else : file.write("[Settings]\n" + resource + " = " + var.get())
+            if sFile == "gtk2" : file.write(resource + " = " + '"' + var.get() + '"')
+            elif sFile == "gtk3" : file.write("[Settings]\n" + resource + " = " + var.get())
         file.close()
     else :
         #If file does not exist, create it
-        if ver == 3 :
+        if sFile == "gtk3" :
             try :
                 os.makedirs(homeDir + "/.config/gtk-3.0/")
             except FileExistsError :
                 pass
         file = open(path, "w")
-        if ver == 2 : file.write(resource + " = " + '"' + var.get() + '"')
-        else : file.write("[Settings]\n" + resource + " = " + var.get())
+        if sFile == "gtk2" : file.write(resource + " = " + '"' + var.get() + '"')
+        elif sFile == "gtk3" : file.write("[Settings]\n" + resource + " = " + var.get())
         file.close()
 
 def endOnNewline() :
@@ -158,20 +158,20 @@ def endOnNewline() :
 
 def update(rVars) :
     #Update GTK+ 2 theme
-    if (rVars[0] != getResource(2, "gtk-theme-name")) and (rVars[0].get() != "None set") : setResource(2, "gtk-theme-name", rVars[0])
+    if (rVars[0] != getResource("gtk2", "gtk-theme-name")) and (rVars[0].get() != "None set") : setResource("gtk2", "gtk-theme-name", rVars[0])
 
     #Update GTK+ 3 theme
-    if (rVars[1] != getResource(3, "gtk-theme-name")) and (rVars[1].get() != "None set") : setResource(3, "gtk-theme-name", rVars[1])
+    if (rVars[1] != getResource("gtk3", "gtk-theme-name")) and (rVars[1].get() != "None set") : setResource("gtk3", "gtk-theme-name", rVars[1])
 
     #Update GTK+ 2 and GTK+ 3 font
-    if (rVars[2].get() != getResource(2, "gtk-font-name")) and (rVars[2].get() != "None set") :
-        setResource(2, "gtk-font-name", rVars[2])
-        setResource(3, "gtk-font-name", rVars[2])
+    if (rVars[2].get() != getResource("gtk2", "gtk-font-name")) and (rVars[2].get() != "None set") :
+        setResource("gtk2", "gtk-font-name", rVars[2])
+        setResource("gtk3", "gtk-font-name", rVars[2])
 
     #Update GTK+ 2 and GTK+ 3 icons
-    if (rVars[3].get() != getResource(2, "gtk-icon-theme-name")) and (rVars[3].get() != "None set") :
-        setResource(2, "gtk-icon-theme-name", rVars[3])
-        setResource(3, "gtk-icon-theme-name", rVars[3])
+    if (rVars[3].get() != getResource("gtk2", "gtk-icon-theme-name")) and (rVars[3].get() != "None set") :
+        setResource("gtk2", "gtk-icon-theme-name", rVars[3])
+        setResource("gtk3", "gtk-icon-theme-name", rVars[3])
 
     #Ensure that the last char in both files is a newline
     endOnNewline()
@@ -190,16 +190,16 @@ class UI() :
         l2 = Label(parent, text = "GTK+ 2 app theme:", pady = 7, padx = 5).grid(row = 2, column = 1, sticky = W)
         varOpG2 = StringVar(parent)
         rVars.append(varOpG2)
-        varOpG2.set(getResource(2, "gtk-theme-name"))
-        themesG2 = findThemes(2)
+        varOpG2.set(getResource("gtk2", "gtk-theme-name"))
+        themesG2 = findThemes("gtk2")
         m1 = OptionMenu(parent, varOpG2, *themesG2).grid(row = 2, column = 2, sticky = W)
 
         #GTK+ 3 section
         l3 = Label(parent, text = "GTK+ 3 app theme:", pady = 7, padx = 5).grid(row = 3, column = 1, sticky = W)
         varOpG3 = StringVar(parent)
         rVars.append(varOpG3)
-        varOpG3.set(getResource(3, "gtk-theme-name"))
-        themesG3 = findThemes(3)
+        varOpG3.set(getResource("gtk3", "gtk-theme-name"))
+        themesG3 = findThemes("gtk3")
         m2 = OptionMenu(parent, varOpG3, *themesG3).grid(row = 3, column = 2, sticky = W)
 
         #Hereafter, we're not supporting seperate settings for GTK+ 2 and GTK+ 3.
@@ -210,13 +210,13 @@ class UI() :
         fontField = Entry(parent)
         rVars.append(fontField)
         fontField.grid(row = 4, column = 2, sticky = W)
-        fontField.insert(0, getResource(2, "gtk-font-name"))
+        fontField.insert(0, getResource("gtk2", "gtk-font-name"))
 
         #Icons section
         l5 = Label(parent, text = "GTK+ icons:", pady = 7, padx = 5).grid(row = 5, column = 1, sticky = W)
         varOpIcons = StringVar(parent)
         rVars.append(varOpIcons)
-        varOpIcons.set(getResource(2, "gtk-icon-theme-name"))
+        varOpIcons.set(getResource("gtk2", "gtk-icon-theme-name"))
         icons = findIcons()
         m3 = OptionMenu(parent, varOpIcons, *icons).grid(row = 5, column = 2, sticky = W)
 
