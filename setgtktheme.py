@@ -6,6 +6,7 @@
 
 from tkinter import *
 from tkinter import messagebox
+import _tkinter
 import os
 
 def findThemes(themeType) :
@@ -73,6 +74,8 @@ def findIcons(themeType) :
     return sorted(final)
 
 def getResource(sFile, resource) :
+    if resource == "gtk-button-images" or resource == "gtk-menu-images" : default = 0
+    else : default = "None set"
     homeDir = os.path.expanduser('~')
     try :
         if sFile == "gtk2" : file = open(homeDir + "/.gtkrc-2.0", "r")
@@ -84,9 +87,9 @@ def getResource(sFile, resource) :
         for x in contents :
             y = x.split("=")
             if y[0].strip() == resource : return y[-1].strip().strip('"')
-        return "None set"
+        return default
     except IOError :
-        return "None set"
+        return default
 
 def setResource(sFile, resource, var) :
     homeDir = os.path.expanduser('~')
@@ -101,6 +104,7 @@ def setResource(sFile, resource, var) :
         contents = file.read()
         file.close()
         contents = contents.split("\n")
+        contents = [x for x in contents if x != ""]
         for x in contents :
             y = x.split("=")
             if y[0].strip() == resource :
@@ -116,7 +120,10 @@ def setResource(sFile, resource, var) :
 
         if not found and contents != [''] :
             #If file exists and is full but resource is not present, append it
-            file = open(path, "a")
+            file = open(path, "w")
+            for x in contents :
+                if contents.index(x) == len(contents) -1 : file.write(x)
+                else : file.write(x + "\n")
             if sFile == "gtk2" : file.write("\n" + resource + " = " + '"' + var.get() + '"')
             elif sFile == "gtk3" : file.write("\n" + resource + " = " + var.get())
             elif sFile == "xdg_cursor" : file.write("\n" + resource + "=" + var.get())
@@ -189,6 +196,20 @@ def update(rVars) :
         setResource("gtk3", "gtk-cursor-theme-name", rVars[4])
         changes = True
 
+    #Update images in GTK+ menus and buttons
+    if  rVars[5].get() != bool(int(getResource("gtk2", "gtk-button-images"))) :
+        temp = StringVar()
+        temp.set(str(int(rVars[5].get())))
+        setResource("gtk2", "gtk-button-images", temp)
+        setResource("gtk3", "gtk-button-images", temp)
+        changes = True
+    if  rVars[6].get() != bool(int(getResource("gtk2", "gtk-menu-images"))) :
+        temp = StringVar()
+        temp.set(str(int(rVars[6].get())))
+        setResource("gtk2", "gtk-menu-images", temp)
+        setResource("gtk3", "gtk-menu-images", temp)
+        changes = True
+
     #Ensure that the last char in all files is a newline
     homeDir = os.path.expanduser('~')
     endOnNewline(homeDir + "/.gtkrc-2.0")
@@ -206,7 +227,7 @@ class UI() :
         l1.grid(row = 1, column = 1, columnspan = 2)
 
         #List of resource vars. Positions format is as follows:
-        #0 = GTK+ 2 theme, 1 = GTK+ 3 theme, 2 = Font, 3 = Icons, 4 = Cursors
+        #0 = GTK+ 2 theme, 1 = GTK+ 3 theme, 2 = Font, 3 = Icons, 4 = Cursors, 5 = Button images, 6 = Menu images
         rVars = []
 
         #GTK+ 2 section
@@ -251,9 +272,19 @@ class UI() :
         cursors = findIcons("cursors")
         m4 = OptionMenu(parent, varOpCursors, *cursors).grid(row = 6, column = 2, sticky = W)
 
+        #Button and menu images section
+        varOpButtonImages = BooleanVar(parent)
+        varOpMenuImages = BooleanVar(parent)
+        rVars.append(varOpButtonImages)
+        rVars.append(varOpMenuImages)
+        varOpButtonImages.set(getResource("gtk2", "gtk-button-images"))
+        varOpMenuImages.set(getResource("gtk2", "gtk-menu-images"))
+        imgMenuButton = Checkbutton(parent, variable = varOpButtonImages, text = "Images in buttons").grid(row = 7, column = 1, sticky = W)
+        imgMenuButton = Checkbutton(parent, variable = varOpMenuImages, text = "Images in menus").grid(row = 7, column = 2, sticky = W)
+
         #Buttons
-        b1 = Button(parent, text = "Close", padx = 5, pady = 5, bd = 3, command = parent.destroy).grid(row = 7, column = 1)
-        b2 = Button(parent, text = "Update", padx = 5, pady = 5, bd = 3, command = lambda : update(rVars)).grid(row = 7, column = 2)
+        b1 = Button(parent, text = "Close", padx = 5, pady = 5, bd = 3, command = parent.destroy).grid(row = 8, column = 1)
+        b2 = Button(parent, text = "Update", padx = 5, pady = 5, bd = 3, command = lambda : update(rVars)).grid(row = 8, column = 2)
         
 top = Tk()  
 ui = UI(top)
