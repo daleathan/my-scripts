@@ -6,7 +6,6 @@
 
 from tkinter import *
 from tkinter import messagebox
-import _tkinter
 import os
 
 def findThemes(themeType) :
@@ -118,7 +117,13 @@ def setResource(sFile, resource, var) :
                 found = True
                 break
 
-        if not found and contents != [''] :
+        if found :
+            #If file exists and resource is present, update it
+            file = open(path, "w")
+            for x in contents :
+                if contents.index(x) == len(contents) -1 : file.write(x)
+                else : file.write(x + "\n")
+        if not found and contents != [] :
             #If file exists and is full but resource is not present, append it
             file = open(path, "w")
             for x in contents :
@@ -127,12 +132,6 @@ def setResource(sFile, resource, var) :
             if sFile == "gtk2" : file.write("\n" + resource + " = " + '"' + var.get() + '"')
             elif sFile == "gtk3" : file.write("\n" + resource + " = " + var.get())
             elif sFile == "xdg_cursor" : file.write("\n" + resource + "=" + var.get())
-        elif found :
-            #If file exists and resource is present, update it
-            file = open(path, "w")
-            for x in contents :
-                if contents.index(x) == len(contents) -1 : file.write(x)
-                else : file.write(x + "\n")
         else :
             #If file exists but is empty, overwrite it
             file = open(path, "w")
@@ -159,10 +158,11 @@ def endOnNewline(filePath) :
         file = open(filePath, "r")
         contents = file.read()
         file.close()
-        if contents[-1] != '\n' :
-            file = open(filePath, "a")
-            file.write('\n')
-            file.close()
+        if len(contents) > 0 :
+            if contents[-1] != '\n' :
+                file = open(filePath, "a")
+                file.write('\n')
+                file.close()
 
 def update(rVars) :
     changes = False
