@@ -156,33 +156,46 @@ def endOnNewline(filePath) :
             file.close()
 
 def update(rVars) :
+    changes = False
+
     #Update GTK+ 2 theme
-    if (rVars[0] != getResource("gtk2", "gtk-theme-name")) and (rVars[0].get() != "None set") : setResource("gtk2", "gtk-theme-name", rVars[0])
+    if (rVars[0].get() != getResource("gtk2", "gtk-theme-name")) and (rVars[0].get() != "None set") :
+        setResource("gtk2", "gtk-theme-name", rVars[0])
+        changes = True
 
     #Update GTK+ 3 theme
-    if (rVars[1] != getResource("gtk3", "gtk-theme-name")) and (rVars[1].get() != "None set") : setResource("gtk3", "gtk-theme-name", rVars[1])
+    if (rVars[1].get() != getResource("gtk3", "gtk-theme-name")) and (rVars[1].get() != "None set") :
+        setResource("gtk3", "gtk-theme-name", rVars[1])
+        changes = True
 
     #Update GTK+ 2 and GTK+ 3 font
     if (rVars[2].get() != getResource("gtk2", "gtk-font-name")) and (rVars[2].get() != "None set") :
         setResource("gtk2", "gtk-font-name", rVars[2])
         setResource("gtk3", "gtk-font-name", rVars[2])
+        changes = True
 
     #Update GTK+ 2 and GTK+ 3 icons
     if (rVars[3].get() != getResource("gtk2", "gtk-icon-theme-name")) and (rVars[3].get() != "None set") :
         setResource("gtk2", "gtk-icon-theme-name", rVars[3])
         setResource("gtk3", "gtk-icon-theme-name", rVars[3])
+        changes = True
 
     #Update GTK+ 2, GTK+ 3 and XDG cursor theme
     if (rVars[4].get() != getResource("xdg_cursor", "Inherits")) and (rVars[4].get() != "None set") :
         setResource("xdg_cursor", "Inherits", rVars[4])
         setResource("gtk2", "gtk-cursor-theme-name", rVars[4])
         setResource("gtk3", "gtk-cursor-theme-name", rVars[4])
+        changes = True
 
     #Ensure that the last char in all files is a newline
     homeDir = os.path.expanduser('~')
     endOnNewline(homeDir + "/.gtkrc-2.0")
     endOnNewline(homeDir + "/.config/gtk-3.0/settings.ini")
     endOnNewline(homeDir + "/.icons/default/index.theme")
+
+    #Show completion message
+    if changes : messagebox.showinfo(title = "Complete!", message = "Restart your applications for the settings to take effect.")
+    else : messagebox.showinfo(title = "Complete!", message = "Settings files were already up to date. No Changes were made.")
 
 class UI() :
     def __init__(self, parent) :
