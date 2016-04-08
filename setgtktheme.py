@@ -218,7 +218,7 @@ def update(rVars) :
 
     #Show completion message
     if changes : messagebox.showinfo(title = "Complete!", message = "Restart your applications for the settings to take effect.")
-    else : messagebox.showinfo(title = "Complete!", message = "Settings files were already up to date. No Changes were made.")
+    else : messagebox.showinfo(title = "Complete!", message = "Settings files were already up to date. No changes were made.")
 
 class UI() :
     def __init__(self, parent) :
