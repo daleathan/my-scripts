@@ -123,7 +123,7 @@ def setResource(sFile, resource, var) :
             for x in contents :
                 if contents.index(x) == len(contents) -1 : file.write(x)
                 else : file.write(x + "\n")
-        if not found and contents != [] :
+        elif not found and contents != [] :
             #If file exists and is full but resource is not present, append it
             file = open(path, "w")
             for x in contents :
@@ -152,6 +152,7 @@ def setResource(sFile, resource, var) :
         elif sFile == "gtk3" : file.write("[Settings]\n" + resource + " = " + var.get())
         elif sFile == "xdg_cursor" : file.write("[Icon Theme]\n" + resource + "=" + var.get())
         file.close()
+    print("done")
 
 def endOnNewline(filePath) :
     if os.path.exists(filePath) :
