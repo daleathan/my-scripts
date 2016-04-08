@@ -152,7 +152,6 @@ def setResource(sFile, resource, var) :
         elif sFile == "gtk3" : file.write("[Settings]\n" + resource + " = " + var.get())
         elif sFile == "xdg_cursor" : file.write("[Icon Theme]\n" + resource + "=" + var.get())
         file.close()
-    print("done")
 
 def endOnNewline(filePath) :
     if os.path.exists(filePath) :
