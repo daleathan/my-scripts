@@ -168,29 +168,29 @@ def update(rVars) :
     changes = False
 
     #Update GTK+ 2 theme
-    if (rVars[0].get() != getResource("gtk2", "gtk-theme-name")) and (rVars[0].get() != "None set") :
+    if  rVars[0].get() != getResource("gtk2", "gtk-theme-name") :
         setResource("gtk2", "gtk-theme-name", rVars[0])
         changes = True
 
     #Update GTK+ 3 theme
-    if (rVars[1].get() != getResource("gtk3", "gtk-theme-name")) and (rVars[1].get() != "None set") :
+    if  rVars[1].get() != getResource("gtk3", "gtk-theme-name") :
         setResource("gtk3", "gtk-theme-name", rVars[1])
         changes = True
 
     #Update GTK+ 2 and GTK+ 3 font
-    if (rVars[2].get() != getResource("gtk2", "gtk-font-name")) and (rVars[2].get() != "None set") :
+    if  rVars[2].get() != getResource("gtk2", "gtk-font-name") :
         setResource("gtk2", "gtk-font-name", rVars[2])
         setResource("gtk3", "gtk-font-name", rVars[2])
         changes = True
 
     #Update GTK+ 2 and GTK+ 3 icons
-    if (rVars[3].get() != getResource("gtk2", "gtk-icon-theme-name")) and (rVars[3].get() != "None set") :
+    if  rVars[3].get() != getResource("gtk2", "gtk-icon-theme-name") :
         setResource("gtk2", "gtk-icon-theme-name", rVars[3])
         setResource("gtk3", "gtk-icon-theme-name", rVars[3])
         changes = True
 
     #Update GTK+ 2, GTK+ 3 and XDG cursor theme
-    if (rVars[4].get() != getResource("xdg_cursor", "Inherits")) and (rVars[4].get() != "None set") :
+    if  rVars[4].get() != getResource("xdg_cursor", "Inherits") :
         setResource("xdg_cursor", "Inherits", rVars[4])
         setResource("gtk2", "gtk-cursor-theme-name", rVars[4])
         setResource("gtk3", "gtk-cursor-theme-name", rVars[4])
