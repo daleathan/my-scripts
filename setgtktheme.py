@@ -176,9 +176,9 @@ def update() :
         changes = True
 
     #Update GTK+ 2 and GTK+ 3 font
-    if  ui.fontField.get() != getResource("gtk2", "gtk-font-name") :
-        setResource("gtk2", "gtk-font-name", ui.fontField)
-        setResource("gtk3", "gtk-font-name", ui.fontField)
+    if  ui.varOpFont.get() != getResource("gtk2", "gtk-font-name") :
+        setResource("gtk2", "gtk-font-name", ui.varOpFont)
+        setResource("gtk3", "gtk-font-name", ui.varOpFont)
         changes = True
 
     #Update GTK+ 2 and GTK+ 3 icons
@@ -243,9 +243,9 @@ class UI() :
         
         #Font section
         l4 = Label(parent, text = "GTK+ font:", pady = 7, padx = 5).grid(row = 4, column = 1, sticky = W)
-        self.fontField = Entry(parent)
-        self.fontField.grid(row = 4, column = 2, sticky = W)
-        self.fontField.insert(0, getResource("gtk2", "gtk-font-name"))
+        self.varOpFont = Entry(parent)
+        self.varOpFont.grid(row = 4, column = 2, sticky = W)
+        self.varOpFont.insert(0, getResource("gtk2", "gtk-font-name"))
 
         #Icons section
         l5 = Label(parent, text = "GTK+ icons:", pady = 7, padx = 5).grid(row = 5, column = 1, sticky = W)
