@@ -162,48 +162,48 @@ def endOnNewline(filePath) :
                 file.write('\n')
                 file.close()
 
-def update(rVars) :
+def update() :
     changes = False
 
     #Update GTK+ 2 theme
-    if  rVars[0].get() != getResource("gtk2", "gtk-theme-name") :
-        setResource("gtk2", "gtk-theme-name", rVars[0])
+    if  ui.varOpG2.get() != getResource("gtk2", "gtk-theme-name") :
+        setResource("gtk2", "gtk-theme-name", ui.varOpG2)
         changes = True
 
     #Update GTK+ 3 theme
-    if  rVars[1].get() != getResource("gtk3", "gtk-theme-name") :
-        setResource("gtk3", "gtk-theme-name", rVars[1])
+    if  ui.varOpG3.get() != getResource("gtk3", "gtk-theme-name") :
+        setResource("gtk3", "gtk-theme-name", ui.varOpG3)
         changes = True
 
     #Update GTK+ 2 and GTK+ 3 font
-    if  rVars[2].get() != getResource("gtk2", "gtk-font-name") :
-        setResource("gtk2", "gtk-font-name", rVars[2])
-        setResource("gtk3", "gtk-font-name", rVars[2])
+    if  ui.fontField.get() != getResource("gtk2", "gtk-font-name") :
+        setResource("gtk2", "gtk-font-name", ui.fontField)
+        setResource("gtk3", "gtk-font-name", ui.fontField)
         changes = True
 
     #Update GTK+ 2 and GTK+ 3 icons
-    if  rVars[3].get() != getResource("gtk2", "gtk-icon-theme-name") :
-        setResource("gtk2", "gtk-icon-theme-name", rVars[3])
-        setResource("gtk3", "gtk-icon-theme-name", rVars[3])
+    if  ui.varOpIcons.get() != getResource("gtk2", "gtk-icon-theme-name") :
+        setResource("gtk2", "gtk-icon-theme-name", ui.varOpIcons)
+        setResource("gtk3", "gtk-icon-theme-name", ui.varOpIcons)
         changes = True
 
     #Update GTK+ 2, GTK+ 3 and XDG cursor theme
-    if  rVars[4].get() != getResource("xdg_cursor", "Inherits") :
-        setResource("xdg_cursor", "Inherits", rVars[4])
-        setResource("gtk2", "gtk-cursor-theme-name", rVars[4])
-        setResource("gtk3", "gtk-cursor-theme-name", rVars[4])
+    if  ui.varOpCursors.get() != getResource("xdg_cursor", "Inherits") :
+        setResource("xdg_cursor", "Inherits", ui.varOpCursors)
+        setResource("gtk2", "gtk-cursor-theme-name", ui.varOpCursors)
+        setResource("gtk3", "gtk-cursor-theme-name", ui.varOpCursors)
         changes = True
 
     #Update images in GTK+ menus and buttons
-    if  rVars[5].get() != bool(int(getResource("gtk2", "gtk-button-images"))) :
+    if  ui.varOpButtonImages.get() != bool(int(getResource("gtk2", "gtk-button-images"))) :
         temp = StringVar()
-        temp.set(str(int(rVars[5].get())))
+        temp.set(str(int(ui.varOpButtonImages.get())))
         setResource("gtk2", "gtk-button-images", temp)
         setResource("gtk3", "gtk-button-images", temp)
         changes = True
-    if  rVars[6].get() != bool(int(getResource("gtk2", "gtk-menu-images"))) :
+    if  ui.varOpMenuImages.get() != bool(int(getResource("gtk2", "gtk-menu-images"))) :
         temp = StringVar()
-        temp.set(str(int(rVars[6].get())))
+        temp.set(str(int(ui.varOpMenuImages.get())))
         setResource("gtk2", "gtk-menu-images", temp)
         setResource("gtk3", "gtk-menu-images", temp)
         changes = True
@@ -224,65 +224,54 @@ class UI() :
         l1 = Label(parent, text = "Set the theme for GTK+ 2 and 3 applications", pady = 5, padx = 5, relief = RAISED)
         l1.grid(row = 1, column = 1, columnspan = 2)
 
-        #List of resource vars. Positions format is as follows:
-        #0 = GTK+ 2 theme, 1 = GTK+ 3 theme, 2 = Font, 3 = Icons, 4 = Cursors, 5 = Button images, 6 = Menu images
-        rVars = []
-
         #GTK+ 2 section
         l2 = Label(parent, text = "GTK+ 2 app theme:", pady = 7, padx = 5).grid(row = 2, column = 1, sticky = W)
-        varOpG2 = StringVar(parent)
-        rVars.append(varOpG2)
-        varOpG2.set(getResource("gtk2", "gtk-theme-name"))
+        self.varOpG2 = StringVar(parent)
+        self.varOpG2.set(getResource("gtk2", "gtk-theme-name"))
         themesG2 = findThemes("gtk2")
-        m1 = OptionMenu(parent, varOpG2, *themesG2).grid(row = 2, column = 2, sticky = W)
+        m1 = OptionMenu(parent, self.varOpG2, *themesG2).grid(row = 2, column = 2, sticky = W)
 
         #GTK+ 3 section
         l3 = Label(parent, text = "GTK+ 3 app theme:", pady = 7, padx = 5).grid(row = 3, column = 1, sticky = W)
-        varOpG3 = StringVar(parent)
-        rVars.append(varOpG3)
-        varOpG3.set(getResource("gtk3", "gtk-theme-name"))
+        self.varOpG3 = StringVar(parent)
+        self.varOpG3.set(getResource("gtk3", "gtk-theme-name"))
         themesG3 = findThemes("gtk3")
-        m2 = OptionMenu(parent, varOpG3, *themesG3).grid(row = 3, column = 2, sticky = W)
+        m2 = OptionMenu(parent, self.varOpG3, *themesG3).grid(row = 3, column = 2, sticky = W)
 
         #Hereafter, we're not supporting seperate settings for GTK+ 2 and GTK+ 3.
         #For displaying the current setting, we only check the GTK+ 2 settings file.
         
         #Font section
         l4 = Label(parent, text = "GTK+ font:", pady = 7, padx = 5).grid(row = 4, column = 1, sticky = W)
-        fontField = Entry(parent)
-        rVars.append(fontField)
-        fontField.grid(row = 4, column = 2, sticky = W)
-        fontField.insert(0, getResource("gtk2", "gtk-font-name"))
+        self.fontField = Entry(parent)
+        self.fontField.grid(row = 4, column = 2, sticky = W)
+        self.fontField.insert(0, getResource("gtk2", "gtk-font-name"))
 
         #Icons section
         l5 = Label(parent, text = "GTK+ icons:", pady = 7, padx = 5).grid(row = 5, column = 1, sticky = W)
-        varOpIcons = StringVar(parent)
-        rVars.append(varOpIcons)
-        varOpIcons.set(getResource("gtk2", "gtk-icon-theme-name"))
+        self.varOpIcons = StringVar(parent)
+        self.varOpIcons.set(getResource("gtk2", "gtk-icon-theme-name"))
         icons = findIcons("icons")
-        m3 = OptionMenu(parent, varOpIcons, *icons).grid(row = 5, column = 2, sticky = W)
+        m3 = OptionMenu(parent, self.varOpIcons, *icons).grid(row = 5, column = 2, sticky = W)
 
         #Cursors section
         l6 = Label(parent, text = "GTK+ cursors:", pady = 7, padx = 5).grid(row = 6, column = 1, sticky = W)
-        varOpCursors = StringVar(parent)
-        rVars.append(varOpCursors)
-        varOpCursors.set(getResource("xdg_cursor", "Inherits"))
+        self.varOpCursors = StringVar(parent)
+        self.varOpCursors.set(getResource("xdg_cursor", "Inherits"))
         cursors = findIcons("cursors")
-        m4 = OptionMenu(parent, varOpCursors, *cursors).grid(row = 6, column = 2, sticky = W)
+        m4 = OptionMenu(parent, self.varOpCursors, *cursors).grid(row = 6, column = 2, sticky = W)
 
         #Button and menu images section
-        varOpButtonImages = BooleanVar(parent)
-        varOpMenuImages = BooleanVar(parent)
-        rVars.append(varOpButtonImages)
-        rVars.append(varOpMenuImages)
-        varOpButtonImages.set(getResource("gtk2", "gtk-button-images"))
-        varOpMenuImages.set(getResource("gtk2", "gtk-menu-images"))
-        imgMenuButton = Checkbutton(parent, variable = varOpButtonImages, text = "Images in buttons").grid(row = 7, column = 1, sticky = W)
-        imgMenuButton = Checkbutton(parent, variable = varOpMenuImages, text = "Images in menus").grid(row = 7, column = 2, sticky = W)
+        self.varOpButtonImages = BooleanVar(parent)
+        self.varOpMenuImages = BooleanVar(parent)
+        self.varOpButtonImages.set(getResource("gtk2", "gtk-button-images"))
+        self.varOpMenuImages.set(getResource("gtk2", "gtk-menu-images"))
+        imgMenuButton = Checkbutton(parent, variable = self.varOpButtonImages, text = "Images in buttons").grid(row = 7, column = 1, sticky = W)
+        imgMenuButton = Checkbutton(parent, variable = self.varOpMenuImages, text = "Images in menus").grid(row = 7, column = 2, sticky = W)
 
         #Buttons
         b1 = Button(parent, text = "Close", padx = 5, pady = 5, bd = 3, command = parent.destroy).grid(row = 8, column = 1)
-        b2 = Button(parent, text = "Update", padx = 5, pady = 5, bd = 3, command = lambda : update(rVars)).grid(row = 8, column = 2)
+        b2 = Button(parent, text = "Update", padx = 5, pady = 5, bd = 3, command = update).grid(row = 8, column = 2)
         
 top = Tk()  
 ui = UI(top)
