@@ -108,10 +108,10 @@ def setResource(sFile, resource, var) :
             y = x.split("=")
             if y[0].strip() == resource :
                 if y[0][-1] == " " :
-                    if sFile == "gtk2": z = str(resource + " = " + '"' + var.get() + '"')
+                    if sFile == "gtk2" and var.get() != "1" and var.get() != "0" : z = str(resource + " = " + '"' + var.get() + '"')
                     else : z = str(resource + " = " + var.get())
                 else :
-                    if sFile == "gtk2" : z = str(resource + "=" + '"' + var.get() + '"')
+                    if sFile == "gtk2" and var.get() != "1" and var.get() != "0" : z = str(resource + "=" + '"' + var.get() + '"')
                     else : z = str(resource + "=" + var.get())
                 contents[contents.index(x)] = z
                 found = True
