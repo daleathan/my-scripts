@@ -1,7 +1,5 @@
 #!/usr/bin/python3
 #A Python script to set the theme for GTK+ 2 and GTK+ 3 applications in minimal environments
-#This shouldn't overwrite existing ~/.gtkrc-2.0 or ~/.config/gtk-3.0/settings.ini files - instead
-#it will try to update them in place.
 #By Charles Bos
 
 from tkinter import *
