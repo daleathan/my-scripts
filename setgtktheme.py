@@ -82,7 +82,8 @@ def findIcons(themeType) :
     return sorted(final)
 
 def getResource(sFile, resource) :
-    if resource == "gtk-button-images" or resource == "gtk-menu-images" : default = 0
+    if resource == "gtk-button-images" or resource == "gtk-menu-images" \
+       or resource == "gtk-application-prefer-dark-theme" : default = 0
     else : default = "None set"
     homeDir = os.path.expanduser('~')
     try :
@@ -138,13 +139,17 @@ def setResource(sFile, resource, var) :
             for x in contents :
                 if contents.index(x) == len(contents) -1 : file.write(x)
                 else : file.write(x + "\n")
-            if sFile == "gtk2" : file.write("\n" + resource + " = " + '"' + var.get() + '"')
+            if sFile == "gtk2" :
+                if var.get() == "1" or var.get() == "0" : file.write("\n" + resource + " = " + var.get())
+                else : file.write("\n" + resource + " = " + '"' + var.get() + '"')
             elif sFile == "gtk3" : file.write("\n" + resource + " = " + var.get())
             elif sFile == "xdg_cursor" : file.write("\n" + resource + "=" + var.get())
         else :
             #If file exists but is empty, overwrite it
             file = open(path, "w")
-            if sFile == "gtk2" : file.write(resource + " = " + '"' + var.get() + '"')
+            if sFile == "gtk2" :
+                if var.get() == "1" or var.get() == "0" : file.write(resource + " = " + var.get())
+                else : file.write(resource + " = " + '"' + var.get() + '"')
             elif sFile == "gtk3" : file.write("[Settings]\n" + resource + " = " + var.get())
             elif sFile == "xdg_cursor" : file.write("[Icon Theme]\n" + resource + "=" + var.get())
         file.close()
@@ -157,7 +162,9 @@ def setResource(sFile, resource, var) :
             try : os.makedirs(homeDir + "/.icons/default/")
             except FileExistsError : pass
         file = open(path, "w")
-        if sFile == "gtk2" : file.write(resource + " = " + '"' + var.get() + '"')
+        if sFile == "gtk2" :
+            if var.get() == "1" or var.get() == "0" : file.write(resource + " = " + var.get())
+            else : file.write(resource + " = " + '"' + var.get() + '"')
         elif sFile == "gtk3" : file.write("[Settings]\n" + resource + " = " + var.get())
         elif sFile == "xdg_cursor" : file.write("[Icon Theme]\n" + resource + "=" + var.get())
         file.close()
@@ -219,6 +226,13 @@ def update() :
         setResource("gtk3", "gtk-menu-images", temp)
         changes = True
 
+    #Update dark theme
+    if ui.varOpDarkTheme.get() != bool(int(getResource("gtk3", "gtk-application-prefer-dark-theme"))) :
+        temp = StringVar()
+        temp.set(str(int(ui.varOpDarkTheme.get())))
+        setResource("gtk3", "gtk-application-prefer-dark-theme", temp)
+        changes = True
+
     #Ensure that the last char in all files is a newline
     homeDir = os.path.expanduser('~')
     endOnNewline(homeDir + "/.gtkrc-2.0")
@@ -228,6 +242,11 @@ def update() :
     #Show completion message
     if changes : messagebox.showinfo(title = "Complete!", message = "Restart your applications for the settings to take effect.")
     else : messagebox.showinfo(title = "Complete!", message = "Settings files were already up to date. No changes were made.")
+
+def darkThemeNote() :
+    if ui.varOpDarkTheme.get() :
+        messagebox.showinfo(title = "Note", message = "A dark theme variant is available only for some GTK+ 3 themes such as Adwaita.")
+        
 
 class UI() :
     def __init__(self, parent) :
@@ -250,8 +269,6 @@ class UI() :
         m2 = OptionMenu(parent, self.varOpG3, *themesG3).grid(row = 3, column = 2, sticky = W)
 
         #Hereafter, we're not supporting seperate settings for GTK+ 2 and GTK+ 3.
-        #For displaying the current setting, only check the GTK+ 2 settings file (or
-        #the index.theme file in the case of the cursor theme)
         
         #Font section
         l4 = Label(parent, text = "GTK+ font:", pady = 7, padx = 5).grid(row = 4, column = 1, sticky = W)
@@ -278,12 +295,17 @@ class UI() :
         self.varOpMenuImages = BooleanVar(parent)
         self.varOpButtonImages.set(getResource("gtk2", "gtk-button-images"))
         self.varOpMenuImages.set(getResource("gtk2", "gtk-menu-images"))
-        imgMenuButton = Checkbutton(parent, variable = self.varOpButtonImages, text = "Images in buttons").grid(row = 7, column = 1, sticky = W)
-        imgMenuButton = Checkbutton(parent, variable = self.varOpMenuImages, text = "Images in menus").grid(row = 7, column = 2, sticky = W)
+        imgButtonCheckbox = Checkbutton(parent, variable = self.varOpButtonImages, text = "Images in buttons").grid(row = 7, column = 1, sticky = W)
+        imgMenuCheckbox = Checkbutton(parent, variable = self.varOpMenuImages, text = "Images in menus").grid(row = 7, column = 2, sticky = W)
+
+        #Dark theme section
+        self.varOpDarkTheme = BooleanVar(parent)
+        self.varOpDarkTheme.set(getResource("gtk3", "gtk-application-prefer-dark-theme"))
+        darkThemeCheckbox = Checkbutton(parent, variable = self.varOpDarkTheme, text = "Use dark theme", command = darkThemeNote).grid(row = 8, column = 1, sticky = W)
 
         #Buttons
-        b1 = Button(parent, text = "Close", padx = 5, pady = 5, bd = 3, command = parent.destroy).grid(row = 8, column = 1)
-        b2 = Button(parent, text = "Update", padx = 5, pady = 5, bd = 3, command = update).grid(row = 8, column = 2)
+        b1 = Button(parent, text = "Close", padx = 5, pady = 5, bd = 3, command = parent.destroy).grid(row = 9, column = 1)
+        b2 = Button(parent, text = "Update", padx = 5, pady = 5, bd = 3, command = update).grid(row = 9, column = 2)
         
 top = Tk()  
 ui = UI(top)
