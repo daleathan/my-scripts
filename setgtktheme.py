@@ -196,19 +196,27 @@ def update() :
     #Update GTK+ 2 and GTK+ 3 font
     if  ui.varOpFont.get() != getResource("gtk2", "gtk-font-name") :
         setResource("gtk2", "gtk-font-name", ui.varOpFont)
+        changes = True
+    if  ui.varOpFont.get() != getResource("gtk3", "gtk-font-name") :
         setResource("gtk3", "gtk-font-name", ui.varOpFont)
         changes = True
 
     #Update GTK+ 2 and GTK+ 3 icons
     if  ui.varOpIcons.get() != getResource("gtk2", "gtk-icon-theme-name") and ui.varOpIcons.get() != "None found" :
         setResource("gtk2", "gtk-icon-theme-name", ui.varOpIcons)
+        changes = True
+    if  ui.varOpIcons.get() != getResource("gtk3", "gtk-icon-theme-name") and ui.varOpIcons.get() != "None found" :
         setResource("gtk3", "gtk-icon-theme-name", ui.varOpIcons)
         changes = True
 
     #Update GTK+ 2, GTK+ 3 and XDG cursor theme
     if  ui.varOpCursors.get() != getResource("xdg_cursor", "Inherits") and ui.varOpIcons.get() != "None found" :
         setResource("xdg_cursor", "Inherits", ui.varOpCursors)
+        changes = True
+    if  ui.varOpCursors.get() != getResource("gtk2", "Inherits") and ui.varOpIcons.get() != "None found" :
         setResource("gtk2", "gtk-cursor-theme-name", ui.varOpCursors)
+        changes = True
+    if  ui.varOpCursors.get() != getResource("gtk3", "Inherits") and ui.varOpIcons.get() != "None found" :
         setResource("gtk3", "gtk-cursor-theme-name", ui.varOpCursors)
         changes = True
 
