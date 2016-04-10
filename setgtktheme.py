@@ -210,13 +210,13 @@ def update() :
         changes = True
 
     #Update GTK+ 2, GTK+ 3 and XDG cursor theme
-    if  ui.varOpCursors.get() != getResource("xdg_cursor", "Inherits") and ui.varOpIcons.get() != "None found" :
+    if  ui.varOpCursors.get() != getResource("xdg_cursor", "Inherits") and ui.varOpCursors.get() != "None found" :
         setResource("xdg_cursor", "Inherits", ui.varOpCursors)
         changes = True
-    if  ui.varOpCursors.get() != getResource("gtk2", "Inherits") and ui.varOpIcons.get() != "None found" :
+    if  ui.varOpCursors.get() != getResource("gtk2", "gtk-cursor-theme-name") and ui.varOpCursors.get() != "None found" :
         setResource("gtk2", "gtk-cursor-theme-name", ui.varOpCursors)
         changes = True
-    if  ui.varOpCursors.get() != getResource("gtk3", "Inherits") and ui.varOpIcons.get() != "None found" :
+    if  ui.varOpCursors.get() != getResource("gtk3", "gtk-cursor-theme-name") and ui.varOpCursors.get() != "None found" :
         setResource("gtk3", "gtk-cursor-theme-name", ui.varOpCursors)
         changes = True
 
