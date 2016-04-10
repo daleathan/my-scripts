@@ -255,22 +255,21 @@ def darkThemeNote() :
     if ui.varOpDarkTheme.get() :
         messagebox.showinfo(title = "Note", message = "A dark theme variant is available only for some GTK+ 3 themes such as Adwaita.")
         
-
 class UI() :
     def __init__(self, parent) :
         parent.title("Set GTK+ theme")
-        l1 = Label(parent, text = "Set the theme for GTK+ 2 and 3 applications", pady = 5, padx = 5, relief = RAISED)
+        l1 = Label(parent, text = "Set the theme for GTK+ 2 and 3 applications", pady = 5, padx = 10, relief = RAISED)
         l1.grid(row = 1, column = 1, columnspan = 2)
 
         #GTK+ 2 section
-        l2 = Label(parent, text = "GTK+ 2 app theme:", pady = 7, padx = 5).grid(row = 2, column = 1, sticky = W)
+        l2 = Label(parent, text = "GTK+ 2 theme:", pady = 7, padx = 5).grid(row = 2, column = 1, sticky = W)
         self.varOpG2 = StringVar(parent)
         self.varOpG2.set(getResource("gtk2", "gtk-theme-name"))
         themesG2 = findThemes("gtk2")
         m1 = OptionMenu(parent, self.varOpG2, *themesG2).grid(row = 2, column = 2, sticky = W)
 
         #GTK+ 3 section
-        l3 = Label(parent, text = "GTK+ 3 app theme:", pady = 7, padx = 5).grid(row = 3, column = 1, sticky = W)
+        l3 = Label(parent, text = "GTK+ 3 theme:", pady = 7, padx = 5).grid(row = 3, column = 1, sticky = W)
         self.varOpG3 = StringVar(parent)
         self.varOpG3.set(getResource("gtk3", "gtk-theme-name"))
         themesG3 = findThemes("gtk3")
@@ -303,13 +302,13 @@ class UI() :
         self.varOpMenuImages = BooleanVar(parent)
         self.varOpButtonImages.set(getResource("gtk2", "gtk-button-images"))
         self.varOpMenuImages.set(getResource("gtk2", "gtk-menu-images"))
-        imgButtonCheckbox = Checkbutton(parent, variable = self.varOpButtonImages, text = "Images in buttons").grid(row = 7, column = 1, sticky = W)
-        imgMenuCheckbox = Checkbutton(parent, variable = self.varOpMenuImages, text = "Images in menus").grid(row = 7, column = 2, sticky = W)
+        imgButtonCheckbox = Checkbutton(parent, variable = self.varOpButtonImages, text = "Images in buttons", pady = 3).grid(row = 7, column = 1, sticky = W)
+        imgMenuCheckbox = Checkbutton(parent, variable = self.varOpMenuImages, text = "Images in menus", pady = 3).grid(row = 7, column = 2, sticky = W)
 
         #Dark theme section
         self.varOpDarkTheme = BooleanVar(parent)
         self.varOpDarkTheme.set(getResource("gtk3", "gtk-application-prefer-dark-theme"))
-        darkThemeCheckbox = Checkbutton(parent, variable = self.varOpDarkTheme, text = "Use dark theme", command = darkThemeNote).grid(row = 8, column = 1, sticky = W)
+        darkThemeCheckbox = Checkbutton(parent, variable = self.varOpDarkTheme, text = "Use dark theme", command = darkThemeNote, pady = 3).grid(row = 8, column = 1, sticky = W)
 
         #Buttons
         b1 = Button(parent, text = "Close", padx = 5, pady = 5, bd = 3, command = parent.destroy).grid(row = 9, column = 1)
