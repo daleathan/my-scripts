@@ -254,6 +254,29 @@ def update() :
 def darkThemeNote() :
     if ui.varOpDarkTheme.get() :
         messagebox.showinfo(title = "Note", message = "A dark theme variant is available only for some GTK+ 3 themes such as Adwaita.")
+
+def reset() :
+    rmFilesFailed = False
+    question = "The following files will be deleted:\n\n    ~/.gtkrc-2.0\n    ~/.config/gtk-3.0/settings.ini\n    ~/.icons/default/index.theme\n\nDo you want to continue?"
+    choice = messagebox.askyesno(title = "Reset", message = question)
+    if choice :
+        homeDir = os.path.expanduser('~')
+        try : os.remove(homeDir + "/.gtkrc-2.0")
+        except IOError : rmFilesFailed = True
+        try : os.remove(homeDir + "/.config/gtk-3.0/settings.ini")
+        except IOError : rmFilesFailed = True
+        try : os.remove(homeDir + "/.icons/default/index.theme")
+        except IOError : rmFilesFailed = True
+        if rmFilesFailed : messagebox.showerror(title = "Error", message = "Errors occured whilst removing the settings files.")
+        ui.varOpG2.set(getResource("gtk2", "gtk-theme-name"))
+        ui.varOpG3.set(getResource("gtk3", "gtk-theme-name"))
+        ui.varOpFont.delete(0, len(ui.varOpFont.get()))
+        ui.varOpFont.insert(0, getResource("gtk2", "gtk-font-name"))
+        ui.varOpIcons.set(getResource("gtk2", "gtk-icon-theme-name"))
+        ui.varOpCursors.set(getResource("xdg_cursor", "Inherits"))
+        ui.varOpButtonImages.set(getResource("gtk2", "gtk-button-images"))
+        ui.varOpMenuImages.set(getResource("gtk2", "gtk-menu-images"))
+        ui.varOpDarkTheme.set(getResource("gtk3", "gtk-application-prefer-dark-theme"))
         
 class UI() :
     def __init__(self, parent) :
@@ -311,8 +334,9 @@ class UI() :
         darkThemeCheckbox = Checkbutton(parent, variable = self.varOpDarkTheme, text = "Use dark theme", command = darkThemeNote, pady = 3).grid(row = 8, column = 1, sticky = W)
 
         #Buttons
-        b1 = Button(parent, text = "Close", padx = 5, pady = 5, bd = 3, command = parent.destroy).grid(row = 9, column = 1)
-        b2 = Button(parent, text = "Update", padx = 5, pady = 5, bd = 3, command = update).grid(row = 9, column = 2)
+        b1 = Button(parent, text = "Close", padx = 5, pady = 5, bd = 3, command = parent.destroy).grid(row = 9, column = 1, sticky = W)
+        b2 = Button(parent, text = "Update", padx = 5, pady = 5, bd = 3, command = update).grid(row = 9, column = 2, sticky = E)
+        b3 = Button(parent, text = "Reset", padx = 5, pady = 5, bd= 3, command = reset).grid(row = 9, column = 1, columnspan = 3)
         
 top = Tk()  
 ui = UI(top)
