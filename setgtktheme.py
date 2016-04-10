@@ -262,10 +262,13 @@ def reset() :
     if choice :
         homeDir = os.path.expanduser('~')
         try : os.remove(homeDir + "/.gtkrc-2.0")
+        except FileNotFoundError : pass
         except IOError : rmFilesFailed = True
         try : os.remove(homeDir + "/.config/gtk-3.0/settings.ini")
+        except FileNotFoundError : pass
         except IOError : rmFilesFailed = True
         try : os.remove(homeDir + "/.icons/default/index.theme")
+        except FileNotFoundError : pass
         except IOError : rmFilesFailed = True
         if rmFilesFailed : messagebox.showerror(title = "Error", message = "Errors occured whilst removing the settings files.")
         ui.varOpG2.set(getResource("gtk2", "gtk-theme-name"))
