@@ -32,9 +32,19 @@ def findThemes(themeType) :
             if "gtk-3.0" in (dirs) :
                 gDir = os.listdir(x + "/gtk-3.0")
                 if "gtk.css" in gDir : final.append(y[-1])
-    #Add default themes to list    
-    if "Adwaita" not in final : final.append("Adwaita")
-    if "Raleigh" not in final : final.append("Raleigh")
+    #Raleigh, Adwaita and HighContrast GTK+ 3 themes are all present
+    #if GTK+ 3 is present, even if the gtk.css files are non-existent
+    #or empty. Therefore, make sure these themes are in the list
+    if themeType == "gtk3" :
+        #Existence of /usr/share/themes/Default/gtk-3.0 should indicate
+        #the presence of GTK+ 3 on the system
+        if "/usr/share/themes/Default" in allThemes :
+            if "gtk-3.0" in os.listdir("/usr/share/themes/Default") :
+                if "Raleigh" not in final : final.append("Raleigh")
+                if "Adwaita" not in final : final.append("Adwaita")
+                if "HighContrast" not in final : final.append("HighContrast")
+    #We mustn't return an empty list so add a fallback value in this case
+    if final == [] : final.append("None found")
 
     return sorted(final)
 
@@ -64,9 +74,10 @@ def findIcons(themeType) :
                 if "cursors" in dirs : final.append(y[-1])
             else :
                 if len(dirs) > 2 : final.append(y[-1])
-    #Remove hicolor and default
+    #Remove hicolor as this is a fallback icon theme that will be used anyway
     if "hicolor" in final : final.remove("hicolor")
-    if "default" in final : final.remove("default")
+    #We mustn't return an empty list so add a fallback value in this case
+    if final == [] : final.append("None found")
 
     return sorted(final)
 
@@ -166,12 +177,12 @@ def update() :
     changes = False
 
     #Update GTK+ 2 theme
-    if  ui.varOpG2.get() != getResource("gtk2", "gtk-theme-name") :
+    if  ui.varOpG2.get() != getResource("gtk2", "gtk-theme-name") and ui.varOpG2.get() != "None found" :
         setResource("gtk2", "gtk-theme-name", ui.varOpG2)
         changes = True
 
     #Update GTK+ 3 theme
-    if  ui.varOpG3.get() != getResource("gtk3", "gtk-theme-name") :
+    if  ui.varOpG3.get() != getResource("gtk3", "gtk-theme-name") and ui.varOpG3.get() != "None found" :
         setResource("gtk3", "gtk-theme-name", ui.varOpG3)
         changes = True
 
@@ -182,13 +193,13 @@ def update() :
         changes = True
 
     #Update GTK+ 2 and GTK+ 3 icons
-    if  ui.varOpIcons.get() != getResource("gtk2", "gtk-icon-theme-name") :
+    if  ui.varOpIcons.get() != getResource("gtk2", "gtk-icon-theme-name") and ui.varOpIcons.get() != "None found" :
         setResource("gtk2", "gtk-icon-theme-name", ui.varOpIcons)
         setResource("gtk3", "gtk-icon-theme-name", ui.varOpIcons)
         changes = True
 
     #Update GTK+ 2, GTK+ 3 and XDG cursor theme
-    if  ui.varOpCursors.get() != getResource("xdg_cursor", "Inherits") :
+    if  ui.varOpCursors.get() != getResource("xdg_cursor", "Inherits") and ui.varOpIcons.get() != "None found" :
         setResource("xdg_cursor", "Inherits", ui.varOpCursors)
         setResource("gtk2", "gtk-cursor-theme-name", ui.varOpCursors)
         setResource("gtk3", "gtk-cursor-theme-name", ui.varOpCursors)
@@ -239,7 +250,8 @@ class UI() :
         m2 = OptionMenu(parent, self.varOpG3, *themesG3).grid(row = 3, column = 2, sticky = W)
 
         #Hereafter, we're not supporting seperate settings for GTK+ 2 and GTK+ 3.
-        #For displaying the current setting, we only check the GTK+ 2 settings file.
+        #For displaying the current setting, only check the GTK+ 2 settings file (or
+        #the index.theme file in the case of the cursor theme)
         
         #Font section
         l4 = Label(parent, text = "GTK+ font:", pady = 7, padx = 5).grid(row = 4, column = 1, sticky = W)
