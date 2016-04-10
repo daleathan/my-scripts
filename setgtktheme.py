@@ -336,7 +336,7 @@ class UI() :
         #Buttons
         b1 = Button(parent, text = "Close", padx = 5, pady = 5, bd = 3, command = parent.destroy).grid(row = 9, column = 1, sticky = W)
         b2 = Button(parent, text = "Update", padx = 5, pady = 5, bd = 3, command = update).grid(row = 9, column = 2, sticky = E)
-        b3 = Button(parent, text = "Reset", padx = 5, pady = 5, bd= 3, command = reset).grid(row = 9, column = 1, columnspan = 3)
+        b3 = Button(parent, text = "Reset", padx = 5, pady = 5, bd= 3, command = reset).grid(row = 9, column = 1, columnspan = 2)
         
 top = Tk()  
 ui = UI(top)
