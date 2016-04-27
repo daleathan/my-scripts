@@ -7,7 +7,7 @@ from subprocess import Popen, PIPE
 import os
 
 def checkMetacity() :
-    execs = os.listdir("/bin")
+    execs = os.listdir("/usr/bin")
     if "metacity" not in execs :
         print("mcityconf.py - Metacity wasn't found on this system. Exiting.")
         os._exit(0)
