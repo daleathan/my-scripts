@@ -23,6 +23,11 @@ getHOffset() {
   echo $(expr $(expr $H - 600) / 2)
 }
 
+if [ ! $DISPLAY ]; then
+  echo "Could not find display. Is X running?"
+  exit
+fi
+
 if [ $1 ]; then 
   /usr/bin/feh $1 -g 800x600+$(getWOffset)+$(getHOffset) -q;
 else 
