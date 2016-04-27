@@ -1,0 +1,30 @@
+#!/bin/sh
+#Wrapper script to launch feh in 800x600 resolution, centered
+
+getWidth() {
+  HW=$(xrandr | grep '*' | cut -d " " -f 4)
+  W=$(echo $HW | cut -d 'x' -f 1)
+  echo $W
+}
+
+getHeight() {
+  HW=$(xrandr | grep '*' | cut -d " " -f 4)
+  H=$(echo $HW | cut -d 'x' -f 2)
+  echo $H
+}
+
+getWOffset() {
+  W=$(getWidth)
+  echo $(expr $(expr $W - 800) / 2)
+}
+
+getHOffset() {
+  H=$(getHeight)
+  echo $(expr $(expr $H - 600) / 2)
+}
+
+if [ $1 ]; then 
+  /usr/bin/feh $1 -g 800x600+$(getWOffset)+$(getHOffset) -q;
+else 
+  /usr/bin/feh ~/Pictures -g 800x600+$(getWOffset)+$(getHOffset) -q;
+fi
