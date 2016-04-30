@@ -21,14 +21,20 @@ path_to_top=$(dirname $abs)
 length=$(expr ${#path_to_top} + 1)
 top=${abs:$length}
 
-for x in $(find $1 -type f); do
-  path=$(dirname $x)
+for x in $(find $1); do
+  if [ -f $x ]; then
+    path=$(dirname $x)
+  else
+    path=$x
+  fi
   dest=$(echo $2/$top/${path/*$top//} | sed 's@[<>:"\|?*]@_@g')
   if [ ! -d $dest ]; then
     mkdir -p $dest
   fi
-  filename=$(basename $x | sed 's@[<>:"/\|?*]@_@g')
-  cp $x $dest/$filename
+  if [ -f $x ]; then
+    filename=$(basename $x | sed 's@[<>:"/\|?*]@_@g')
+    cp $x $dest/$filename
+  fi
 done
 
 IFS=$IFS_ORIG
