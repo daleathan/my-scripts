@@ -18,17 +18,15 @@ if [ ! $1 ] || [ ! $2 ] || [ ! -d $1 ] || [ ! -d $2 ]; then
 fi
 
 abs=$(realpath $1)
-path_to_top=$(dirname $abs)
-length=$(expr ${#path_to_top} + 1)
-top=${abs:$length}
+top=$(dirname $abs)
 
-for x in $(find $1); do
+for x in $(find $abs); do
   if [ -f $x ]; then
     path=$(dirname $x)
   else
     path=$x
   fi
-  dest=$(echo $2/$top/${path/*$top//} | sed 's@[<>:"\|?*]@_@g')
+  dest=$(echo $2/${path/$top//} | sed 's@[<>:"\|?*]@_@g')
   if [ ! -d $dest ]; then
     mkdir -p $dest
   fi
