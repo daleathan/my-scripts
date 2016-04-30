@@ -18,8 +18,7 @@ fi
 
 cd $1
 abs=$(dirname $PWD)
-length=${#abs}
-((length+=1))
+length=$(expr ${#abs} + 1)
 top=${1:$length}
 
 for x in $(find . -type f); do
