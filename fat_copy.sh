@@ -19,7 +19,7 @@ fi
 cd $1
 abs=$(dirname $PWD)
 length=$(expr ${#abs} + 1)
-top=${1:$length}
+top=${PWD:$length}
 
 for x in $(find . -type f); do
   dest=$(echo $2/$top/$(dirname $x) | sed 's@[<>:"\|?*]@_@g')
