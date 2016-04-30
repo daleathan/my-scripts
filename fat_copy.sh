@@ -16,13 +16,14 @@ if [ ! $1 ] || [ ! $2 ] || [ ! -d $1 ] || [ ! -d $2 ]; then
   exit
 fi
 
-cd $1
-abs=$(dirname $PWD)
-length=$(expr ${#abs} + 1)
-top=${PWD:$length}
+abs=$(realpath $1)
+path_to_top=$(dirname $abs)
+length=$(expr ${#path_to_top} + 1)
+top=${abs:$length}
 
-for x in $(find . -type f); do
-  dest=$(echo $2/$top/$(dirname $x) | sed 's@[<>:"\|?*]@_@g')
+for x in $(find $1 -type f); do
+  path=$(dirname $x)
+  dest=$(echo $2/$top/${path/*$top//} | sed 's@[<>:"\|?*]@_@g')
   if [ ! -d $dest ]; then
     mkdir -p $dest
   fi
