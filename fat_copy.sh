@@ -23,7 +23,7 @@ length=${#abs}
 top=${1:$length}
 
 for x in $(find . -type f); do
-  dest=$(echo $2/$top/$(dirname $x) | sed 's@[<>:"|?*]@_@g')
+  dest=$(echo $2/$top/$(dirname $x) | sed 's@[<>:"\|?*]@_@g')
   if [ ! -d $dest ]; then
     mkdir -p $dest
   fi
