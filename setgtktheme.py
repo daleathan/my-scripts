@@ -32,8 +32,7 @@ def findThemes(themeType) :
             if "gtk-3.0" in (dirs) :
                 gDir = os.listdir(x + "/gtk-3.0")
                 if "gtk.css" in gDir : final.append(y[-1])
-    #Raleigh, Adwaita, HighContrast and HighContrastInverse GTK+ 3 themes
-    #are all present if GTK+ 3 is present, even if the gtk.css files are
+    #Some GTK+3 themes present if GTK+ 3 is present, even if the gtk.css files are
     #non-existent or empty. Therefore, make sure these themes are in the list
     if themeType == "gtk3" :
         #Existence of /usr/share/themes/Default/gtk-3.0 should indicate
@@ -44,6 +43,7 @@ def findThemes(themeType) :
                 if "Adwaita" not in final : final.append("Adwaita")
                 if "HighContrast" not in final : final.append("HighContrast")
                 if "HighContrastInverse" not in final : final.append("HighContrastInverse")
+                if "win32" not in final : final.append("win32")
     #We mustn't return an empty list so add a fallback value in this case
     if final == [] : final.append("None found")
 
