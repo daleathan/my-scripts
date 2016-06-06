@@ -1,7 +1,14 @@
 #!/usr/bin/python3
 
+import os
+
 mystr = input("Enter binary string: ")
 output = []
+
+for x in mystr :
+    if x != '0' and x != '1' :
+        print("Invalid binary string.")
+        os._exit(0)
 
 while len(mystr)%8 != 0 : mystr = '0' + mystr
 
