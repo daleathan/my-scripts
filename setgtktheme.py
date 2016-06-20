@@ -22,7 +22,8 @@ def findThemes(themeType) :
     final = []
     
     for x in allThemes :
-        dirs = os.listdir(x)
+        try : dirs = os.listdir(x)
+        except NotADirectoryError : continue
         y = x.split("/")
         if themeType == "gtk2" :
             if "gtk-2.0" in (dirs) :
@@ -65,7 +66,8 @@ def findIcons(themeType) :
     final = []
     
     for x in allIcons :
-        dirs = os.listdir(x)
+        try : dirs = os.listdir(x)
+        except NotADirectoryError : continue
         y = x.split("/")
         #Dir needs to contain index.theme and might well contain cursors dir. Therefore, the
         #number of items within dir needs to be greater than 2 for it to contain a viable icon
