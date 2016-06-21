@@ -287,7 +287,7 @@ def reset() :
 class UI() :
     def __init__(self, parent) :
         parent.title("Set GTK+ theme")
-        l1 = Label(parent, text = "Set the theme for GTK+ 2 and 3 applications", pady = 5, padx = 10, relief = RAISED)
+        l1 = Label(parent, text = "Set the theme for GTK+ 2 and 3 applications", pady = 5, padx = 15, relief = RAISED)
         l1.grid(row = 1, column = 1, columnspan = 2)
 
         #GTK+ 2 section
