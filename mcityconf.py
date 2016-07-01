@@ -13,7 +13,7 @@ def checkMetacity() :
         os._exit(0)
 
 def getTheme() :
-    theme = Popen(["gsettings", "get", "org.gnome.metacity", "theme"], stdout = PIPE).communicate()
+    theme = Popen(["gsettings", "get", "org.gnome.metacity.theme", "name"], stdout = PIPE).communicate()
     theme = str(theme[0]).lstrip('''b"\'''').rstrip(''''\\n"''')
     return theme
 
@@ -46,7 +46,7 @@ def findThemes() :
 
 def setTheme(self) :
     newTheme = varOp.get()
-    Popen(["gsettings", "set", "org.gnome.metacity", "theme", newTheme])
+    Popen(["gsettings", "set", "org.gnome.metacity.theme", "name", newTheme])
 
 def getSysFont() :
     status = Popen(["gsettings", "get", "org.gnome.desktop.wm.preferences", "titlebar-uses-system-font"], stdout = PIPE).communicate()
