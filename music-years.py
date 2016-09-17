@@ -8,23 +8,31 @@ from mutagen.id3 import ID3, ID3NoHeaderError
 
 def usage() :
     print('''Usage:
-  music-years.py <path to music>
-  Note: without the path to music argument, the path is taken to be ~/Music''')
+  music-years.py <options>
+
+Options:
+  -h, --help: show this dialog
+  --music-dir: directory to search for tracks, defaults to ~/Music
+  --alltpy: show the number of tracks for all years, not just the top 10''')
+
+# Get args
+args = sys.argv
+if "-h" in args or "--help" in args :
+    usage()
+    os._exit(0)
 
 # Get music directory
-args = sys.argv
-if len(args) > 1 :
-    if (args[1] == '-h') or (args[1] == '--help') :
-        usage()
-        os._exit(0)
-    elif os.path.exists(args[1]) : musicDir = args[1]
+if "--music-dir" in args :
+    dirArg = args[args.index("--music-dir") + 1]
+    if os.path.exists(dirArg) : musicDir = dirArg
     else :
         usage()
         os._exit(0)
-elif os.path.exists(os.path.expanduser('~') + "/Music") : musicDir = os.path.expanduser('~') + "/Music"
 else :
-    usage()
-    os._exit(0)
+    if os.path.exists(os.path.expanduser('~') + "/Music") : musicDir = os.path.expanduser('~') + "/Music"
+    else :
+        usage()
+        os._exit(0)
 
 # Get dates for music files
 musicFiles = []
@@ -76,10 +84,15 @@ else :
     else : print("Mode year of release for your music: " + str(years[0]) + " (" + str(len(years)) + " tracks)")
 
     # Top years for tracks
-    print("\nTop years for tracks (max 10)")
+    if "--alltpy" not in args : 
+        print("\nTracks per year (top 10)")
+        limit = 10
+    else : 
+        print("\nTracks per year")
+        limit = len(modeList)
     counter = 0
     if modeList != [] :
-        while (counter < 10) and (counter < len(modeList)) :
+        while (counter < limit) and (counter < len(modeList)) :
             print(str(counter + 1) + ": " + str(modeList[counter][0]) + " (" + str(len(modeList[counter])) + " tracks)")
             counter += 1
     else : print("1: " + str(years[0]) + " (" + str(len(years)) + " tracks)")
