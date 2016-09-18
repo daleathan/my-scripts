@@ -8,14 +8,7 @@ import requests
 import os
 
 def versionCheck(localVer, aurVer) :
-    #Compare versions by splitting version string at "." and comparing each number in turn -
-    #letters will be converted into their ascii codes. If lengths are not equal after
-    #splitting, this cannot be done properly so fall back to simple string comparison.
-    #Return 0 immediately if vers are equal. Return 1 for updates and return -1 for mismatches -
-    #(where local ver is newer than aur ver).
     if localVer == aurVer : return 0
-    #Check for epochs. Any package that has an epoch is automatically more recent than
-    #a package without
     if (aurVer.find(":") != -1) and (localVer.find(":") == -1) : return 1
     if (aurVer.find(":") == -1) and (localVer.find(":") != -1) : return -1
     versions = [localVer, aurVer]
@@ -88,17 +81,18 @@ else :
     if updates != [] :
         print("The following packages have updates available:\n-----")
         for x in updates : print(x)
-        fetch = input("\nFetch updated tarballs? [y/n] ")
-        if fetch == "y" :
-            homeDir = os.path.expanduser('~')
-            if os.path.exists(homeDir + "/Downloads") : downloadsDir = homeDir + "/Downloads"
-            else : downloadsDir = homeDir
-            print("Downloading to " + downloadsDir + "\n")
-            for x in updates :
-                if x in splitPkgs : continue
-                newPkg = x.split(' ')[0]
-                pkgUrl = "https://aur.archlinux.org/cgit/aur.git/snapshot/" + newPkg + ".tar.gz"
-                Popen(["wget", "-q", pkgUrl, "-P", downloadsDir]).wait()
-                if os.path.exists(downloadsDir + "/" + newPkg + ".tar.gz") : completion = "SUCCESS"
-                else : completion = "FAILURE"
-                print("Fetch: " + newPkg + ".tar.gz - " + completion)
+        if "wget" in os.listdir("/usr/bin") :
+            fetch = input("\nFetch updated tarballs? [y/n] ")
+            if fetch == "y" :
+                homeDir = os.path.expanduser('~')
+                if os.path.exists(homeDir + "/Downloads") : downloadsDir = homeDir + "/Downloads"
+                else : downloadsDir = homeDir
+                print("Downloading to " + downloadsDir + "\n")
+                for x in updates :
+                    if x in splitPkgs : continue
+                    newPkg = x.split(' ')[0]
+                    pkgUrl = "https://aur.archlinux.org/cgit/aur.git/snapshot/" + newPkg + ".tar.gz"
+                    Popen(["wget", "-q", pkgUrl, "-P", downloadsDir]).wait()
+                    if os.path.exists(downloadsDir + "/" + newPkg + ".tar.gz") : completion = "SUCCESS"
+                    else : completion = "FAILURE"
+                    print("Fetch: " + newPkg + ".tar.gz - " + completion)
