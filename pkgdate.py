@@ -14,7 +14,8 @@ def usage() :
 Options:
   -h: Display this dialog
   -e: List explicitly installed packages only
-  -m: List local packages only''')
+  -m: List local packages only
+  -n: List package names only''')
 
 args = sys.argv
 
@@ -23,11 +24,8 @@ if "-h" in args :
     os._exit(0)
 
 pacOpts = "-Qi"
-validOpts = ["-e", "-m", "-em", "-me"]
-for x in args :
-    if x in validOpts :
-        temp = list(pacOpts)
-        if x.lstrip("-") not in temp : pacOpts += x.lstrip("-")
+if "-e" in args : pacOpts += "e"
+if "-m" in args : pacOpts += "m"
 
 instOutput = Popen(["pacman", pacOpts], stdout = PIPE).communicate()
 instOutput = (str(instOutput).replace("\\n", " ").replace("b\'", "").replace("\', None", "").strip("()").rstrip(" ")).split(" ")
@@ -51,4 +49,7 @@ while counter < len(instOutput) :
 
 instPkgs = [list(x) for x in zip(name, date)]
 instPkgs = sorted(instPkgs, key=lambda x: datetime.datetime.strptime(x[1], '%d %b %Y %H:%M:%S'))
-for x in instPkgs : print(x[0] + ", " + x[1])
+if "-n" in args : 
+    for x in instPkgs : print (x[0])
+else :
+    for x in instPkgs : print(x[0] + ", " + x[1])
