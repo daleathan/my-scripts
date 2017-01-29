@@ -82,7 +82,7 @@ def setButtonLayout() :
 
 class reset() :
     def theme() :
-        Popen(["gsettings", "reset", "org.gnome.metacity", "theme"]).wait()
+        Popen(["gsettings", "reset", "org.gnome.metacity.theme", "name"]).wait()
         varOp.set("Current: " + getTheme())
 
     def useSysFont() :
