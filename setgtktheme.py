@@ -28,11 +28,13 @@ def findThemes(themeType) :
         if themeType == "gtk2" :
             if "gtk-2.0" in (dirs) :
                 gDir = os.listdir(x + "/gtk-2.0")
-                if "gtkrc" in gDir : final.append(y[-1])
+                if "gtkrc" in gDir :
+                    if y[-1] not in final : final.append(y[-1])
         else :
             if "gtk-3.0" in (dirs) :
                 gDir = os.listdir(x + "/gtk-3.0")
-                if "gtk.css" in gDir : final.append(y[-1])
+                if "gtk.css" in gDir :
+                    if y[-1] not in final : final.append(y[-1])
     #Some GTK+3 themes present if GTK+ 3 is present, even if the gtk.css files are
     #non-existent or empty. Therefore, make sure these themes are in the list
     if themeType == "gtk3" :
