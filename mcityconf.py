@@ -31,7 +31,8 @@ def findThemes() :
             for name in files:
                 dirFiles.append(name)
         if (("metacity-theme-1.xml" not in dirFiles) and ("metacity-theme-2.xml" not in dirFiles) and ("metacity-theme-3.xml" not in dirFiles)) : pass
-        else : themes.append(x)
+        else :
+            if x not in themes : themes.append(x)
 
     if locThemes != [] :
         for x in locThemes :
@@ -40,7 +41,8 @@ def findThemes() :
                 for name in files:
                     dirFiles.append(name)
             if (("metacity-theme-1.xml" not in dirFiles) and ("metacity-theme-2.xml" not in dirFiles) and ("metacity-theme-3.xml" not in dirFiles)) : pass
-            else : themes.append(x)
+            else :
+                if x not in themes: themes.append(x)
 
     return sorted(themes)
 
