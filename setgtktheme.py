@@ -195,8 +195,12 @@ def update() :
 
     #Update GTK+ 3 theme
     if  ui.varOpG3.get() != getResource("gtk3", "gtk-theme-name") and ui.varOpG3.get() != "None found" :
+        #Show a warning about GTK+ 3 Raleigh
+        if ui.varOpG3.get() == "Raleigh" and getResource("gtk3", "gtk-theme-name") != "Raleigh" :
+            messagebox.showwarning(title = "Warning", message = "The GTK+ 3 version of Raleigh was removed from GTK+ as of version 3.90.0. Despite it being listed here, it might not be present on your system.")
         setResource("gtk3", "gtk-theme-name", ui.varOpG3)
         changes = True
+
 
     #Update GTK+ 2 and GTK+ 3 font
     if  ui.varOpFont.get() != getResource("gtk2", "gtk-font-name") :
