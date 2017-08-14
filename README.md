@@ -128,6 +128,13 @@ interesting now though I haven't yet found a use for it in my day to day
 workflow. Maybe one of these days... - Depends: python, python-selenium, 
 python-beautifulsoup4, phantomjs
 * **text2bin.py** - opposite of bin2text.py - Depends: python
+* **tkscrot.py** - this is a dead simple python Tk frontend to scrot. It's
+intended to imitate the look and feel of GNOME Screenshot. I got rid of
+GNOME Screenshot itself partly because it uses the GNOME header bars and partly
+because of the application size. For me, GNOME Screenshot takes up 10x as much
+space as this script and scrot combined. MATE Screenshot is even worse as it's
+not distributed separately but as part of MATE Utils which includes a whole
+bunch of applications I neither want not need. - Depends: python, tk, scrot
 * **volume-change.sh** - a script I wrote to change the volume when using
 PulseAudio. It has three actions, volume increase, decrease and (un)mute which
 can be each be bound to the XF86Audio keys. It works fine though I no longer
