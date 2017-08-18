@@ -22,7 +22,7 @@ class UI() :
     def __init__(self, parent) :
         parent.title("Display Selector")
 
-        #Screenshot
+        #Display selection
         l1 = Label(parent, text = "Select the output display(s).", pady = 5, padx = 5).grid(row = 1, column = 1, sticky = W)
         self.display = IntVar()
         r1 = Radiobutton(parent, text = "Laptop only", variable = self.display, value = 0, pady = 5, padx = 5).grid(row = 2, column = 1, sticky = W)
