@@ -9,13 +9,11 @@ from subprocess import Popen
 def run() :
     if ui.display.get() == 0 :
         cmd = ["xrandr", "--output", "HDMI1", "--off", "--output", "LVDS1", "--auto"]
-        Popen(cmd).wait()
     elif ui.display.get() == 1 :
         cmd = ["xrandr", "--output", "HDMI1", "--auto", "--output", "LVDS1", "--off"]
-        Popen(cmd).wait()
     else :
         cmd = ["xrandr", "--output", "HDMI1", "--auto", "--output", "LVDS1", "--auto"]
-        Popen(cmd).wait()
+    Popen(cmd).wait()
     top.destroy()
 
 class UI() :
