@@ -52,4 +52,4 @@ instPkgs = sorted(instPkgs, key=lambda x: datetime.datetime.strptime(x[1], '%d %
 if "-n" in args : 
     for x in instPkgs : print (x[0])
 else :
-    for x in instPkgs : print(x[0] + ", " + x[1])
+    for x in instPkgs : print(x[1] + ", " + x[0])
