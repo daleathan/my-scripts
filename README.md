@@ -40,6 +40,9 @@ guard. - Depends: bash, procps-ng (for vmstat)
 * **display-selector.sh** - A zenity dialogue for calling xrandr. This allows me
 to switch between my laptop screen and the HDMI port. - Depends: bash, zenity, 
 xorg-xrandr
+* **display-selector.py** - Like display-selector.sh but using python Tk
+instead of zenity. The GTK+ look of zenity is prettier I guess, but zenity is
+slow!! Working fast is more important than looking good. Depends: python, tk
 * **end-session.py** - A python Tk dialogue that can call systemctl 
 {reboot,poweroff,suspend...}. Not particularly useful to me now. I can't 
 remember why I wrote this one. - Depends: python, tk, systemd
