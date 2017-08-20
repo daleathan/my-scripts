@@ -10,23 +10,22 @@ Usage:
   -c: only check if hibernation is possible. Return 1 if so or else return 0"
 }
 
-if [ "$1" = "-h" ]; then
+if [ "$1" = "-h" ] || [ "$#" -gt 1 ]; then
   usage
   exit 0
 fi
 
 fs=$(vmstat -s | grep 'free swap' | tr -s ' ' | cut -d ' ' -f 2)
 um=$(vmstat -s | grep 'used memory' | tr -s ' ' | cut -d ' ' -f 2)
-check_only=$(for x in "$@"; do if [ "$x" = "-c" ]; then echo 1; fi; done)
 
 if [ $um -lt $fs ]; then
-  if [ "$check_only" = 1 ]; then 
+  if [ "$1" = "-c" ]; then 
     echo 1
   else 
     systemctl hibernate
   fi
 else
-  if [ "$check_only" = 1 ]; then 
+  if [ "$1" = "-c" ]; then 
     echo 0
   else
     xmessage -center 'Cannot hibernate. Too much memory is in use.'
