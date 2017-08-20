@@ -33,10 +33,6 @@ only a few. - Depends: python, python-requests, python-beautifulsoup4, pacman,
 wget (optional)
 * **bin2text.py** - A silly little script that I wrote just for fun really. 
 Does what it says on the tin. - Depends: python
-* **canhibernate.sh** - A tiny script that uses vmstat to check that the amount
-of used memory doesn't exceed the amount of free swap. If you want to call
-systemctl hibernate from a window manager menu entry, you can use this as an if 
-guard. - Depends: bash, procps-ng (for vmstat)
 * **display-selector.py** - Like display-selector.sh but using python Tk
 instead of zenity. The GTK+ look of zenity is prettier I guess, but zenity is
 slow!! Working fast is more important than looking good. Depends: python, tk
@@ -108,6 +104,12 @@ that it allows one to check which packages they have installed recently without
 having to check the pacman log, which might well be filled with other output.
 There might be a builtin pacman function for this but if there is, I have never
 come across it. - Depends: python, pacman
+* **safehibernate.sh** - A script that uses vmstat to check that the amount
+of used memory doesn't exceed the amount of free swap. It can either call
+systemctl hibernate/display a warning if hibernation is possible/impossible
+or it can return 1/0 where 1 indicates hibernation is possible and 0 indicates
+that it's impossible. - Depends: bash, procps-ng (for vmstat), systemd 
+(optional), xmessage (optional)
 * **setgtktheme.py** - This is by far my most popular script for people who 
 visit here, or at least that's what GitHub's visit tracker tells me. It's a 
 python Tk dialog for setting the GTK theme, fonts etc. I originally wrote it for
