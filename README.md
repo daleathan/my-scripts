@@ -109,7 +109,7 @@ of used memory doesn't exceed the amount of free swap. It can either call
 systemctl hibernate/display a warning if hibernation is possible/impossible
 or it can return 1/0 where 1 indicates hibernation is possible and 0 indicates
 that it's impossible. - Depends: bash, procps-ng (for vmstat), systemd 
-(optional), xmessage (optional)
+(optional), xorg-xmessage (optional)
 * **setgtktheme.py** - This is by far my most popular script for people who 
 visit here, or at least that's what GitHub's visit tracker tells me. It's a 
 python Tk dialog for setting the GTK theme, fonts etc. I originally wrote it for
