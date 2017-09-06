@@ -4,6 +4,7 @@
 
 from tkinter import *
 from subprocess import Popen
+import time
 
 def run() :
     cmd = ["scrot"]
@@ -14,6 +15,7 @@ def run() :
     if ui.shotType.get() == 1 and ui.incBorder.get() == 1 : cmd.append("-b")
     cmd.append("-e xdg-open $f")
     top.destroy()
+    time.sleep(0.1)
     Popen(cmd).wait()
 
 class UI() :
