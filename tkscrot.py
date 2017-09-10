@@ -30,7 +30,7 @@ class UI() :
         r3 = Radiobutton(parent, text = "Select area to grab", variable = self.shotType, value = 2, pady = 5, padx = 5).grid(row = 3, column = 2, sticky = W)
 
         #Delay
-        l2 = Label(parent, text = "Set delay (s)", pady = 5, padx = 5).grid(row = 4, column = 1, sticky = W)
+        l2 = Label(parent, text = "Set delay", pady = 5, padx = 5).grid(row = 4, column = 1, sticky = W)
         self.delay = Spinbox(parent, from_ = 0, to = 60, width = 15)
         self.delay.grid(row = 4, column = 2)
 
