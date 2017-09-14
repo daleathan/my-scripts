@@ -28,6 +28,7 @@ else
   if [ "$1" = "-c" ]; then 
     echo 0
   else
-    xmessage -center 'Cannot hibernate. Too much memory is in use.'
+    xmessage -center 'Cannot hibernate. Too much memory is in use.' -title \
+      Warning
   fi
 fi
