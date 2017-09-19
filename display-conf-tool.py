@@ -4,6 +4,7 @@
 #By Charles Bos
 
 from tkinter import *
+from tkinter import messagebox
 from subprocess import Popen, PIPE
 
 class Display() :
@@ -176,7 +177,9 @@ class UI() :
                     elif pos[0] == "Above" : cmd.append("--above")
                     else : cmd.append("--below")
                     cmd.append(x.position[1])
-            Popen(cmd).wait()
+            error = Popen(cmd, stderr = PIPE).communicate()
+            if str(error[1]) != "b''" :
+                messagebox.showerror(title = "Xrandr error", message = str(error[1]).lstrip("b'").rstrip("\\n'"))
 
         #Set window title
         parent.title("Display Conf Tool")
