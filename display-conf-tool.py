@@ -179,7 +179,7 @@ class UI() :
             Popen(cmd).wait()
 
         #Set window title
-        parent.title("Display Selector")
+        parent.title("Display Conf Tool")
 
         #Objects for storing display settings
         self.displayObjs = []
