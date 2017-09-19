@@ -33,13 +33,19 @@ only a few. - Depends: python, python-requests, python-beautifulsoup4, pacman,
 wget (optional)
 * **bin2text.py** - A silly little script that I wrote just for fun really. 
 Does what it says on the tin. - Depends: python
-* **display-selector.py** - Like display-selector.sh but using python Tk
-instead of zenity. The GTK+ look of zenity is prettier I guess, but zenity is
-slow!! Working fast is more important than looking good. Depends: python, tk,
-xorg-xrandr
+* **display-conf-tool.py** - This is a general pupose Tk gui frontend to
+xrandr. It can enable/disable displays, configure display resolutions, display
+mirroring and display positioning. It started out as a reimplementation of
+display-selector.sh in Tk because zenity is slow and working fast is more
+important to me than looking good! But later I re-wrote it to make it work in
+all contexts (i.e. no hardcoded display names) and to add more features. - 
+Depends: python, tk, xorg-xrandr
 * **display-selector.sh** - A zenity dialogue for calling xrandr. This allows me
-to switch between my laptop screen and the HDMI port. - Depends: bash, zenity, 
-xorg-xrandr
+to switch between my laptop screen and the HDMI port. Note that the display
+names are hardcoded and the functionality is very limited. This can only
+enable or disable displays. You should use display-conf-tool.py instead
+which is faster, detects displays instead of relying on hardcoded names
+and has many more xrandr settings exposed. - Depends: bash, zenity, xorg-xrandr
 * **end-session.py** - A python Tk dialogue that can call systemctl 
 {reboot,poweroff,suspend...}. Not particularly useful to me now. I can't 
 remember why I wrote this one. - Depends: python, tk, systemd
