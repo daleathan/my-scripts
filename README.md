@@ -56,6 +56,14 @@ that this doesn't actually 'copy' directories strictly speaking.
 It only copies files - directories are created in the new location using mkdir.
 There was some good reason for that though I can't remember what it was right 
 now ;) - Depends: bash, coreutils
+* **fvwm-recent-files.py** - This script parses the recently-used.xbel file
+which is written to by GTK+ applications, determines the 10 most
+recently used files, which applications are the correct ones for opening
+those files and then outputs the results in FVWM menu format, essentially
+giving you a dynamic 'recently used' menu similar to the one found in MATE's
+Places menu. Whilst the output is in FVWM format, one could easily add
+support for other WM formats. I just don't have any reason to do that at the
+moment. - Depends: python, python-urllib3
 * **gnome-screensaver-idlelock.sh** - I wrote this one when I was still using
 GNOME Screensaver 3.6 with Xfce. And I was doing that because XScreenSaver's
 DPMS timeouts conflict with xfce-power-manager's timeouts. It uses xprintidle
