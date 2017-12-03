@@ -114,6 +114,7 @@ if len(files) > 0 :
             if os.path.exists(x[1]) :
                 filename = os.path.basename(x[1])
                 if len(filename) > 25 : filename = filename[:22] + "..."
+                filename = filename.replace("&", "&&")
                 prog = getProgram(x)
                 print("+ \"" + filename + "\" Exec " + \
                     prog + " \"" + x[1] + "\"")
