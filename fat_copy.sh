@@ -1,6 +1,7 @@
 #!/bin/sh
 #A script to copy directories and their contents, automatically replacing
-#FAT illegal characters with underscores. Use with care!
+#FAT illegal characters with underscores. Note that this does NOT work around
+#FAT's case insensitivity. Use with care!
 #By Charles Bos
 
 usage() {
