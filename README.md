@@ -54,8 +54,10 @@ files, replacing any characters in filenames or directory names
 that are illegal for the FAT filesystem with underscores. It should be noted 
 that this doesn't actually 'copy' directories strictly speaking. 
 It only copies files - directories are created in the new location using mkdir.
-There was some good reason for that though I can't remember what it was right 
-now ;) - Depends: bash, coreutils
+This is because copying directories can only be done recursively which means
+the entire directory tree would be copied over to the FAT filesystem without
+the necessary changes to the names of any of the files or subdirectories in
+the tree. - Depends: bash, coreutils
 * **fvwm-recent-files.py** - This script parses the recently-used.xbel file
 which is written to by GTK+ applications, determines the 10 most
 recently used files, which applications are the correct ones for opening
