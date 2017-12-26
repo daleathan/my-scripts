@@ -1,8 +1,8 @@
 #!/usr/bin/python3
 #Python script to rename mp3 files according to the format
 #"Track-number Track-name.mp3", for example: 02 Self Control.mp3
-#Note: Tracks must have valid ID3 data for this to work - python-mutagen is required.
-#Note2: Should work on Windows but untested.
+#Note that tracks must have valid ID3 data for this to work - 
+#python-mutagen is required for reading the tags.
 #By Charles Bos
 
 import os
@@ -64,12 +64,7 @@ else :
     #Fix illegal characters
     counter = 0
     while counter < len(convList) :
-        if sys.platform == "win32" :
-            winIllegals = ["<", ">", ":", '"', "/", "\\", "|", "?", "*"]
-            for x in convList[counter][1] : 
-                if x in winIllegals : convList[counter][1].replace(x, "_")
-        else :
-            if convList[counter][1].find("/") != -1 : convList[counter][1] = convList[counter][1].replace("/", "_")
+        if convList[counter][1].find("/") != -1 : convList[counter][1] = convList[counter][1].replace("/", "_")
         counter += 1
 
     #Rename files
