@@ -122,7 +122,7 @@ def setResource(sFile, resource, var) :
         contents = file.read()
         file.close()
         contents = contents.split("\n")
-        contents = [x for x in contents if x != ""]
+        if contents[-1] == '' : del contents[-1]
         for x in contents :
             y = x.split("=")
             if y[0].strip() == resource :
