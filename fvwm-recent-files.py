@@ -4,8 +4,17 @@
 
 import os
 import operator
+import sys
 import html
 import urllib.parse
+
+def usage() :
+    print('''Usage:
+    fvwm-recent-files.py [OPTIONS]
+
+Options:
+    -h: show this dialogue
+    -i: use icons''')
 
 def getExec(desktop) :
     file = open(desktop, "r")
@@ -40,7 +49,36 @@ def getProgram(fileinfo) :
     if prog == None : return "xdg-open"
     else : return prog
 
+def getIconTheme() :
+    try :
+        file = open(homedir + "/.gtkrc-2.0", "r")
+        for line in file :
+            line = line.split("=")
+            if line[0].strip() == "gtk-icon-theme-name" : 
+                file.close()
+                return line[1].strip().replace('"', "")
+        return "gnome"
+    except IOError :
+        return "gnome"
+
+def getIcon(mimetype, icons) :
+    mimetype = mimetype.replace("/", "-")
+    for x in icons :
+        icondef = os.path.splitext(x[1])[0]
+        if mimetype.find(icondef) != -1 or \
+                icondef.find(mimetype) != -1 :
+            iconpath = os.path.join(x[0], x[1])
+            return iconpath
+
+args = sys.argv
 homedir = os.path.expanduser("~")
+icons = False
+
+if "-h" in args :
+    usage()
+    os._exit(0)
+if "-i" in args :
+    icons = True
 
 mimefiles = ["/usr/share/applications/mimeinfo.cache",
     "/usr/share/applications/mimeapps.list",
@@ -105,6 +143,16 @@ for x in recentFileLines :
         files[-1].append(mime)
 files = sorted(files, key = operator.itemgetter(0), reverse = True)
 
+if icons :
+    icontheme = getIconTheme()
+    icondirs = ["/usr/share/icons/" + icontheme + "/16x16/mimetypes",
+                "/usr/share/icons/" + icontheme + "/16x16/places"]
+    icons = []
+    for x in icondirs :
+        for root, dirs, ifiles in os.walk(x, topdown=False):
+            for name in ifiles:
+                icons.append((root, name))
+
 counter = 0
 print("DestroyMenu recreate RecentFiles")
 print("AddToMenu RecentFiles \"Recent Files\" Title")
@@ -116,9 +164,20 @@ if len(files) > 0 :
                 if len(filename) > 25 : filename = filename[:22] + "..."
                 filename = filename.replace("&", "&&")
                 prog = getProgram(x)
-                print("+ \"" + filename + "\" Exec " + \
-                    prog + " \"" + x[1] + "\"")
+                iconpath = None
+                if icons : iconpath = getIcon(x[2], icons)
+                if icons and iconpath != None :
+                    print("+ \"" + filename + " %" + iconpath + "%\" Exec " + \
+                        prog + " \"" + x[1] + "\"")
+                else :
+                    print("+ \"" + filename + "\" Exec " + \
+                        prog + " \"" + x[1] + "\"")
                 counter += 1
         else : break
     print('+ "" Nop')
-    print("+ \"Clear List\" Exec rm " + recentFile)
+    if icons : clearicon = \
+            "/usr/share/icons/" + icontheme + "/16x16/actions/edit-clear.png"
+    if icons and os.path.exists(clearicon) :
+        print("+ \"Clear List %" + clearicon + "%\" Exec rm " + recentFile)
+    else :
+        print("+ \"Clear List\" Exec rm " + recentFile)
