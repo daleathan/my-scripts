@@ -63,12 +63,20 @@ def getIconTheme() :
 
 def getIcon(mimetype, icons) :
     mimetype = mimetype.replace("/", "-")
+    mtypeMatches = []
+    mtypeMatches.append(mimetype.partition("application-")[2])
+    mtypeMatches.append(mimetype.partition("x-extension-")[2])
     for x in icons :
         icondef = os.path.splitext(x[1])[0]
         if mimetype.find(icondef) != -1 or \
                 icondef.find(mimetype) != -1 :
             iconpath = os.path.join(x[0], x[1])
             return iconpath
+        for y in mtypeMatches :
+            if y == '' : continue
+            if icondef.find(y) != -1 or y.find(icondef) != -1 :
+                iconpath = os.path.join(x[0], x[1])
+                return iconpath
 
 args = sys.argv
 homedir = os.path.expanduser("~")
