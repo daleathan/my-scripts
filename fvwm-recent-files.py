@@ -13,8 +13,11 @@ def usage() :
     fvwm-recent-files.py [OPTIONS]
 
 Options:
-    -h: show this dialogue
-    -i: use icons''')
+    -h, --help:   show this dialogue
+    -i, --icons:  use icons
+    --truncate:   options are none, middle (default) and end
+    --max-length: max no. of chars in filenames (default is 25)
+    --entries:    max no. of entries in menu (default is 10)''')
 
 def getExec(desktop) :
     file = open(desktop, "r")
@@ -80,13 +83,26 @@ def getIcon(mimetype, icons) :
 
 args = sys.argv
 homedir = os.path.expanduser("~")
-icons = False
 
-if "-h" in args :
+icons = False
+truncate = "middle"
+length = 25
+entries = 10
+
+if "-h" in args or "--help" in args :
     usage()
     os._exit(0)
-if "-i" in args :
+if "-i" in args or "--icons" in args :
     icons = True
+if "--truncate" in args :
+    try : truncate = args[args.index("--truncate") + 1]
+    except IndexError : pass
+if "--max-length" in args :
+    try : length = int(args[args.index("--max-length") + 1])
+    except (IndexError,ValueError) : pass
+if "--entries" in args :
+    try : entries = int(args[args.index("--entries") + 1])
+    except (IndexError,ValueError) : pass
 
 mimefiles = ["/usr/share/applications/mimeinfo.cache",
     "/usr/share/applications/mimeapps.list",
@@ -166,10 +182,24 @@ print("DestroyMenu recreate RecentFiles")
 print("AddToMenu RecentFiles \"Recent Files\" Title")
 if len(files) > 0 :
     for x in files :
-        if counter < 10 :
+        if counter < entries :
             if os.path.exists(x[1]) :
                 filename = os.path.basename(x[1])
-                if len(filename) > 25 : filename = filename[:22] + "..."
+                if truncate == "end" :
+                    if len(filename) > length : 
+                        filename = filename[:length - 3] + "..."
+                elif truncate == "middle" :
+                    if len(filename) > length :
+                        fnamelist = list(filename)
+                        prevHalfway = 0
+                        halfway = round(len(fnamelist) / 2)
+                        while len(fnamelist) > length - 5 :
+                            del fnamelist[halfway]
+                            prevHalfway = halfway
+                            halfway = round(len(fnamelist) / 2)
+                        filename = ''.join(fnamelist)
+                        filename = filename[:prevHalfway] + "[...]" + \
+                                filename[prevHalfway:]
                 filename = filename.replace("&", "&&")
                 prog = getProgram(x)
                 iconpath = None
