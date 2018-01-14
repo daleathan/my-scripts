@@ -27,7 +27,7 @@ for x in $(find $abs); do
   else
     path=$x
   fi
-  dest=$(echo `realpath $2/${path/$top/}` | sed 's@[<>:"\|?*]@_@g')
+  dest=`realpath $(echo $2/${path/$top/} | sed 's@[<>:"\|?*]@_@g')`
   if [ ! -d $dest ]; then
     mkdir -p $dest
   fi
