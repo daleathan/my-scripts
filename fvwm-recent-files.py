@@ -70,6 +70,7 @@ def getIcon(mimetype, icons) :
     mtypeMatches.append(mimetype.partition("application-")[2])
     mtypeMatches.append(mimetype.partition("x-extension-")[2])
     mtypeMatches.append(mimetype.partition("audio-")[1])
+    mtypeMatches.append(mimetype.partition("text-")[1])
     for x in icons :
         icondef = os.path.splitext(x[1])[0]
         if mimetype.find(icondef) != -1 or \
@@ -79,6 +80,10 @@ def getIcon(mimetype, icons) :
         for y in mtypeMatches :
             if y == '' : continue
             if icondef.find(y) != -1 or y.find(icondef) != -1 :
+                if y == "text-" :
+                    if icondef.find("html") != -1 and \
+                            mimetype.find("html") == -1 :
+                        break
                 iconpath = os.path.join(x[0], x[1])
                 return iconpath
 
