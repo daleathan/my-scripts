@@ -66,18 +66,18 @@ def getIconTheme() :
 
 def getIcon(mimetype, icons) :
     mimetype = mimetype.replace("/", "-")
-    mtypeMatches = []
-    mtypeMatches.append(mimetype.partition("application-")[2])
-    mtypeMatches.append(mimetype.partition("x-extension-")[2])
-    mtypeMatches.append(mimetype.partition("audio-")[1])
-    mtypeMatches.append(mimetype.partition("text-")[1])
+    specialcases = []
+    specialcases.append(mimetype.partition("application-")[2])
+    specialcases.append(mimetype.partition("x-extension-")[2])
+    specialcases.append(mimetype.partition("audio-")[1])
+    specialcases.append(mimetype.partition("text-")[1])
     for x in icons :
         icondef = os.path.splitext(x[1])[0]
         if mimetype.find(icondef) != -1 or \
                 icondef.find(mimetype) != -1 :
             iconpath = os.path.join(x[0], x[1])
             return iconpath
-        for y in mtypeMatches :
+        for y in specialcases :
             if y == '' : continue
             if icondef.find(y) != -1 or y.find(icondef) != -1 :
                 if y == "text-" :
