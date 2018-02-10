@@ -66,26 +66,23 @@ def getIconTheme() :
 
 def getIcon(mimetype, icons) :
     mimetype = mimetype.replace("/", "-")
-    specialcases = []
-    specialcases.append(mimetype.partition("application-")[2])
-    specialcases.append(mimetype.partition("x-extension-")[2])
-    specialcases.append(mimetype.partition("audio-")[1])
-    specialcases.append(mimetype.partition("text-")[1])
+    #mimetype special cases
+    if mimetype[0:5] == "audio" : mimetype = "audio-x-generic"
+    if mimetype[0:5] == "image" : mimetype = "image-x-generic"
+    if mimetype[0:5] == "video" : mimetype = "video-x-generic"
+    if mimetype == "text-plain" : mimetype = "text-x-generic"
+    if mimetype == "application-octet-stream" : mimetype = "text-x-generic"
+    mimetype = mimetype.replace("application-x-extension-", "")
+    if mimetype == "htm" or mimetype == "shtml" or mimetype == "xht" or \
+            mimetype == "xhtml" :
+        mimetype = "text-html"
     for x in icons :
         icondef = os.path.splitext(x[1])[0]
-        if mimetype.find(icondef) != -1 or \
-                icondef.find(mimetype) != -1 :
+        #icondef special cases
+        icondef = icondef.replace("gnome-mime-", "")
+        if mimetype == icondef :
             iconpath = os.path.join(x[0], x[1])
             return iconpath
-        for y in specialcases :
-            if y == '' : continue
-            if icondef.find(y) != -1 or y.find(icondef) != -1 :
-                if y == "text-" :
-                    if icondef.find("html") != -1 and \
-                            mimetype.find("html") == -1 :
-                        break
-                iconpath = os.path.join(x[0], x[1])
-                return iconpath
 
 args = sys.argv
 homedir = os.path.expanduser("~")
