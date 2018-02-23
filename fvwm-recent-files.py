@@ -76,6 +76,8 @@ def getIcon(mimetype, icons) :
     if mimetype == "htm" or mimetype == "shtml" or mimetype == "xht" or \
             mimetype == "xhtml" :
         mimetype = "text-html"
+    if mimetype == "application-x-xz-compressed-tar" : mimetype = \
+            "application-x-compressed-tar"
     for x in icons :
         icondef = os.path.splitext(x[1])[0]
         #icondef special cases
