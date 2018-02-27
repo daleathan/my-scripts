@@ -72,12 +72,13 @@ def getIcon(mimetype, icons) :
     if mimetype[0:5] == "video" : mimetype = "video-x-generic"
     if mimetype == "text-plain" : mimetype = "text-x-generic"
     if mimetype == "application-octet-stream" : mimetype = "text-x-generic"
-    mimetype = mimetype.replace("application-x-extension-", "")
-    if mimetype == "htm" or mimetype == "shtml" or mimetype == "xht" or \
-            mimetype == "xhtml" :
+    if mimetype == "application-x-extension-htm" or \
+            mimetype == "application-x-extension-shtml" or \
+            mimetype == "application-x-extension-xht" or \
+            mimetype == "application-x-extension-xhtml" :
         mimetype = "text-html"
-    if mimetype == "application-x-xz-compressed-tar" : mimetype = \
-            "application-x-compressed-tar"
+    if mimetype == "application-x-xz-compressed-tar" : 
+        mimetype = "application-x-compressed-tar"
     if mimetype == "application-x-source-rpm" : 
         mimetype = "application-x-rpm"
     for x in icons :
