@@ -5,6 +5,7 @@ import os
 mystr = input("Enter binary string: ")
 output = []
 
+mystr = mystr.replace(" ", "")
 for x in mystr :
     if x != '0' and x != '1' :
         print("Invalid binary string.")
