@@ -81,6 +81,8 @@ def getIcon(mimetype, icons) :
         mimetype = "application-x-compressed-tar"
     if mimetype == "application-x-source-rpm" : 
         mimetype = "application-x-rpm"
+    if mimetype == "application-vnd.debian.binary-package" :
+        mimetype = "application-x-deb"
     for x in icons :
         icondef = os.path.splitext(x[1])[0]
         #icondef special cases
