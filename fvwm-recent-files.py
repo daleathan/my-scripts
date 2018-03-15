@@ -73,6 +73,7 @@ def getIcon(mimetype, icons) :
     if mimetype == "text-plain" : mimetype = "text-x-generic"
     if mimetype == "application-octet-stream" : mimetype = "text-x-generic"
     if mimetype == "application-x-extension-htm" or \
+            mimetype == "application-x-extension-html" or \
             mimetype == "application-x-extension-shtml" or \
             mimetype == "application-x-extension-xht" or \
             mimetype == "application-x-extension-xhtml" :
