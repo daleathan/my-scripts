@@ -212,6 +212,7 @@ if len(files) > 0 :
                         filename = filename[:prevHalfway] + "[...]" + \
                                 filename[prevHalfway:]
                 filename = filename.replace("&", "&&")
+                filename = filename.replace("%", "%%")
                 prog = getProgram(x)
                 iconpath = None
                 if icons : iconpath = getIcon(x[2], icons)
