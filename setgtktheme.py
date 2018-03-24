@@ -304,20 +304,25 @@ class UI() :
         self.varOpG2 = StringVar(parent)
         self.varOpG2.set(getResource("gtk2", "gtk-theme-name"))
         themesG2 = findThemes("gtk2")
-        m1 = OptionMenu(parent, self.varOpG2, *themesG2).grid(row = 2, column = 2, sticky = W)
+        m1 = OptionMenu(parent, self.varOpG2, *themesG2)
+        m1.configure(width = 12)
+        m1.grid(row = 2, column = 2, sticky = W)
 
         #GTK+ 3 section
         l3 = Label(parent, text = "GTK+ 3 theme:", pady = 7, padx = 5).grid(row = 3, column = 1, sticky = W)
         self.varOpG3 = StringVar(parent)
         self.varOpG3.set(getResource("gtk3", "gtk-theme-name"))
         themesG3 = findThemes("gtk3")
-        m2 = OptionMenu(parent, self.varOpG3, *themesG3).grid(row = 3, column = 2, sticky = W)
+        m2 = OptionMenu(parent, self.varOpG3, *themesG3)
+        m2.configure(width = 12)
+        m2.grid(row = 3, column = 2, sticky = W)
 
         #Hereafter, we're not supporting seperate settings for GTK+ 2 and GTK+ 3.
         
         #Font section
         l4 = Label(parent, text = "GTK+ font:", pady = 7, padx = 5).grid(row = 4, column = 1, sticky = W)
         self.varOpFont = Entry(parent)
+        self.varOpFont.configure(width = 17)
         self.varOpFont.grid(row = 4, column = 2, sticky = W)
         self.varOpFont.insert(0, getResource("gtk2", "gtk-font-name"))
 
@@ -326,14 +331,18 @@ class UI() :
         self.varOpIcons = StringVar(parent)
         self.varOpIcons.set(getResource("gtk2", "gtk-icon-theme-name"))
         icons = findIcons("icons")
-        m3 = OptionMenu(parent, self.varOpIcons, *icons).grid(row = 5, column = 2, sticky = W)
+        m3 = OptionMenu(parent, self.varOpIcons, *icons)
+        m3.configure(width = 12)
+        m3.grid(row = 5, column = 2, sticky = W)
 
         #Cursors section
         l6 = Label(parent, text = "GTK+ cursors:", pady = 7, padx = 5).grid(row = 6, column = 1, sticky = W)
         self.varOpCursors = StringVar(parent)
         self.varOpCursors.set(getResource("xdg_cursor", "Inherits"))
         cursors = findIcons("cursors")
-        m4 = OptionMenu(parent, self.varOpCursors, *cursors).grid(row = 6, column = 2, sticky = W)
+        m4 = OptionMenu(parent, self.varOpCursors, *cursors)
+        m4.configure(width = 12)
+        m4.grid(row = 6, column = 2, sticky = W)
 
         #Button and menu images section
         self.varOpButtonImages = BooleanVar(parent)
@@ -349,9 +358,15 @@ class UI() :
         darkThemeCheckbox = Checkbutton(parent, variable = self.varOpDarkTheme, text = "Use dark theme", command = darkThemeNote, pady = 3).grid(row = 8, column = 1, sticky = W)
 
         #Buttons
-        b1 = Button(parent, text = "Close", padx = 5, pady = 5, bd = 3, command = parent.destroy).grid(row = 9, column = 1, sticky = W)
-        b2 = Button(parent, text = "Update", padx = 5, pady = 5, bd = 3, command = update).grid(row = 9, column = 2, sticky = E)
-        b3 = Button(parent, text = "Reset", padx = 5, pady = 5, bd= 3, command = reset).grid(row = 9, column = 1, columnspan = 2)
+        b1 = Button(parent, text = "Close", padx = 5, pady = 5, bd = 3, command = parent.destroy)
+        b1.configure(width = 5)
+        b1.grid(row = 9, column = 1, sticky = W)
+        b2 = Button(parent, text = "Update", padx = 5, pady = 5, bd = 3, command = update)
+        b2.configure(width = 5)
+        b2.grid(row = 9, column = 2, sticky = E)
+        b3 = Button(parent, text = "Reset", padx = 5, pady = 5, bd= 3, command = reset)
+        b3.configure(width = 5)
+        b3.grid(row = 9, column = 1, columnspan = 2)
         
 top = Tk()  
 ui = UI(top)
