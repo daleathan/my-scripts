@@ -92,6 +92,24 @@ def getIcon(mimetype, icons) :
             iconpath = os.path.join(x[0], x[1])
             return iconpath
 
+def truncateFilename(filename) :
+    if truncate == "end" :
+        if len(filename) > length : 
+            filename = filename[:length - 3] + "..."
+    elif truncate == "middle" :
+        if len(filename) > length :
+            fnamelist = list(filename)
+            prevHalfway = 0
+            halfway = round(len(fnamelist) / 2)
+            while len(fnamelist) > length - 5 :
+                del fnamelist[halfway]
+                prevHalfway = halfway
+                halfway = round(len(fnamelist) / 2)
+            filename = ''.join(fnamelist)
+            filename = filename[:prevHalfway] + "[...]" + \
+                    filename[prevHalfway:]
+    return filename
+
 args = sys.argv
 homedir = os.path.expanduser("~")
 
@@ -196,21 +214,7 @@ if len(files) > 0 :
         if counter < entries :
             if os.path.exists(x[1]) :
                 filename = os.path.basename(x[1])
-                if truncate == "end" :
-                    if len(filename) > length : 
-                        filename = filename[:length - 3] + "..."
-                elif truncate == "middle" :
-                    if len(filename) > length :
-                        fnamelist = list(filename)
-                        prevHalfway = 0
-                        halfway = round(len(fnamelist) / 2)
-                        while len(fnamelist) > length - 5 :
-                            del fnamelist[halfway]
-                            prevHalfway = halfway
-                            halfway = round(len(fnamelist) / 2)
-                        filename = ''.join(fnamelist)
-                        filename = filename[:prevHalfway] + "[...]" + \
-                                filename[prevHalfway:]
+                filename = truncateFilename(filename)
                 filename = filename.replace("&", "&&")
                 filename = filename.replace("%", "%%")
                 prog = getProgram(x)
