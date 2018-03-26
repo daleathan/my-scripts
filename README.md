@@ -159,10 +159,8 @@ not distributed separately but as part of MATE Utils which includes a whole
 bunch of applications I neither want nor need. - Depends: python, tk, scrot
 * **volume-change.sh** - a script I wrote to change the volume when using
 PulseAudio. It has three actions, volume increase, decrease and (un)mute which
-can be each be bound to the XF86Audio keys. It works fine though I no longer
-use it. Instead, I use the excellent volumeicon program. However, If you don't 
-like system tray applets then you can use this instead if you like. - Depends: 
-bash, pulseaudio, alsa-utils
+can be each be bound to the XF86Audio keys. - Depends: bash, pulseaudio, 
+alsa-utils
 * **xfpm-idle-toggle.sh** - Another script that dates from my Xfce days. I 
 wanted to be able toggle Xfce's presentation mode using a keyboard shortcut and
 I wanted a notification showing that the mode had been turned on/off. I no 
