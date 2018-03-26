@@ -11,23 +11,22 @@ Options:
   toggle: mute/unmute the volume"
 }
 
-sink=$(pactl list sinks short | cut -f 1)
 volume=$(amixer | grep "Front Left: Playback" | cut -d "[" -f 2 | cut -d "%" -f 1)
 
 if [ "$1" == "toggle" ]; then
-  pactl set-sink-mute "$sink" toggle
+  pactl set-sink-mute @DEFAULT_SINK@ toggle
 elif [ "$1" == "up" ]; then
   if [ "$volume" -lt 100 ]; then
-    pactl set-sink-mute "$sink" false
-    pactl set-sink-volume "$sink" +5%
+    pactl set-sink-mute @DEFAULT_SINK@ false
+    pactl set-sink-volume @DEFAULT_SINK@ +5%
   fi
 elif [ "$1" == "down" ]; then
   if [ "$volume" -gt 0 ]; then
-    pactl set-sink-mute "$sink" false 
-    pactl set-sink-volume "$sink" -5%
+    pactl set-sink-mute @DEFAULT_SINK@ false 
+    pactl set-sink-volume @DEFAULT_SINK@ -5%
   fi
 else
   usage
 fi
 
-unset sink volume
+unset volume
