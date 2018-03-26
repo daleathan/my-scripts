@@ -31,7 +31,7 @@ cachePkgs = os.listdir(cacheDir)
 
 #Get installed AUR package list
 instOutput = Popen(["pacman", "-Qmi"], stdout = PIPE).communicate()
-instOutput = (str(instOutput).replace("\\n", " ").replace("b\'", "").replace("\', None", "").strip("()").rstrip(" ").lstrip('''"b''')).split(" ")
+instOutput = (str(instOutput).replace("b\'", "").replace("\', None", "").replace(" ", "").strip("()").lstrip('''"b''')).split("\\n")
 instOutput = [x for x in instOutput if (x != "") and (x != ":")]
 
 name = []
@@ -39,12 +39,10 @@ version = []
 arch = []
 instPkgs = []
 
-counter = 0
-while counter < len(instOutput) :
-    if instOutput[counter] == "Name" : name.append(instOutput[counter + 1])
-    elif instOutput[counter] == "Version" : version.append(instOutput[counter + 1])
-    elif instOutput[counter] == "Architecture" : arch.append(instOutput[counter + 1])
-    counter += 1
+for x in instOutput :
+    if x[:5] == "Name:" : name.append(x[5:])
+    elif x[:8] == "Version:" : version.append(x[8:])
+    elif x[:13] == "Architecture:" : arch.append(x[13:])
 
 #Exit if package info extraction failed
 if not (len(name) == len(version) == len(arch)) :
