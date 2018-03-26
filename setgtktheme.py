@@ -35,22 +35,6 @@ def findThemes(themeType) :
                 gDir = os.listdir(x + "/gtk-3.0")
                 if "gtk.css" in gDir :
                     if y[-1] not in final : final.append(y[-1])
-    #Some GTK+ 3 themes are present if GTK+ 3 itself is present, even if the 
-    #gtk.css files are non-existent or empty. Therefore, make sure these 
-    #themes are in the list
-    if themeType == "gtk3" :
-        #Existence of /usr/share/themes/Default/gtk-3.0 should indicate
-        #the presence of GTK+ 3 on the system
-        if "/usr/share/themes/Default" in allThemes :
-            if "gtk-3.0" in os.listdir("/usr/share/themes/Default") :
-                #As of March 2017, the presence of GTK+ 3 does not guarantee
-                #that the Raleigh GTK+ 3 theme is present - we now trigger a
-                #warning for this. See the update function.
-                if "Raleigh" not in final : final.append("Raleigh")
-                if "Adwaita" not in final : final.append("Adwaita")
-                if "HighContrast" not in final : final.append("HighContrast")
-                if "HighContrastInverse" not in final : final.append("HighContrastInverse")
-                if "win32" not in final : final.append("win32")
     #We mustn't return an empty list so add a fallback value in this case
     if final == [] : final.append("None found")
 
@@ -199,9 +183,6 @@ def update() :
 
     #Update GTK+ 3 theme
     if  ui.varOpG3.get() != getResource("gtk3", "gtk-theme-name") and ui.varOpG3.get() != "None found" :
-        #Show a warning about GTK+ 3 Raleigh
-        if ui.varOpG3.get() == "Raleigh" and getResource("gtk3", "gtk-theme-name") != "Raleigh" :
-            messagebox.showwarning(title = "Warning", message = "The GTK+ 3 version of Raleigh was removed from GTK+ as of version 3.90.0. Despite it being listed here, it might not be present on your system.")
         setResource("gtk3", "gtk-theme-name", ui.varOpG3)
         changes = True
 
