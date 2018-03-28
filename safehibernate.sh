@@ -1,34 +1,30 @@
 #!/bin/sh
 #For those of us who made our swap partitions a little bit too small ;)
 
-usage() {
-  echo "Run 'systemctl hibernate' only if the amount of memory in usage does not exceed the amount of available swap space.
-
-Usage:
-  safehibernate.sh [OPTIONS]
-  -h: show this dialog
-  -c: only check if hibernation is possible. Return 1 if so or else return 0"
-}
-
-if [ "$1" = "-h" ] || [ "$#" -gt 1 ]; then
-  usage
-  exit 0
-fi
-
 fs=$(vmstat -s | grep 'free swap' | tr -s ' ' | cut -d ' ' -f 2)
 um=$(vmstat -s | grep 'used memory' | tr -s ' ' | cut -d ' ' -f 2)
+deps_missing=0
+
+if [ ! -f "/usr/bin/systemctl" ]; then
+  echo Could not find /usr/bin/systemctl
+  deps_missing=1
+fi
+
+if [ ! -f "/usr/bin/xmessage" ]; then
+  echo Could not find /usr/bin/xmessage
+  deps_missing=1
+fi
+
+if [ $deps_missing -eq 1 ]; then
+  unset fs um deps_missing
+  exit 1
+fi
 
 if [ $um -lt $fs ]; then
-  if [ "$1" = "-c" ]; then 
-    echo 1
-  else 
-    systemctl hibernate
-  fi
+  unset fs um deps_missing
+  /usr/bin/systemctl hibernate
 else
-  if [ "$1" = "-c" ]; then 
-    echo 0
-  else
-    xmessage -center 'Cannot hibernate. Too much memory is in use.' -title \
-      Warning
-  fi
+  unset fs um deps_missing
+  /usr/bin/xmessage -center 'Cannot hibernate. Too much memory is in use.' \
+    -title Warning
 fi

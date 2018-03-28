@@ -122,11 +122,10 @@ having to check the pacman log, which might well be filled with other output.
 There might be a builtin pacman function for this but if there is, I have never
 come across it. - Depends: python, pacman
 * **safehibernate.sh** - A script that uses vmstat to check that the amount
-of used memory doesn't exceed the amount of free swap. It can either call
-systemctl hibernate/display a warning if hibernation is possible/impossible
-or it can return 1/0 where 1 indicates hibernation is possible and 0 indicates
-that it's impossible. - Depends: bash, procps-ng (for vmstat), systemd 
-(optional), xorg-xmessage (optional)
+of used memory doesn't exceed the amount of free swap before hibernating.
+If it does, then it displays an xmessage dialogue that states this instead of
+attempting to hibernate. - Depends: bash, procps-ng (for vmstat), systemd, 
+xorg-xmessage
 * **setgtktheme.py** - This is by far my most popular script for people who 
 visit here, or at least that's what GitHub's visit tracker tells me. It's a 
 python Tk dialog for setting the GTK theme, fonts etc. I originally wrote it for
