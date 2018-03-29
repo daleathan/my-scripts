@@ -84,6 +84,7 @@ def getIcon(mimetype, icons) :
         mimetype = "application-x-rpm"
     if mimetype == "application-vnd.debian.binary-package" :
         mimetype = "application-x-deb"
+    if mimetype[0:24] == "application-x-virtualbox" : mimetype = mimetype[14:]
     for x in icons :
         icondef = os.path.splitext(x[1])[0]
         #icondef special cases
@@ -199,7 +200,10 @@ files = sorted(files, key = operator.itemgetter(0), reverse = True)
 if icons :
     icontheme = getIconTheme()
     icondirs = ["/usr/share/icons/" + icontheme + "/16x16/mimetypes",
-                "/usr/share/icons/" + icontheme + "/16x16/places"]
+                "/usr/share/icons/" + icontheme + "/16x16/places",
+                "/usr/share/icons/hicolor/16x16/mimetypes",
+                "/usr/share/icons/hicolor/16x16/places"]
+
     icons = []
     for x in icondirs :
         for root, dirs, ifiles in os.walk(x, topdown=False):
