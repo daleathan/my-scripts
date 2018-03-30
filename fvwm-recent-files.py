@@ -17,7 +17,8 @@ Options:
     -i, --icons:  use icons
     --truncate:   options are none, middle (default) and end
     --max-length: max no. of chars in filenames (default is 25)
-    --entries:    max no. of entries in menu (default is 10)''')
+    --entries:    max no. of entries in menu (default is 10)
+    --hotkeys:    enable a hotkey for each menu entry''')
 
 def getExec(desktop) :
     file = open(desktop, "r")
@@ -111,6 +112,10 @@ def truncateFilename(filename) :
                     filename[prevHalfway:]
     return filename
 
+def getHotkey(n) :
+    if n < 10 : return str(n)
+    else : return chr(((n - 10) % 26) + 65)
+
 args = sys.argv
 homedir = os.path.expanduser("~")
 
@@ -118,6 +123,7 @@ icons = False
 truncate = "middle"
 length = 25
 entries = 10
+hotkeys = False
 
 if "-h" in args or "--help" in args :
     usage()
@@ -133,6 +139,8 @@ if "--max-length" in args :
 if "--entries" in args :
     try : entries = int(args[args.index("--entries") + 1])
     except (IndexError,ValueError) : pass
+if "--hotkeys" in args :
+    hotkeys = True
 
 mimefiles = ["/usr/share/applications/mimeinfo.cache",
     "/usr/share/applications/mimeapps.list",
@@ -222,14 +230,13 @@ if len(files) > 0 :
                 filename = filename.replace("&", "&&")
                 filename = filename.replace("%", "%%")
                 prog = getProgram(x)
-                iconpath = None
-                if icons : iconpath = getIcon(x[2], icons)
-                if icons and iconpath != None :
-                    print("+ \"" + filename + " %" + iconpath + "%\" Exec " + \
-                        prog + " \"" + x[1] + "\"")
-                else :
-                    print("+ \"" + filename + "\" Exec " + \
-                        prog + " \"" + x[1] + "\"")
+                label = filename
+                if hotkeys :
+                    label = "&" + getHotkey(counter) + ". " + label
+                if icons :
+                    iconpath = getIcon(x[2], icons)
+                    if iconpath != None : label = label + " %" + iconpath + "%"
+                print("+ \"" + label + "\" Exec " + prog + " \"" + x[1] + "\"")
                 counter += 1
         else : break
     print('+ "" Nop')
