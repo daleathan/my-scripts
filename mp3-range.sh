@@ -8,7 +8,6 @@ usage() {
   exit 0
 }
 
-IFS_ORIG=$IFS
 IFS=$'\n'
 
 if [ ! $1 ] || [ ! $2 ] || [ ! $3 ] || [ ! -d $3 ]; then
@@ -33,7 +32,5 @@ for x in $(find $3 -type f -name "*.mp3"); do
     ((rCount+=1))
   fi
 done
-
-IFS=$IFS_ORIG
 
 echo "$rCount out of $count tracks are tagged in the range $1 - $2"

@@ -18,5 +18,3 @@ elif [ "$OPTION" = "Laptop and television" ]; then
 else
   xrandr --output HDMI1 --off --output LVDS1 --auto
 fi
-
-unset OPTION

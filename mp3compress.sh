@@ -31,7 +31,6 @@ else
 fi
 
 #Modify IFS to cope with spaces in filenames
-IFS_ORIG="$IFS"
 IFS=$'\n'
 
 #Do conversion
@@ -48,8 +47,5 @@ else
     mv "${x}.mp3" "$x"
   done
 fi
-
-#Reset IFS
-IFS="$IFS_ORIG"
 
 echo $'\nComplete!'

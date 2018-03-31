@@ -16,15 +16,12 @@ if [ ! -f "/usr/bin/xmessage" ]; then
 fi
 
 if [ $deps_missing -eq 1 ]; then
-  unset fs um deps_missing
   exit 1
 fi
 
 if [ $um -lt $fs ]; then
-  unset fs um deps_missing
   /usr/bin/systemctl hibernate
 else
-  unset fs um deps_missing
   /usr/bin/xmessage -center 'Cannot hibernate. Too much memory is in use.' \
     -title Warning
 fi
