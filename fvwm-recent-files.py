@@ -243,9 +243,12 @@ if len(files) > 0 :
                 counter += 1
         else : break
     print('+ "" Nop')
-    if icons : clearicon = \
-            "/usr/share/icons/" + icontheme + "/16x16/actions/edit-clear.png"
-    if icons and os.path.exists(clearicon) :
-        print("+ \"Clear List %" + clearicon + "%\" Exec rm " + recentFile)
-    else :
-        print("+ \"Clear List\" Exec rm " + recentFile)
+    clearLabel = "Clear List"
+    if icons : 
+        clearIcon = "/usr/share/icons/" + icontheme + \
+                "/16x16/actions/edit-clear.png"
+        if os.path.exists(clearIcon) :
+            clearLabel = clearLabel + " %" + clearIcon + "%"
+    if hotkeys :
+        clearLabel = "&" + clearLabel
+    print("+ \"" + clearLabel + "\" Exec rm " + recentFile)
