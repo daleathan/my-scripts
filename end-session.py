@@ -4,18 +4,10 @@
 
 from tkinter import *
 import os
-import sys
-
-def getLogoutCommand() :
-    #Logout command can be specified as a program argument. Without arguments
-    #the command is taken as loginctl terminate-session $XDG_SESSION_ID
-    args = sys.argv
-    if len(args) == 1 : return "loginctl terminate-session $XDG_SESSION_ID"
-    else : return args[1]
 
 def runAction() :
     if option.get() == 1 : 
-        os.system(getLogoutCommand())
+        os.system("loginctl terminate-session $XDG_SESSION_ID")
         os._exit(0)
     elif option.get() == 2 : 
         os.system("systemctl suspend")
