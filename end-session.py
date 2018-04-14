@@ -8,9 +8,9 @@ import sys
 
 def getLogoutCommand() :
     #Logout command can be specified as a program argument. Without arguments
-    #the command is taken as pkill -u $USER
+    #the command is taken as loginctl terminate-session $XDG_SESSION_ID
     args = sys.argv
-    if len(args) == 1 : return "pkill -u $USER"
+    if len(args) == 1 : return "loginctl terminate-session $XDG_SESSION_ID"
     else : return args[1]
 
 def runAction() :
