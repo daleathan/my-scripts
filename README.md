@@ -66,6 +66,13 @@ giving you a dynamic 'recently used' menu similar to the one found in MATE's
 Places menu. It has support for icons and filename truncation, the latter of
 which is configurable. You can also choose the maximum number of entries in
 the menu. - Depends: python, python-urllib3
+* **gkgetsecret.py** - So recently I got interested in storing my passwords
+in an encrypted fashion using GNOME Keyring. But for applications that don't
+talk to GNOME Keyring I needed an easy way of getting the passwords out. This
+python script can talk to GNOME Keyring using libsecret and get the password
+(or other secret item) from the default keyring for a given item description.
+There's no error handling as yet! It's only very simple. - Depends: python,
+python-gobject, libsecret
 * **gnome-screensaver-idlelock.sh** - I wrote this one when I was still using
 GNOME Screensaver 3.6 with Xfce. And I was doing that because XScreenSaver's
 DPMS timeouts conflict with xfce-power-manager's timeouts. It uses xprintidle
