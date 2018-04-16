@@ -47,7 +47,12 @@ def get_pw_from_attrs(*attr_val_pairs) :
     '''
     # Check the list of attr-val pairs is present and contains an even number 
     # of elements
-    if attr_val_pairs == () or len(attr_val_pairs) % 2 != 0 : return None
+    if attr_val_pairs == () :
+        raise TypeError("get_pw_from_attrs() at least 1 attribute-value pair " \
+                "must be supplied")
+    if len(attr_val_pairs) % 2 != 0 :
+        raise TypeError("get_pw_from_attrs() incomplete attribute-value " \
+                "pair was supplied")
 
     # Get service
     service = Secret.Service.get_sync(Secret.ServiceFlags.LOAD_COLLECTIONS)
@@ -100,7 +105,9 @@ def get_val_from_attrs(attr, *attr_val_pairs) :
     # Check the list of attr-val pairs contains an even number of elements
     # if it exists
     if attr_val_pairs != () :
-        if len(attr_val_pairs) % 2 != 0 : return None
+        if len(attr_val_pairs) % 2 != 0 :
+            raise TypeError("get_val_from_attrs() incomplete attribute-value " \
+                    "pair was supplied")
 
     # Get service
     service = Secret.Service.get_sync(Secret.ServiceFlags.LOAD_COLLECTIONS)
