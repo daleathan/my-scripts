@@ -70,8 +70,8 @@ the menu. - Depends: python, python-urllib3
 in an encrypted fashion using GNOME Keyring. But for applications that don't
 talk to GNOME Keyring I needed an easy way of getting the passwords out. This
 python script can talk to GNOME Keyring using libsecret and get the password
-(or other secret item) from the default keyring for a given item description.
-There's no error handling as yet! It's only very simple. - Depends: python,
+or attribute value for a given description or a set of attribute-value pairs.
+It's only very simple but seems to work well for me. - Depends: python,
 python-gobject, libsecret
 * **gnome-screensaver-idlelock.sh** - I wrote this one when I was still using
 GNOME Screensaver 3.6 with Xfce. And I was doing that because XScreenSaver's
