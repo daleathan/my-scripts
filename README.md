@@ -31,6 +31,10 @@ This is probably the script I use most. It works well for me though I'm not
 sure how fast it would be if you had a lot of AUR packages installed - I have 
 only a few. - Depends: python, python-requests, python-beautifulsoup4, pacman,
 wget (optional)
+* **backlight-change.sh** - This is a wrapper script for xbacklight. It allows
+you to increase or decrease the backlight and can optionally show 
+notifications with notify-osd. - Depends: bash, xorg-xbacklight, libnotify 
+(optional), notify-osd (optional)
 * **bin2text.py** - A silly little script that I wrote just for fun really. 
 Does what it says on the tin. - Depends: python
 * **display-conf-tool.py** - This is a general pupose Tk gui frontend to
