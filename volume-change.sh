@@ -27,6 +27,20 @@ send_notify() {
     -i $icon
 }
 
+get_volume() {
+  echo $(amixer | grep "Front Left: Playback" | cut -d "[" -f 2 | \
+    cut -d "%" -f 1)
+}
+
+get_muted() {
+  mute=$(amixer | tr -s ' ' | grep "Front Left: Playback" | cut -d " " -f 7)
+  if [ "$mute" == "[off]" ]; then
+    echo 1
+  else
+    echo 0
+  fi
+}
+
 #We test specifically for notify-osd because it is the only notifications
 #server that supports the synchronous hint which is needed for the progress bar
 notify=0
@@ -37,18 +51,14 @@ fi
 if [ "$1" == "toggle" ]; then
   pactl set-sink-mute @DEFAULT_SINK@ toggle
   if [ "$notify" == 1 ]; then
-    mute=$(amixer | tr -s ' ' | grep "Front Left: Playback" | cut -d " " -f 7)
-    if [ "$mute" == "[off]" ]; then
+    if [ "$(get_muted)" == 1 ]; then
       send_notify 0 
     else
-      volume=$(amixer | grep "Front Left: Playback" | cut -d "[" -f 2 | \
-        cut -d "%" -f 1)
-      send_notify "$volume"
+      send_notify "$(get_volume)"
     fi
   fi
 elif [ "$1" == "up" ]; then
-  volume=$(amixer | grep "Front Left: Playback" | cut -d "[" -f 2 | \
-    cut -d "%" -f 1)
+  volume="$(get_volume)"
   if [ "$volume" -lt 100 ]; then
     pactl set-sink-mute @DEFAULT_SINK@ false
     pactl set-sink-volume @DEFAULT_SINK@ +5%
@@ -58,8 +68,7 @@ elif [ "$1" == "up" ]; then
     send_notify "$new_vol"
   fi
 elif [ "$1" == "down" ]; then
-  volume=$(amixer | grep "Front Left: Playback" | cut -d "[" -f 2 | \
-    cut -d "%" -f 1)
+  volume="$(get_volume)"
   if [ "$volume" -gt 0 ]; then
     pactl set-sink-mute @DEFAULT_SINK@ false 
     pactl set-sink-volume @DEFAULT_SINK@ -5%
