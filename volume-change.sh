@@ -44,7 +44,7 @@ get_muted() {
 #We test specifically for notify-osd because it is the only notifications
 #server that supports the synchronous hint which is needed for the progress bar
 notify=0
-if [ -f "/usr/bin/notify-send" ] && [ $(pgrep notify-osd) ]; then
+if [ -f "/usr/bin/notify-send" ] && [ "$(pgrep notify-osd)" ]; then
   notify=1
 fi
 
