@@ -28,23 +28,20 @@ if "-e" in args : pacOpts += "e"
 if "-m" in args : pacOpts += "m"
 
 instOutput = Popen(["pacman", pacOpts], stdout = PIPE).communicate()
-instOutput = instOutput[0].decode("utf-8").replace("\n", " ").rstrip(" ").split(" ")
-instOutput = [x for x in instOutput if (x != "") and (x != ":")]
+instOutput = instOutput[0].decode("utf-8").split("\n")
 
 name = []
 date = []
 
-counter = 0
-while counter < len(instOutput) :
-    if instOutput[counter] == "Name" : name.append(instOutput[counter + 1])
-    elif (instOutput[counter] == "Install") and (instOutput[counter + 1] == "Date") :
-        counter2 = 3
-        temp = str()
-        while counter2 < 7 :
-            temp += instOutput[counter + counter2] + " "
-            counter2 += 1
-        date.append(temp.rstrip(" "))
-    counter += 1
+for x in instOutput :
+    x = x.partition(":")
+    if x[0].rstrip() == "Name" : name.append(x[2].lstrip())
+    if x[0].rstrip() == "Install Date" :
+        dateElems = x[2].lstrip().split(" ")[1:-1]
+        for x in range(len(dateElems)) : 
+            if x != len(dateElems) - 1 :
+                dateElems[x] = dateElems[x] + " "
+        date.append(''.join(dateElems))
 
 instPkgs = [list(x) for x in zip(name, date)]
 instPkgs = sorted(instPkgs, key=lambda x: datetime.datetime.strptime(x[1], '%d %b %Y %H:%M:%S'))
