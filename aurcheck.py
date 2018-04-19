@@ -23,16 +23,14 @@ def versionCheck(localVer, aurVer) :
         y = ''.join(y)
         y = y.split(".")
         versions[versions.index(x)] = y
-    if len(versions[0]) == len(versions[1]) :
-        counter = 0
-        while counter < len(versions[0]) :
-            if int(versions[1][counter]) > int(versions[0][counter]) : return 1
-            elif int(versions[1][counter]) < int(versions[0][counter]) : return -1
-            counter += 1
-    else :
-        if aurVer > localVer : return 1
-        elif aurVer < localVer : return -1
-        
+    for x in range(0, min(len(versions[0]), len(versions[1]))) :
+        if int(versions[1][x]) > int(versions[0][x]) : return 1
+        elif int(versions[1][x]) < int(versions[0][x]) : return -1
+    if len(versions[0]) != len(versions[1]) :
+        if len(versions[1]) > len(versions[0]) : return 1
+        else : return -1
+    else : return 0
+
 aurPkgs = Popen(["pacman", "-Qm"], stdout = PIPE).communicate()
 aurPkgs = aurPkgs[0].decode("utf-8").replace("\n", " ").rstrip(" ").split(" ")
 
