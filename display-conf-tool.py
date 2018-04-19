@@ -29,8 +29,7 @@ class UI() :
     #Getters
     def getXrandrOutput() :
         out = Popen("xrandr", stdout = PIPE).communicate()
-        out = str(out[0]).lstrip("b'").rstrip("'").split("\\n")
-        out = [x for x in out if len(x) > 0]
+        out = out[0].decode("utf-8").rstrip("\n").split("\n")
         return out
 
     def getDisplays(connected) :
@@ -178,8 +177,9 @@ class UI() :
                     else : cmd.append("--below")
                     cmd.append(x.position[1])
             error = Popen(cmd, stderr = PIPE).communicate()
-            if str(error[1]) != "b''" :
-                messagebox.showerror(title = "Xrandr error", message = str(error[1]).lstrip("b'").rstrip("\\n'"))
+            error = error[1].decode("utf-8")
+            if error != "" :
+                messagebox.showerror(title = "Xrandr error", message = error)
 
         #Set window title
         parent.title("Display Conf Tool")

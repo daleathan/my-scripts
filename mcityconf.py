@@ -14,7 +14,7 @@ def checkMetacity() :
 
 def getTheme() :
     theme = Popen(["gsettings", "get", "org.gnome.metacity.theme", "name"], stdout = PIPE).communicate()
-    theme = str(theme[0]).lstrip('''b"\'''').rstrip(''''\\n"''')
+    theme = theme[0].decode("utf-8")
     return theme
 
 def findThemes() :
@@ -52,7 +52,7 @@ def setTheme(self) :
 
 def getSysFont() :
     status = Popen(["gsettings", "get", "org.gnome.desktop.wm.preferences", "titlebar-uses-system-font"], stdout = PIPE).communicate()
-    status = str(status[0]).lstrip('''b"\'''').rstrip(''''\\n"''')
+    status = status[0].decode("utf-8")
     return status
 
 def setSysFont() :
@@ -65,7 +65,7 @@ def setSysFont() :
 
 def getTitleFont() :
     font = Popen(["gsettings", "get", "org.gnome.desktop.wm.preferences", "titlebar-font"], stdout = PIPE).communicate()
-    font = str(font[0]).lstrip('''b"\'''').rstrip(''''\\n"''')
+    font = font[0].decode("utf-8")
     return font
 
 def setTitleFont() :
@@ -75,7 +75,7 @@ def setTitleFont() :
 
 def getButtonLayout() :
     layout = Popen(["gsettings", "get", "org.gnome.desktop.wm.preferences", "button-layout"], stdout = PIPE).communicate()
-    layout = str(layout[0]).lstrip('''b"\'''').rstrip(''''\\n"''')
+    layout = layout[0].decode("utf-8")
     return layout
 
 def setButtonLayout() :

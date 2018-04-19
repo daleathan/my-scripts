@@ -28,9 +28,8 @@ if "-e" in args : pacOpts += "e"
 if "-m" in args : pacOpts += "m"
 
 instOutput = Popen(["pacman", pacOpts], stdout = PIPE).communicate()
-instOutput = (str(instOutput).replace("\\n", " ").replace("b\'", "").replace("\', None", "").strip("()").rstrip(" ")).split(" ")
+instOutput = instOutput[0].decode("utf-8").replace("\n", " ").rstrip(" ").split(" ")
 instOutput = [x for x in instOutput if (x != "") and (x != ":")]
-instOutput[0] = instOutput[0].lstrip('''b"''')
 
 name = []
 date = []

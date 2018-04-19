@@ -34,7 +34,7 @@ def versionCheck(localVer, aurVer) :
         elif aurVer < localVer : return -1
         
 aurPkgs = Popen(["pacman", "-Qm"], stdout = PIPE).communicate()
-aurPkgs = (str(aurPkgs).replace("\\n", " ").replace("b\'", "").replace("\', None", "").strip("()").rstrip(" ")).split(" ")
+aurPkgs = aurPkgs[0].decode("utf-8").replace("\n", " ").rstrip(" ").split(" ")
 
 counter = 0
 while counter < len(aurPkgs) - 1 :
