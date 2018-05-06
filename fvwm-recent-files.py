@@ -230,7 +230,7 @@ if len(files) > 0 :
             if os.path.exists(x[1]) :
                 filename = os.path.basename(x[1])
                 filename = truncateFilename(filename)
-                filename = filename.replace("&", "&&")
+                if not hotkeys : filename = filename.replace("&", "&&")
                 filename = filename.replace("%", "%%")
                 prog = getProgram(x)
                 label = filename
