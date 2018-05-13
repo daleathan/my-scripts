@@ -239,7 +239,8 @@ if len(files) > 0 :
                 if icons :
                     iconpath = getIcon(x[2], icons)
                     if iconpath != None : label = label + " %" + iconpath + "%"
-                print("+ \"" + label + "\" Exec " + prog + " \"" + x[1] + "\"")
+                print("+ \"" + label + "\" Exec exec " + prog + " \"" + \
+                        x[1] + "\"")
                 counter += 1
         else : break
     print('+ "" Nop')
@@ -251,4 +252,4 @@ if len(files) > 0 :
             clearLabel = clearLabel + " %" + clearIcon + "%"
     if hotkeys :
         clearLabel = "&" + clearLabel
-    print("+ \"" + clearLabel + "\" Exec rm " + recentFile)
+    print("+ \"" + clearLabel + "\" Exec exec rm " + recentFile)
