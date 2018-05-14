@@ -232,6 +232,7 @@ if len(files) > 0 :
                 filename = truncateFilename(filename)
                 if not hotkeys : filename = filename.replace("&", "&&")
                 filename = filename.replace("%", "%%")
+                filename = filename.replace('"', '\\"')
                 prog = getProgram(x)
                 label = filename
                 if hotkeys :
