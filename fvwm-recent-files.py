@@ -228,20 +228,20 @@ if len(files) > 0 :
     for x in files :
         if counter < entries :
             if os.path.exists(x[1]) :
-                filename = os.path.basename(x[1])
-                filename = truncateFilename(filename)
-                if not hotkeys : filename = filename.replace("&", "&&")
-                filename = filename.replace("%", "%%")
-                filename = filename.replace('"', '\\"')
-                prog = getProgram(x)
-                label = filename
+                label = os.path.basename(x[1])
+                label = truncateFilename(label)
+                if not hotkeys : label = label.replace("&", "&&")
+                label = label.replace("%", "%%")
+                label = label.replace('"', '\\"')
                 if hotkeys :
                     label = "&" + getHotkey(counter) + ". " + label
                 if icons :
                     iconpath = getIcon(x[2], icons)
                     if iconpath != None : label = label + " %" + iconpath + "%"
+                prog = getProgram(x)
+                filepath = x[1].replace('"', '\\"')
                 print("+ \"" + label + "\" Exec exec " + prog + " \"" + \
-                        x[1] + "\"")
+                        filepath + "\"")
                 counter += 1
         else : break
     print('+ "" Nop')
