@@ -18,7 +18,8 @@ Options:
     --truncate:   options are none, middle (default) and end
     --max-length: max no. of chars in filenames (default is 25)
     --entries:    max no. of entries in menu (default is 10)
-    --hotkeys:    enable a hotkey for each menu entry''')
+    --hotkeys:    enable a hotkey for each menu entry
+    --term:       terminal used for cmd apps (default is xterm)''')
 
 def getExec(desktop) :
     file = open(desktop, "r")
@@ -30,6 +31,17 @@ def getExec(desktop) :
             if x.find("%") != -1 : return x[x.find("=") + 1:x.find(" %")]
             else : return x[x.find("=") + 1:]
     return None
+
+def isTerminal(desktop) :
+    file = open(desktop, "r")
+    contents = file.read()
+    file.close()
+    contents = contents.split("\n")
+    for x in contents :
+        if x[:9] == "Terminal=" : 
+            if x[9:] == "true" or x[9:] == "True" : return True
+            else : return False
+    return False
 
 def getDesktopPath(desktop) :
     desktopDirs = [homedir + "/.local/share/applications",
@@ -51,7 +63,9 @@ def getProgram(fileinfo) :
     if path == None : return "xdg-open"
     prog = getExec(path)
     if prog == None : return "xdg-open"
-    else : return prog
+    else : 
+        if isTerminal(path) : prog = term + " -e " + prog
+        return prog
 
 def getIconTheme() :
     try :
@@ -125,6 +139,7 @@ truncate = "middle"
 length = 25
 entries = 10
 hotkeys = False
+term = "xterm"
 
 if "-h" in args or "--help" in args :
     usage()
@@ -142,6 +157,9 @@ if "--entries" in args :
     except (IndexError,ValueError) : pass
 if "--hotkeys" in args :
     hotkeys = True
+if "--term" in args :
+    try : term = args[args.index("--term") + 1]
+    except (IndexError,ValueError) : pass
 
 mimefiles = ["/usr/share/applications/mimeinfo.cache",
     "/usr/share/applications/mimeapps.list",
