@@ -14,7 +14,7 @@ Actions:
 send_notify() {
   notify-send -h int:value:$1 \
     -h string:x-canonical-private-synchronous:anything " " \
-    -i dialog-information
+    -i notification-display-brightness
 }
 
 #We test specifically for notify-osd because it is the only notifications

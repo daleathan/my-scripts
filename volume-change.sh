@@ -14,13 +14,13 @@ Actions:
 
 send_notify() {
   if [ $1 -eq 0 ]; then
-    icon=audio-volume-muted
+    icon=notification-audio-volume-muted
   elif [ $1 -gt 30 ] && [ $1 -lt 70 ]; then
-    icon=audio-volume-medium
+    icon=notification-audio-volume-medium
   elif [ $1 -gt 65 ]; then
-    icon=audio-volume-high
+    icon=notification-audio-volume-high
   else
-    icon=audio-volume-low
+    icon=notification-audio-volume-low
   fi
   notify-send -h int:value:$1 \
     -h string:x-canonical-private-synchronous:anything " " \
