@@ -1,7 +1,8 @@
-#!/usr/bin/python
-#A quick 'n dirty way of retrieving a secret from GNOME Keyring
-#using libsecret. We can identify the secret either from a description
-#or from attribute-value pairs
+'''
+gkgetsecret.py
+This provides a handful of functions for retrieving secrets from GNOME Keyring
+using the libsecret API. See the documentation for each function
+'''
 
 from gi import require_version
 require_version('Secret', '1')
