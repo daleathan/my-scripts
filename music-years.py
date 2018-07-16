@@ -13,7 +13,8 @@ def usage() :
 Options:
   -h, --help: show this dialog
   --music-dir: directory to search for tracks, defaults to ~/Music
-  --alltpy: show the number of tracks for all years, not just the top 10''')
+  --alltpy: show the number of tracks for all years, not just the top 10
+  --alltpy-do: show number of tracks for all years in date order''')
 
 # Get args
 args = sys.argv
@@ -84,12 +85,16 @@ else :
     else : print("Mode year of release for your music: " + str(years[0]) + " (" + str(len(years)) + " tracks)")
 
     # Top years for tracks
-    if "--alltpy" not in args : 
-        print("\nTracks per year (top 10)")
-        limit = 10
-    else : 
+    if "--alltpy" in args : 
         print("\nTracks per year")
         limit = len(modeList)
+    elif "--alltpy-do" in args :
+        print("\nTracks per year (date order)")
+        limit = len(modeList)
+        modeList.sort(reverse=True)
+    else : 
+        print("\nTracks per year (top 10)")
+        limit = 10
     counter = 0
     if modeList != [] :
         while (counter < limit) and (counter < len(modeList)) :
