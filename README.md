@@ -126,6 +126,12 @@ for him that reads an OpenBox menu file, locates the icon for each menu entry
 and then edits the menu file in place, adding the icon paths in the correct
 places. I've never had a use for it myself, what with me not being an OpenBox
 user, but I think he was rather pleased with it. - Depends: python
+* **ownit.sh** - This is a simple script I wrote to fix ownership and
+permissions for files that have been copied from some filesystem that doesn't
+support Unix permissions. It sets the user and group ownership to $USER and it
+sets the permissions to 644 for ordinary files and 755 for directories and
+executable files. We use the file command to determine whether a file ought to
+be marked as executable. - Depends: bash, coreutils, file
 * **pkgdate.py** - So this is another pacman based script. Put simply, it lists
 packages in order of the last time they were installed. It's quite useful in 
 that it allows one to check which packages they have installed recently without
