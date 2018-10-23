@@ -30,11 +30,12 @@ except (ValueError, IndexError) :
 
 print("Beginning countdown to " + str(end) + " !!!")
 
+timeleft = str(end - now).split(".")[0]
+length = len(timeleft)
 while now <= end :
-    sys.stdout.write("\r" + str(end - now).split(".")[0])
-    sys.stdout.flush()
+    print(timeleft.ljust(length), end = "\r")
     time.sleep(1)
     now = datetime.datetime.today()
-sys.stdout.write("\n")
+    timeleft = str(end - now).split(".")[0]
 
-print("Countdown finished !!!")
+print("\nCountdown finished !!!")
