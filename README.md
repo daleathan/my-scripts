@@ -37,6 +37,8 @@ notifications with notify-osd. - Depends: bash, xorg-xbacklight, libnotify
 (optional), notify-osd (optional)
 * **bin2text.py** - A silly little script that I wrote just for fun really. 
 Does what it says on the tin. - Depends: python
+* **countdown.py** - A python script for those days that never seem to end. 
+Feed it an end date and time and it will display a countdown in the console to that end time. It doesn't half make me feel better. ;) - Depends: python
 * **display-conf-tool.py** - This is a general pupose Tk gui frontend to
 xrandr. It can enable/disable displays, configure display resolutions, display
 mirroring and display positioning. It started out as a reimplementation of
