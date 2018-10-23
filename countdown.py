@@ -9,14 +9,24 @@ import datetime
 
 def usage() :
     print('''Usage:
-    countdown.py "%Y-%m-%d %H:%M:%S"''')
+    countdown.py "%Y-%m-%d %H:%M:%S"
+    countdown.py -t "%H:%M"
+
+Options:
+    -t, --time: specify just a time instead of a full date''')
+
+args = sys.argv
+now = datetime.datetime.today()
 
 try :
-    end = datetime.datetime.strptime(sys.argv[1], "%Y-%m-%d %H:%M:%S")
+    if "-t" in args or "--time" in args :
+        dstring = now.strftime("%Y-%m-%d") + " " + args[2] + ":00"
+    else :
+        dstring = args[1]
+    end = datetime.datetime.strptime(dstring, "%Y-%m-%d %H:%M:%S")
 except (ValueError, IndexError) :
     usage()
     os._exit(1)
-now = datetime.datetime.today()
 
 print("Beginning countdown to " + str(end) + " !!!")
 
