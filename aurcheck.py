@@ -41,9 +41,10 @@ while counter < len(aurPkgs) - 1 :
     counter += 1
     
 updates = []
-splitPkgs = []
 mismatches = []
 failures = []
+
+splitPkgs = {}
 
 for x in aurPkgs:
     try :
@@ -63,7 +64,7 @@ for x in aurPkgs:
             pkgBaseStart = page.find('''<a href="https://aur.archlinux.org/cgit/aur.git/tree/PKGBUILD?h=''')
             pkgBaseEnd = page.find('''">View PKGBUILD</a> /''')
             pkgBase = page[pkgBaseStart + 64:pkgBaseEnd]
-            if x[0] != pkgBase : splitPkgs.append(str(x[0] + " " +x[1] + " --> " + version))
+            if x[0] != pkgBase : splitPkgs[str(x[0] + " " +x[1] + " --> " + version)] = pkgBase
         elif comparison == -1 : mismatches.append(str(x[0] + " - (local) " +x[1] + " (AUR) " + version))
 
 if updates == mismatches == failures == [] : print("Everything is up to date.")
@@ -86,11 +87,16 @@ else :
                 if os.path.exists(homeDir + "/Downloads") : downloadsDir = homeDir + "/Downloads"
                 else : downloadsDir = homeDir
                 print("Downloading to " + downloadsDir + "\n")
+                downloaded = []
                 for x in updates :
-                    if x in splitPkgs : continue
-                    newPkg = x.split(' ')[0]
+                    if x in splitPkgs : 
+                        newPkg = splitPkgs[x]
+                    else :
+                        newPkg = x.split(' ')[0]
+                    if newPkg in downloaded : continue
                     pkgUrl = "https://aur.archlinux.org/cgit/aur.git/snapshot/" + newPkg + ".tar.gz"
-                    Popen(["wget", "-q", pkgUrl, "-P", downloadsDir]).wait()
+                    Popen(["wget", "-q", pkgUrl, "-O", downloadsDir + "/" + newPkg + ".tar.gz"]).wait()
                     if os.path.exists(downloadsDir + "/" + newPkg + ".tar.gz") : completion = "SUCCESS"
                     else : completion = "FAILURE"
                     print("Fetch: " + newPkg + ".tar.gz - " + completion)
+                    downloaded.append(newPkg)
