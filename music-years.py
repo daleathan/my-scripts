@@ -46,7 +46,7 @@ for root, dirs, files in os.walk(musicDir, topdown=False):
 for x in musicFiles :
     try :
         audio = ID3(x)
-        years.append(int(str(audio["TDRC"].text[0])))
+        years.append(int(str(audio["TDRC"].text[0])[:4]))
     except (ID3NoHeaderError, KeyError) :
         pass
 
