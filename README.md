@@ -149,6 +149,16 @@ At the time, I was very taken with browser automation. I still find it
 interesting now though I haven't yet found a use for it in my day to day 
 workflow. Maybe one of these days... - Depends: python, python-selenium, 
 python-beautifulsoup4, phantomjs
+* **termwall.sh** - This script gets the screen size and starts a number of
+evenly sized terminals to cover the screen in a grid without overlapping. This
+is a setup I use every day, funnily enough so I wanted to automate it. The
+dimensions of the grid can be set by the user. Note that the default char
+height, width and offset will not translate well to other setups so these may
+need to be changed. There are options to change these. Also note that your
+window manager needs to be using a sane window placement algorithm for the
+windows to be laid out in a grid. MinOverLap placement will work. Something
+silly like centered placement or (shudder) cascade will obviously not work
+well at all. - Depends: bash, xdpyinfo
 * **text2bin.py** - opposite of bin2text.py - Depends: python
 * **tkscrot.py** - this is a dead simple python Tk frontend to scrot. It's
 intended to imitate the look and feel of GNOME Screenshot. I got rid of
