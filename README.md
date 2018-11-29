@@ -42,19 +42,10 @@ Feed it an end date and time and it will display a countdown in the console to t
 * **display-conf-tool.py** - This is a general pupose Tk gui frontend to
 xrandr. It can enable/disable displays, configure display resolutions, display
 mirroring and display positioning. It started out as a reimplementation of
-display-selector.sh in Tk because zenity is slow and working fast is more
+zenity shell script in Tk because zenity is slow and working fast is more
 important to me than looking good! But later I re-wrote it to make it work in
 all contexts (i.e. no hardcoded display names) and to add more features. - 
 Depends: python, tk, xorg-xrandr
-* **display-selector.sh** - A zenity dialogue for calling xrandr. This allows me
-to switch between my laptop screen and the HDMI port. Note that the display
-names are hardcoded and the functionality is very limited. This can only
-enable or disable displays. You should use display-conf-tool.py instead
-which is faster, detects displays instead of relying on hardcoded names
-and has many more xrandr settings exposed. - Depends: bash, zenity, xorg-xrandr
-* **end-session.py** - A python Tk dialogue that can call systemctl 
-{reboot,poweroff,suspend...}. Not particularly useful to me now. I can't 
-remember why I wrote this one. - Depends: python, tk, systemd
 * **fat_copy.sh** - This is quite useful actually. It can copy directories and 
 files, replacing any characters in filenames or directory names
 that are illegal for the FAT filesystem with underscores. It should be noted 
@@ -79,15 +70,6 @@ python script can talk to GNOME Keyring using libsecret and get the password
 or attribute value for a given description or a set of attribute-value pairs.
 It's only very simple but seems to work well for me. - Depends: python,
 python-gobject, libsecret
-* **gnome-screensaver-idlelock.sh** - I wrote this one when I was still using
-GNOME Screensaver 3.6 with Xfce. And I was doing that because XScreenSaver's
-DPMS timeouts conflict with xfce-power-manager's timeouts. It uses xprintidle
-to get the idle time and then locks the screen when the timeout is reached
-as long as Xfce's presentation mode is not engaged. Xautolock does this sort of
-thing much better though so just use that. Personally, I don't use this or 
-xautolock. Instead, I ditched the pointless power manager and just went back to
-the excellent XScreenSaver. - Depends: bash, xprintidle, gnome-screensaver, 
-xfconf
 * **mcityconf.py** - This is another python Tk program. It can read and write to
 a few of Metacity's DConf keys - namely, the ones controlling themes and fonts.
 This was written back when I was still using Compiz 0.9 with Xfce - the
@@ -180,8 +162,3 @@ PulseAudio. It has three actions, volume increase, decrease and (un)mute which
 can be each be bound to the XF86Audio keys. This can also optionally display
 volume notifications using notify-osd. - Depends: bash, pulseaudio, 
 alsa-utils, libnotify (optional), notify-osd (optional)
-* **xfpm-idle-toggle.sh** - Another script that dates from my Xfce days. I 
-wanted to be able toggle Xfce's presentation mode using a keyboard shortcut and
-I wanted a notification showing that the mode had been turned on/off. I no 
-longer use Xfce or its power manager so this is no longer useful to me. - 
-Depends: bash, xfconf, libnotify (for notify-send)
