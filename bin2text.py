@@ -9,7 +9,7 @@ mystr = mystr.replace(" ", "")
 for x in mystr :
     if x != '0' and x != '1' :
         print("Invalid binary string.")
-        os._exit(0)
+        os._exit(1)
 
 while len(mystr)%8 != 0 : mystr = '0' + mystr
 

@@ -4,22 +4,23 @@
 usage() {
   echo "Usage:"
   echo "  mp3-range.sh lower-year upper-year directory"
-  IFS=$IFS_ORIG
-  exit 0
 }
 
 IFS=$'\n'
 
 if [ ! $1 ] || [ ! $2 ] || [ ! $3 ] || [ ! -d $3 ]; then
   usage
+  exit 1
 fi
 
 if [[ ! $1 =~ ^[0-9]+$ ]] || [[ ! $2 =~ ^[0-9]+$ ]]; then
   usage
+  exit 1
 fi
 
 if [ $1 -ge $2 ]; then
   usage
+  exit 1
 fi
 
 count=0

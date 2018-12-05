@@ -21,17 +21,17 @@ if len(args) == 1 :
         pkgDir = homeDir + "/Downloads"
     else :
         usage()
-        os._exit(0)
+        os._exit(1)
 elif len(args) == 3 :
     if (os.path.exists(args[1])) and (os.path.exists(args[2])) :
         cacheDir = args[1]
         pkgDir = args[2]
     else :
         usage()
-        os._exit(0)
+        os._exit(1)
 else :
     usage()
-    os._exit(0)
+    os._exit(1)
 
 #Check for pkg files in each dir
 dirs = os.listdir(pkgDir)

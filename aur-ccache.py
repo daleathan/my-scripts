@@ -20,11 +20,11 @@ if len(args) > 1 :
     elif os.path.exists(args[1]) : cacheDir = args[1]
     else :
         usage()
-        os._exit(0)
+        os._exit(1)
 elif os.path.exists(os.path.expanduser('~') + "/.aurcache") : cacheDir = os.path.expanduser('~') + "/.aurcache"
 else :
     usage()
-    os._exit(0)
+    os._exit(1)
 
 #Get package list in cache
 cachePkgs = os.listdir(cacheDir)
@@ -46,7 +46,7 @@ for x in instOutput :
 #Exit if package info extraction failed
 if not (len(name) == len(version) == len(arch)) :
     print("Error getting names of installed packages.")
-    os._exit(0)
+    os._exit(1)
 
 counter = 0
 while counter < len(name) :

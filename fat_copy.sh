@@ -13,7 +13,7 @@ IFS=$'\n'
 
 if [ ! $1 ] || [ ! $2 ] || ([ ! -d $1 ] && [ ! -f $1 ]) || [ ! -d $2 ]; then
   usage
-  exit
+  exit 1
 fi
 
 abs=$(realpath $1)

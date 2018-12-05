@@ -28,12 +28,12 @@ if "--music-dir" in args :
     if os.path.exists(dirArg) : musicDir = dirArg
     else :
         usage()
-        os._exit(0)
+        os._exit(1)
 else :
     if os.path.exists(os.path.expanduser('~') + "/Music") : musicDir = os.path.expanduser('~') + "/Music"
     else :
         usage()
-        os._exit(0)
+        os._exit(1)
 
 # Get dates for music files
 musicFiles = []
@@ -52,7 +52,7 @@ for x in musicFiles :
 
 if years == [] :
     print("No valid music files found. Nothing to do. Exiting...")
-    os._exit(0)
+    os._exit(1)
 else :
     # Begin reporting results
     print("Number of files found: " + str(len(musicFiles)))

@@ -67,7 +67,7 @@ if (len(args) != 2) or (args[1] == '-h') or (args[1] == '--help') :
 elif os.path.isfile(args[1]) : menuFile = args[1]
 else :
     usage()
-    os._exit(0)
+    os._exit(1)
 
 #Get locations of icons and .desktops
 iconDirs = ["/usr/share/pixmaps", "/usr/share/icons/hicolor"]

@@ -22,7 +22,7 @@ else :
     if os.path.exists(args[1]) : musicDir = args[1]
     else :
         usage()
-        os._exit(0)
+        os._exit(1)
 
 #Get titles and track numbers for songs
 musicFiles = []
@@ -53,7 +53,7 @@ if len(convList) == 0 :
     else :
         print("Some music files were found but none were renamable.\n\nCheck the tags and permissions on the following files:\n-----")
         for x in ignore : print(x[1])
-    os._exit(0)
+    os._exit(1)
 else :
     #Add leading 0 if missing
     #Remove number of tracks per album if it exists

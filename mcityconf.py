@@ -10,7 +10,7 @@ def checkMetacity() :
     execs = os.listdir("/usr/bin")
     if "metacity" not in execs :
         print("mcityconf.py - Metacity wasn't found on this system. Exiting.")
-        os._exit(0)
+        os._exit(1)
 
 def getTheme() :
     theme = Popen(["gsettings", "get", "org.gnome.metacity.theme", "name"], stdout = PIPE).communicate()

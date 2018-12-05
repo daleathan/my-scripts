@@ -13,7 +13,7 @@ fi
 if [ "$1" == "-h" ] || [ "$1" == "--help" ]; then
   echo "Usage:
   ownit.sh [FILES/DIRS...]"
-  exit
+  exit 0
 fi
 
 for x in "$@"; do

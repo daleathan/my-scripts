@@ -51,7 +51,7 @@ for x in aurPkgs:
         response = requests.get("https://aur.archlinux.org/packages/" + x[0])
     except requests.ConnectionError :
         print("Error. Connection to network failed.")
-        os._exit(0)
+        os._exit(1)
     page = str(BeautifulSoup(response.content, "html.parser"))
     start = page.find("<h2>Package Details: ")
     if start == -1 : failures.append(x[0])
