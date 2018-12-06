@@ -45,12 +45,12 @@ get_dimensions() {
 
 get_height() {
   local DIMS="$1"
-  echo "$DIMS" | cut -d "x" -f 2
+  echo "$DIMS" | cut -d "x" -f 2 -s
 }
 
 get_width() {
   local DIMS="$1"
-  echo "$DIMS" | cut -d "x" -f 1
+  echo "$DIMS" | cut -d "x" -f 1 -s
 }
 
 get_term_dimension() {
@@ -108,14 +108,12 @@ run() {
       OFFSET="${x#*=}"
     fi
     if [ "${x%=*}" == "--screen-res" ]; then
-      if [ "${x#*=}" ]; then
-        local DIMS="${x#*=}"
-        local HEIGHT=$(get_height "$DIMS")
-        local WIDTH=$(get_width "$DIMS")
-        if [[ ! "$HEIGHT" =~ ^[0-9]+$ ]] || [[ ! "$WIDTH" =~ ^[0-9]+$ ]]; then
-          echo "Invalid screen resolution!!!"
-          exit 1
-        fi
+      local DIMS="${x#*=}"
+      local HEIGHT=$(get_height "$DIMS")
+      local WIDTH=$(get_width "$DIMS")
+      if [[ ! "$HEIGHT" =~ ^[0-9]+$ ]] || [[ ! "$WIDTH" =~ ^[0-9]+$ ]]; then
+        echo "Invalid screen resolution!!!"
+        exit 1
       fi
     fi
   done
