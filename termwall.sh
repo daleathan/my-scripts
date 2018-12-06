@@ -1,7 +1,8 @@
 #!/bin/bash
 #Start a number of equally sized terminals that cover the screen in a grid
 #Note that the window manager needsto be using a MinOverlapPlacement algorithm
-#For the terminal windows to be laid out in a grid.
+#For the terminal windows to be laid out in a grid. Also note that we use the
+#screen dimensions of the primary display.
 #By Charles Bos
 
 usage() {
@@ -25,15 +26,21 @@ Options:
 
   --char-width:  set width divisor to convert pixel dimensions into character 
                  dimensions used by terminals. Use format --char-width=x. 
-                 Defaults to 16.
+                 Defaults to 8.
 
   --offset:      number of char columns and rows to subtract from the terminal
                  height and width in order to ensure the terminals do not
-                 overlap. Use format --offset=x. Defaults to 1."
+                 overlap. Use format --offset=x. Defaults to 1.
+                 
+  --screen-res:  screen resolution of the display to start the terminals on.
+                 Use format --screen-res=1366x768 for instance. If this is not
+                 supplied we use xrandr to the get dimensions of the primary
+                 display."
 }
 
 get_dimensions() {
-  echo $(xdpyinfo | grep dimensions | tr -s " " | cut -d " " -f 3)
+  echo $(xrandr | grep '*\|primary' | grep -A1 primary | tail -n 1 | \
+    tr -s ' ' | cut -d ' ' -f 2)
 }
 
 get_height() {
@@ -59,13 +66,6 @@ get_term_dimension() {
 }
 
 run() {
-  #Check we have xdpyinfo
-  which xdpyinfo > /dev/null 2>&1
-  if [ ! $? == 0 ]; then
-    echo "xdpyinfo was not found!!! Exiting."
-    exit 1
-  fi
-
   #Handle args
   local ROWSIZE="$1"
   if [ ! "$ROWSIZE" ] || [[ ! "$ROWSIZE" =~ ^[0-9]+$ ]]; then
@@ -78,10 +78,7 @@ run() {
   local BIN="urxvt"
   local LIMIT=$(expr $ROWSIZE \* $COLSIZE)
   local CHARHEIGHT=16
-  local CHARWIDTH=16
-  local DIMS=$(get_dimensions)
-  local WIDTH=$(get_width "$DIMS")
-  local HEIGHT=$(get_height "$DIMS")
+  local CHARWIDTH=8
   local OFFSET=1
 
   for x in $@; do
@@ -110,7 +107,29 @@ run() {
     if [ "${x%=*}" == "--offset" ] && [[ "${x#*=}" =~ ^[0-9]+$ ]]; then
       OFFSET="${x#*=}"
     fi
+    if [ "${x%=*}" == "--screen-res" ]; then
+      if [ "${x#*=}" ]; then
+        local DIMS="${x#*=}"
+        local HEIGHT=$(get_height "$DIMS")
+        local WIDTH=$(get_width "$DIMS")
+        if [[ ! "$HEIGHT" =~ ^[0-9]+$ ]] || [[ ! "$WIDTH" =~ ^[0-9]+$ ]]; then
+          echo "Invalid screen resolution!!!"
+          exit 1
+        fi
+      fi
+    fi
   done
+
+  if [ ! "$DIMS" ]; then
+    which xrandr > /dev/null 2>&1
+    if [ ! $? == 0 ]; then
+      echo "xrandr was not found!!! Exiting."
+      exit 1
+    fi
+    local DIMS=$(get_dimensions)
+    local WIDTH=$(get_width "$DIMS")
+    local HEIGHT=$(get_height "$DIMS")
+  fi
 
   #Get the height and width of each terminal
   local TWIDTH=$(get_term_dimension $WIDTH $ROWSIZE $CHARWIDTH $OFFSET)
