@@ -158,7 +158,7 @@ need to be changed. There are options to change these. Also note that your
 window manager needs to be using a sane window placement algorithm for the
 windows to be laid out in a grid. MinOverLap placement will work. Something
 silly like centered placement or (shudder) cascade will obviously not work
-well at all. - Depends: bash, xdpyinfo
+well at all. - Depends: bash, xorg-xrandr
 * **text2bin.py** - opposite of bin2text.py - Depends: python
 * **tkscrot.py** - this is a dead simple python Tk frontend to scrot. It's
 intended to imitate the look and feel of GNOME Screenshot. I got rid of
