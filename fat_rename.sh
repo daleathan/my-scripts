@@ -6,7 +6,7 @@
 
 usage() {
   echo "Usage:"
-  echo "  fat_copy.sh target"
+  echo "  fat_rename.sh target"
 }
 
 IFS=$'\n'
