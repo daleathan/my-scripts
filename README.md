@@ -55,6 +55,13 @@ This is because copying directories can only be done recursively which means
 the entire directory tree would be copied over to the FAT filesystem without
 the necessary changes to the names of any of the files or subdirectories in
 the tree. - Depends: bash, coreutils
+* **fat_rename.sh** - This is a modified version of fat\_copy.sh above. Instead
+of copying files to a new location with illegal characters replaced it instead
+renames all files and directories within the target in-place. This is useful
+if you want to make all file/dir names within a location Windows compatible but
+you don't actually want to copy them anywhere. The other benefit of this is that
+directory timestamps can be preserved which is not possible with the other
+script. - Depends: bash, coreutils
 * **fvwm-recent-files.py** - This script parses the recently-used.xbel file
 which is written to by GTK+ applications, determines the 10 most
 recently used files, which applications are the correct ones for opening
