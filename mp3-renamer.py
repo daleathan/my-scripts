@@ -67,7 +67,8 @@ else :
         if sys.platform == "win32" or sys.platform == "cygwin" :
             winIllegals = ["<", ">", ":", '"', "/", "\\", "|", "?", "*"]
             for x in convList[counter][1] :
-                if x in winIllegals : convList[counter][1].replace(x, "_")
+                if x in winIllegals : 
+                  convList[counter][1] = convList[counter][1].replace(x, "_")
         else :
             if convList[counter][1].find("/") != -1 : convList[counter][1] = convList[counter][1].replace("/", "_")
         counter += 1
