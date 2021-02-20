@@ -50,7 +50,7 @@ if not (len(name) == len(version) == len(arch)) :
 
 counter = 0
 while counter < len(name) :
-    pkgName = name[counter] + "-" + version[counter] + "-" + arch[counter] + ".pkg.tar.xz"
+    pkgName = name[counter] + "-" + version[counter] + "-" + arch[counter] + ".pkg.tar.zst"
     instPkgs.append(pkgName)
     counter += 1
 
@@ -58,7 +58,7 @@ while counter < len(name) :
 oldPkgs = []
 for x in cachePkgs :
     if x not in instPkgs : 
-        if x.find(".pkg.tar.xz") != -1 : oldPkgs.append(x)
+        if x.find(".pkg.tar.zst") != -1 : oldPkgs.append(x)
 oldPkgs = sorted(oldPkgs)
 
 #Show packages to be removed and remove them if specified

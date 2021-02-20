@@ -52,7 +52,7 @@ for x in dirs :
     #Copy found package files
     contains = False
     for y in contents :
-        if y.find(".pkg.tar.xz") != -1 :
+        if y.find(".pkg.tar.zst") != -1 :
             shutil.copyfile(y, cacheDir + "/" + y.split("/")[-1])
             print("Cached: " + y.split("/")[-1])
             contains = True
