@@ -21,6 +21,7 @@ timestamps = args[2]
 ext = os.path.splitext(media)[1]
 
 cmd = "ffmpeg -i \"" + media + "\" -map 0:1 thumbnail.png"
+print(cmd)
 status = os.system(cmd)
 if status != 0 :
     raise ValueError("Error extracting thumbnail. Command was: " + cmd)
@@ -46,19 +47,19 @@ for x in range(len(parts) - 1) :
     if len(start_ts) == 2 :
         start_hours = 0
         start_mins = int(start_ts[0])
-        start_secs = int(start_ts[1])
+        start_secs = float(start_ts[1])
     else :
         start_hours = int(start_ts[0])
         start_mins = int(start_ts[1])
-        start_secs = int(start_ts[2])
+        start_secs = float(start_ts[2])
     if len(end_ts) == 2 :   
         end_hours = 0
         end_mins = int(end_ts[0])
-        end_secs = int(end_ts[1])
+        end_secs = float(end_ts[1])
     else :
         end_hours = int(end_ts[0])
         end_mins = int(end_ts[1])
-        end_secs = int(end_ts[2])
+        end_secs = float(end_ts[2])
     start_td = datetime.timedelta(hours = start_hours, minutes = start_mins, seconds = start_secs)
     end_td = datetime.timedelta(hours = end_hours, minutes = end_mins, seconds = end_secs)
     parts[x][2] = str((end_td - start_td).total_seconds())
@@ -77,6 +78,7 @@ for part in parts :
     if status != 0 :
         raise ValueError("Error extracting track. Command was: " + cmd)
     cmd = "AtomicParsley \"" + outfile + "\" --artwork thumbnail.png --output \"" + outfile + ".1\""
+    print(cmd)
     status = os.system(cmd)
     if status != 0 :
         raise ValueError("Error setting thumbnail. Command was: " + cmd)
